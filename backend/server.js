@@ -4,6 +4,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const { ApolloServer } = require("apollo-server-express");
 const { connectDb } = require("./config/db");
+const { schema, executor, context, dataSources, formatError } = require("./graphql");
 const PORT = process.env.PORT || 5000;
 
 // Express app and middleware
@@ -16,7 +17,13 @@ app.use(require("./routes/auth.routes"));
 // Error handler
 app.use(require("./controllers/error.controller"));
 
-const apolloServer = new ApolloServer({});
+const apolloServer = new ApolloServer({
+  schema,
+  executor,
+  context,
+  dataSources,
+  formatError,
+});
 
 (async () => {
   await connectDb();
