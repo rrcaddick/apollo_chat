@@ -41,4 +41,23 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.methods.validatePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.rotateRefreshToken = async function (refreshToken) {
+  this.refreshToken = refreshToken;
+  await this.save();
+};
+
+userSchema.methods.clearRefreshToken = async function () {
+  this.refreshToken = undefined;
+  await this.save();
+};
+
+userSchema.statics.revokeRefreshToken = async function (userId) {
+  const user = await this.findById(userId);
+  await user.clearRefreshToken();
+};
+
 module.exports = mongoose.model("User", userSchema);
