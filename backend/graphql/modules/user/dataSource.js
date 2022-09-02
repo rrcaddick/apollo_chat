@@ -2,7 +2,7 @@ const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class User extends MongoDataSource {
   async getUsers() {
-    await this.model.find();
+    return await this.model.find();
   }
 
   async registerUser(input) {

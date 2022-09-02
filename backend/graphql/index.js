@@ -1,6 +1,6 @@
 const { createApplication } = require("graphql-modules");
-const { userModule } = require("./user/module");
-const UserSource = require("./user/dataSource");
+const { userModule } = require("./modules/user/module");
+const UserSource = require("./modules/user/dataSource");
 const User = require("../models/user");
 
 const graphqlApplication = createApplication({
@@ -16,9 +16,9 @@ const context = ({ req }) => {
   return context;
 };
 
-const dataSources = () => {
-  user: new UserSource(User);
-};
+const dataSources = () => ({
+  user: new UserSource(User),
+});
 
 const formatError = (err) => {
   return {
@@ -31,7 +31,7 @@ const formatError = (err) => {
 
 module.exports = {
   graphqlApplication,
-  executor: graphqlApplication.createApolloExecutor,
+  executor: graphqlApplication.createApolloExecutor(),
   schema: graphqlApplication.schema,
   context,
   dataSources,

@@ -1,4 +1,4 @@
-const { validate } = require("../middleware/validate");
+const { validate } = require("../../middleware/validate");
 const { userSchema } = require("./validator");
 
 const middlewares = {
