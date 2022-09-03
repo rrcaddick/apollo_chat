@@ -3,8 +3,8 @@ const { typeDefs } = require("./typeDefs");
 const { resolvers } = require("./resolvers");
 const { middlewares } = require("./middlewares");
 
-const userModule = createModule({
-  id: "user-module",
+const messageModule = createModule({
+  id: "message-module",
   dirname: __dirname,
   typeDefs,
   resolvers,
@@ -12,5 +12,5 @@ const userModule = createModule({
 });
 
 module.exports = {
-  userModule,
+  messageModule,
 };
