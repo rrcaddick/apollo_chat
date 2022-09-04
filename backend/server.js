@@ -5,11 +5,12 @@ const cookieParser = require("cookie-parser");
 const { ApolloServer, gql } = require("apollo-server-express");
 const { connectDb } = require("./config/db");
 const { schema, executor, context, dataSources, formatError } = require("./graphql");
+const { authenticate } = require("./middleware/authenticate");
 const PORT = process.env.PORT || 5000;
 
 // Express app and middleware
 const app = express();
-app.use(express.urlencoded({ extended: false }), express.json(), cookieParser());
+app.use(express.urlencoded({ extended: false }), express.json(), cookieParser(), authenticate);
 
 // Auth routes
 app.use(require("./routes/auth.routes"));

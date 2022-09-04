@@ -7,13 +7,17 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addChat(members: [ID!]): Chat!
+    addChat(input: AddChatInput!): Chat!
   }
 
   type Chat {
     id: ID
     members: [User!]
     latestMessage: Message
+  }
+
+  input AddChatInput {
+    members: [ID]
   }
 `;
 

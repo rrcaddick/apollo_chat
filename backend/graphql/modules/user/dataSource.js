@@ -5,6 +5,14 @@ class User extends MongoDataSource {
     return await this.model.find();
   }
 
+  async getUsersByIds(userIds) {
+    return await this.findManyByIds(userIds);
+  }
+
+  async getUser(userId) {
+    return await this.findOneById(userId);
+  }
+
   async registerUser(input) {
     return await this.model.create({ ...input });
   }

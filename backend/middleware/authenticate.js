@@ -16,6 +16,7 @@ const authenticate = asyncHandler(async (req, res, next) => {
 
   try {
     const { userId } = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    console.log(`New mutation`.bgRed.white);
     const user = await User.findById(userId).select("-password");
 
     if (user) {

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const Chat = require("./chat");
 
 const messageSchema = new Schema(
   {
@@ -20,5 +21,10 @@ const messageSchema = new Schema(
   },
   { timestamps: true }
 );
+
+messageSchema.post("save", async function (message, next) {
+  await Chat.findByIdAndUpdate(message.chat, { latestMessage: message });
+  next();
+});
 
 module.exports = mongoose.model("Message", messageSchema);

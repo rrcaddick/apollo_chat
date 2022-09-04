@@ -1,16 +1,17 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class Chat extends MongoDataSource {
-  async chats() {
+  async getChats() {
     return await this.model.find();
   }
 
-  async chat(chatId) {
+  async getChat(chatId) {
     return await this.findOneById(chatId);
   }
 
   async addChat(members) {
-    return this.model.create({ members });
+    const chat = await this.model.create({ members });
+    return chat.populate("members latestMessage");
   }
 }
 

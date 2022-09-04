@@ -1,11 +1,11 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class Message extends MongoDataSource {
-  async messages() {
+  async getMessages() {
     return await this.model.find();
   }
 
-  async message(messageId) {
+  async getMessage(messageId) {
     return await this.findOneById(messageId);
   }
 
