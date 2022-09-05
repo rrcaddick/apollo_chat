@@ -6,12 +6,14 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "debug": "nodemon --inspect backend/server.js"
+    "debug": "concurrently \"nodemon --inspect backend/server.js\" \" npm start --prefix=frontend \""
   },
   "author": "Raymond Caddick",
   "license": "ISC",
   "devDependencies": {
+    "@types/concurrently": "^7.0.0",
     "@types/nodemon": "^1.19.2",
+    "concurrently": "^7.3.0",
     "nodemon": "^2.0.19"
   },
   "dependencies": {
