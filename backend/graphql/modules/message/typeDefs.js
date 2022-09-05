@@ -10,6 +10,10 @@ const typeDefs = gql`
     addMessage(input: MessageInput!): Message!
   }
 
+  type Subscription {
+    messageAdded(userId: ID): Message
+  }
+
   type Message {
     id: ID
     sender: User!

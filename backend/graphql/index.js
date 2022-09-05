@@ -1,4 +1,5 @@
-const { createApplication } = require("graphql-modules");
+const { createApplication, InjectionToken } = require("graphql-modules");
+const { PubSub } = require("graphql-subscriptions");
 const { userModule } = require("./modules/user/module");
 const UserSource = require("./modules/user/dataSource");
 const User = require("../models/user");
@@ -8,9 +9,18 @@ const Chat = require("../models/chat");
 const { messageModule } = require("./modules/message/module");
 const MessageSource = require("./modules/message/dataSource");
 const Message = require("../models/message");
+const { pubSubToken } = require("./common/injectionTokens");
+
+// const pubSubToken = new InjectionToken("pub-sub");
 
 const graphqlApplication = createApplication({
   modules: [userModule, chatModule, messageModule],
+  providers: [
+    {
+      provide: pubSubToken,
+      useValue: new PubSub(),
+    },
+  ],
 });
 
 const context = ({ req }) => {
@@ -41,7 +51,10 @@ module.exports = {
   graphqlApplication,
   executor: graphqlApplication.createApolloExecutor(),
   schema: graphqlApplication.schema,
+  execute: graphqlApplication.createExecution(),
+  subscribe: graphqlApplication.createSubscription(),
   context,
   dataSources,
   formatError,
+  pubSubToken,
 };

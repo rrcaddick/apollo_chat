@@ -1,3 +1,6 @@
+const { withFilter } = require("graphql-subscriptions");
+const { pubSubToken } = require("../../common/injectionTokens");
+
 const resolvers = {
   Query: {
     messages: (_root, _args, { dataSources: { message } }) => message.getMessages(),
@@ -5,12 +8,38 @@ const resolvers = {
   },
   Message: {
     id: ({ _id }) => _id,
-    sender: ({ sender }, _args, { dataSources: { user } }) => user.getUser(sender),
-    chat: ({ chat: chatId }, _args, { dataSources: { chat } }) => chat.getChat(chatId),
   },
   Mutation: {
-    addMessage: (_root, { input: { chatId, content } }, { dataSources: { message }, user: { _id: id } }) =>
-      message.addMessage({ sender: id, chat: chatId, content }),
+    addMessage: async (_root, { input: { chatId, content } }, context) => {
+      const {
+        injector,
+        dataSources: { message },
+        user: { _id: id },
+      } = context;
+      const pubSub = injector.get(pubSubToken);
+
+      const newMessage = await message.addMessage({ sender: id, chat: chatId, content });
+      pubSub.publish("MESSAGE_ADDED", newMessage);
+      return newMessage;
+    },
+  },
+  Subscription: {
+    messageAdded: {
+      subscribe: withFilter(
+        (_root, _args, context) => {
+          const pubSub = context.injector.get(pubSubToken);
+          return pubSub.asyncIterator(["MESSAGE_ADDED"]);
+        },
+        ({ chat, sender }, { userId }) => {
+          if (sender._id.toString() === userId) return false;
+
+          return chat.members.reduce((_, member) => {
+            return member._id.toString() === userId;
+          }, false);
+        }
+      ),
+      resolve: (root) => root,
+    },
   },
 };
 
