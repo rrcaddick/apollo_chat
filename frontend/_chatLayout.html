@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Structure</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        flex-shrink: 0;
+        height: 3rem;
+        margin-bottom: 0.75rem;
+        background-color: blue;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+        color: #fff;
+      }
+
+      main {
+        display: flex;
+        background-color: brown;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .chat-container {
+        flex: 4;
+        background-color: bisque;
+        display: flex;
+      }
+      .chat-list-container {
+        flex: 1;
+        background-color: chartreuse;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-menu {
+        height: 4rem;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        background-color: blueviolet;
+        flex-shrink: 0;
+      }
+
+      .chat-menu.border {
+        border-right: 1px solid black;
+      }
+
+      .chat-list {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: darkmagenta;
+        padding: 1rem;
+        overflow: hidden;
+      }
+
+      .chat-list-header {
+        flex-shrink: 0;
+        background-color: crimson;
+        height: 5rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+
+      .scrollable-chats {
+        flex-grow: 1;
+        background-color: darkorange;
+        padding: 1rem;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .chat {
+        background-color: aquamarine;
+        height: 3rem;
+        padding: 1rem;
+        border-radius: 10px;
+      }
+
+      .chat-message-container {
+        flex: 2;
+        background-color: chartreuse;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-messages {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: cornflowerblue;
+        /* padding: 1rem 0; */
+        overflow: hidden;
+      }
+      .scrollable-chat-messages {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: gold;
+        padding: 1rem;
+        gap: 1rem;
+        overflow: auto;
+      }
+
+      .message {
+        padding: 1rem;
+        background-color: blue;
+        width: 40%;
+        border-radius: 10px;
+        color: #fff;
+      }
+
+      .scrollable-chat-messages .message:nth-child(6n + 4),
+      .scrollable-chat-messages .message:nth-child(6n + 5),
+      .scrollable-chat-messages .message:nth-child(6n + 6) {
+        align-self: flex-end;
+      }
+
+      .send-message {
+        flex-shrink: 0;
+        height: 3rem;
+        background-color: deeppink;
+        padding: 1rem;
+      }
+
+      .notification-container {
+        flex: 1;
+        background-color: aqua;
+        padding: 1rem;
+        border-left: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow: hidden;
+      }
+
+      .notifications-list {
+        flex: 1;
+        background-color: darkred;
+        color: #fff;
+        padding: 1rem;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .notification {
+        background-color: black;
+        color: #fff;
+        height: 3rem;
+        padding: 1rem;
+        border-radius: 10px;
+      }
+
+      .online-friends {
+        flex: 1;
+        background-color: darkgreen;
+        color: 1;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow: auto;
+      }
+
+      .friend {
+        background-color: darkmagenta;
+        color: #fff;
+        height: 3rem;
+        padding: 1rem;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>GRAPHQL CHAT</p>
+      <p>An elegant display of apollo's power</p>
+    </header>
+    <main>
+      <div class="chat-container">
+        <div class="chat-list-container">
+          <div class="chat-menu border">Chat List Menu</div>
+          <div class="chat-list">
+            <div class="chat-list-header">Chat List Header</div>
+            <div class="scrollable-chats">
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+              <div class="chat">Chat</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-container">
+          <div class="chat-menu">Chat Message Menu</div>
+          <div class="chat-messages">
+            <div class="scrollable-chat-messages">
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+              <div class="message">Message</div>
+            </div>
+            <div class="send-message">Send Message</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notification-container">
+        <p>Notifications</p>
+        <div class="notifications-list">
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+          <div class="notification">Notification</div>
+        </div>
+        <p>Friends</p>
+        <div class="online-friends">
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+          <div class="friend">Friend</div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
