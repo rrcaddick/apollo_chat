@@ -16,6 +16,8 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) 
       display="flex"
       gap="1rem"
       justifyContent="flex-start"
+      // TODO: Fix hidden box shadows
+      // boxShadow={(theme) => theme.shadows["2"]}
       sx={{
         cursor: "pointer",
         "&:hover": {

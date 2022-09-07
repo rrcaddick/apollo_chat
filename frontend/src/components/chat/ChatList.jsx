@@ -197,7 +197,11 @@ const CHAT_DUMMY = [
 
 const ChatList = () => {
   return (
-    <Box sx={{ flex: 1.25, display: "flex", flexDirection: "column" }} backgroundColor="#ececec" overflow="hidden">
+    <Box
+      sx={{ flex: 1.25, display: "flex", flexDirection: "column" }}
+      backgroundColor={(theme) => theme.palette.grey["200"]}
+      overflow="hidden"
+    >
       <ChatListMenu />
       <Box p="12px 24px" display="flex" flexDirection="column" gap="1rem" flexGrow={1} overflow="hidden">
         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -235,7 +239,6 @@ const ChatList = () => {
           display="flex"
           flexDirection="column"
           gap="1rem"
-          overflow="auto"
           flexGrow={1}
           sx={{
             overflowY: "overlay",
@@ -244,7 +247,7 @@ const ChatList = () => {
             },
             "::-webkit-scrollbar": { width: "10px", display: "none" },
             "::-webkit-scrollbar-thumb": {
-              backgroundColor: (theme) => theme.palette.secondary.main,
+              backgroundColor: "#8f0acd73",
               borderRadius: "20px",
             },
           }}
