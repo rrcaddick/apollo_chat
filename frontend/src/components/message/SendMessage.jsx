@@ -24,7 +24,7 @@ const MessageInput = styled(TextareaAutosize)`
   }
 `;
 
-const NewMessage = () => {
+const SendMessage = () => {
   return (
     <Box p="12px 24px 0">
       <Box
@@ -76,4 +76,4 @@ const NewMessage = () => {
   );
 };
 
-export default NewMessage;
+export default SendMessage;

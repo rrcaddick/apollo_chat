@@ -1,14 +1,14 @@
-import ChatList from "../components/chat/ChatList";
+import LeftNav from "../components/navigation/LeftNav";
 import ChatMessage from "../components/chat/ChatMessage";
 import ChatLayout from "../components/layout/ChatLayout";
-import Notifications from "../components/notifications/Notifications";
+import RightNav from "../components/navigation/RightNav";
 
 const Chats = () => {
   return (
     <ChatLayout>
-      <ChatList />
+      <LeftNav />
       <ChatMessage />
-      <Notifications />
+      <RightNav />
     </ChatLayout>
   );
 };

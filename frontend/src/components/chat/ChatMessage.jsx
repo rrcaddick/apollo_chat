@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import MessageFeed from "../message/MessageFeed";
-import NewMessage from "../message/NewMessage";
+import SendMessage from "../message/SendMessage";
 import ChatMessageMenu from "./ChatMessageMenu";
 
 const ChatMessage = () => {
@@ -8,7 +8,7 @@ const ChatMessage = () => {
     <Box sx={{ flex: 3 }} display="flex" flexDirection="column" pb="12px">
       <ChatMessageMenu />
       <MessageFeed />
-      <NewMessage />
+      <SendMessage />
     </Box>
   );
 };

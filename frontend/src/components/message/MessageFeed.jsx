@@ -1,1099 +1,298 @@
 import { Box } from "@mui/material";
+import ScrollableList from "../layout/ScrollableList";
+import Message from "./Message";
+
+const DUMMY_MESSAGES = [
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 1,
+    content: "Are we meeting today? What time would be best for you?",
+    userMessage: true,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 2,
+    content: "Would like to discuss new opportunity",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: false,
+  },
+  {
+    id: 3,
+    content: "Any time is fine with me",
+    userMessage: true,
+    firstMessage: false,
+    lastMessage: true,
+  },
+  {
+    id: 4,
+    content: "Oooh that sounds interesting!",
+    userMessage: false,
+    firstMessage: true,
+    lastMessage: false,
+  },
+  {
+    id: 5,
+    content: "What about 5 PM tonight?",
+    userMessage: false,
+    firstMessage: false,
+    lastMessage: true,
+  },
+];
 
 const MessageFeed = () => {
   return (
-    <Box p="12px 8px" boxShadow={(theme) => theme.shadows["10"]} overflow="hidden" display="flex">
-      <Box
-        flexGrow={1}
-        display="flex"
-        flexDirection="column"
-        gap="0.25rem"
-        p="0 16px"
-        sx={{
-          overflowY: "overlay",
-          "&:hover::-webkit-scrollbar": {
-            display: "block",
-          },
-          "::-webkit-scrollbar": { width: "10px", display: "none" },
-          "::-webkit-scrollbar-thumb": {
-            // backgroundColor: (theme) => theme.palette.secondary.main,
-            backgroundColor: "#8f0acd73",
-            borderRadius: "20px",
-          },
-        }}
-      >
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-        {/* Message */}
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderTopRightRadius: "30px",
-          }}
-        >
-          Are we meeting today? What time would be best for you? Any time is fine with me
-        </Box>
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Would like to discuss new opportunity
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.grey["200"]}
-          color={(theme) => theme.palette.grey.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-start"
-          borderRadius="30px"
-        >
-          Yes let's meet
-        </Box>
-
-        <Box
-          backgroundColor={(theme) => theme.palette.primary.main}
-          color={(theme) => theme.palette.primary.contrastText}
-          p="0.5rem 1rem"
-          alignSelf="flex-end"
-          sx={{
-            borderTopLeftRadius: "30px",
-            borderBottomLeftRadius: "30px",
-            borderBottomRightRadius: "30px",
-          }}
-        >
-          Okay let's say around 8 PM?
-        </Box>
-      </Box>
+    <Box p="12px 8px" boxShadow={(theme) => theme.shadows["10"]} overflow="hidden" display="flex" flexGrow={1}>
+      <ScrollableList gap="0.25rem" p="0 16px" thumbWidth="10px" thumbColor="#8f0acd73">
+        {DUMMY_MESSAGES.map((message) => (
+          <Message {...message} />
+        ))}
+      </ScrollableList>
     </Box>
   );
 };
