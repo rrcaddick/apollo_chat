@@ -15,13 +15,20 @@ const GlobalStyles = () => (
         font-family: "Poppins", sans-serif;
       }
 
+      html {
+        height: 100%;
+        width: 100%;
+      }
+
       body {
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
         display: flex;
       }
 
       #root {
+        height: 100%;
+        width: 100%;
         flex-grow: 1;
         display: flex;
         flex-direction: column;

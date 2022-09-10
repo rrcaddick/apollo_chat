@@ -1,6 +1,9 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { useContext } from "react";
+import { NavigationContext } from "../../providers/NavigationProvider";
+import { Avatar, Badge, Box, Typography } from "@mui/material";
 
 const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) => {
+  const { slideLeft } = useContext(NavigationContext);
   const activestyles = active
     ? {
         backgroundColor: (theme) => theme.palette.primary.main,
@@ -18,19 +21,22 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) 
       justifyContent="flex-start"
       // TODO: Fix hidden box shadows
       // boxShadow={(theme) => theme.shadows["2"]}
-      sx={{
+      sx={(theme) => ({
         cursor: "pointer",
         "&:hover": {
-          backgroundColor: (theme) => theme.palette.primary.main,
-          color: (theme) => theme.palette.primary.contrastText,
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
         },
-      }}
+      })}
+      onClick={slideLeft}
       {...activestyles}
     >
       <Avatar alt="Ash Caddick" src={profilePicture} />
 
       <Box overflow="hidden" textOverflow="ellipsis">
-        <Typography fontWeight="bold">{name}</Typography>
+        <Typography fontWeight="bold" noWrap>
+          {name}
+        </Typography>
         <Typography fontSize="x-small" noWrap>
           {latestMessage}
         </Typography>
@@ -40,19 +46,7 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) 
         <Typography fontSize="x-small" noWrap>
           3:43 PM
         </Typography>
-        <Typography
-          fontSize="small"
-          borderRadius="50%"
-          backgroundColor="purple"
-          width="1.25rem"
-          height="1.25rem"
-          color="#fff"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          2
-        </Typography>
+        <Badge badgeContent={Math.floor(Math.random() * (4 - 1 + 0) + 0)} color="secondary" />
       </Box>
     </Box>
   );

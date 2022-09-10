@@ -1,7 +1,8 @@
+import { useContext } from "react";
+import { NavigationContext } from "../../providers/NavigationProvider";
 import { Box } from "@mui/material";
 import ChatListMenu from "../chat/ChatListMenu";
 import ChatList from "../chat/ChatList";
-
 const CHATS_DUMMY = [
   {
     id: 1,
@@ -195,11 +196,26 @@ const CHATS_DUMMY = [
 ];
 
 const LeftNav = () => {
+  const { slideStyles } = useContext(NavigationContext);
   return (
     <Box
-      sx={{ flex: 1.25, display: "flex", flexDirection: "column" }}
+      flex="1 0 100%"
+      display="flex"
+      flexDirection="column"
       backgroundColor={(theme) => theme.palette.grey["200"]}
       overflow="hidden"
+      width="100%"
+      sx={(theme) => ({
+        [theme.breakpoints.up("lg")]: {
+          flex: 1.25,
+        },
+        [theme.breakpoints.up("md")]: {
+          flex: 1.5,
+        },
+        [theme.breakpoints.down("md")]: {
+          ...slideStyles,
+        },
+      })}
     >
       <ChatListMenu />
       <ChatList chats={CHATS_DUMMY} />

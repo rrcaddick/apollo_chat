@@ -1,10 +1,13 @@
-import { Group, Mail, Message, Phone } from "@mui/icons-material";
-import { Avatar, IconButton } from "@mui/material";
+import { useContext } from "react";
+import { NavigationContext } from "../../providers/NavigationProvider";
+import { Group, Message, Notifications, Phone } from "@mui/icons-material";
+import { Avatar, Badge, IconButton } from "@mui/material";
 import ChatMenu from "../navigation/ChatMenu";
 
 const ChatListMenu = () => {
+  const { slideLeft } = useContext(NavigationContext);
   return (
-    <ChatMenu>
+    <ChatMenu padding="12px 24px">
       <IconButton color="primary">
         <Message />
       </IconButton>
@@ -12,10 +15,17 @@ const ChatListMenu = () => {
         <Phone />
       </IconButton>
       <IconButton color="primary">
-        <Mail />
-      </IconButton>
-      <IconButton color="primary">
         <Group />
+      </IconButton>
+      <IconButton
+        color="primary"
+        onClick={() => {
+          slideLeft(2);
+        }}
+      >
+        <Badge badgeContent={4} color="secondary">
+          <Notifications />
+        </Badge>
       </IconButton>
       <Avatar
         alt="Ray Caddick"

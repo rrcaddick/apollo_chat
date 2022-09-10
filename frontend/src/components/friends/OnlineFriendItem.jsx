@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Typography } from "@mui/material";
 import React from "react";
 
 const OnlineFriendItem = ({ profilePicture, name, status }) => {
@@ -17,7 +17,17 @@ const OnlineFriendItem = ({ profilePicture, name, status }) => {
         },
       }}
     >
-      <Avatar src={profilePicture} />
+      <Badge
+        variant="dot"
+        color="success"
+        overlap="circular"
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+      >
+        <Avatar src={profilePicture} />
+      </Badge>
       <Box>
         <Typography fontSize="1rem" fontWeight="bold">
           {name}
