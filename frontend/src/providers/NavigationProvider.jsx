@@ -9,6 +9,10 @@ const NavigationContext = createContext({
   slideLeft: () => {},
   slideRight: () => {},
   slideStyles: {},
+  speedDialDrawerOpen: {},
+  toggleAddChat: () => {},
+  toggleCreateGroup: () => {},
+  toggleSendBroadcast: () => {},
 });
 
 const NavigationProvider = ({ children }) => {
@@ -17,6 +21,12 @@ const NavigationProvider = ({ children }) => {
   const theme = useTheme();
   const mediumScreen = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const [speedDialDrawerOpen, setSpeedDialDrawerOpen] = useState({
+    addChat: false,
+    createGroup: false,
+    sendBroadcast: false,
+  });
 
   const toggleDrawer = () => {
     setDrawerOpen((prevState) => !prevState);
@@ -41,6 +51,16 @@ const NavigationProvider = ({ children }) => {
     transition: `all 500ms ease-in-out`,
   };
 
+  const toggleAddChat = () => {
+    setSpeedDialDrawerOpen((prevState) => ({ ...prevState, addChat: !prevState.addChat }));
+  };
+  const toggleCreateGroup = () => {
+    setSpeedDialDrawerOpen((prevState) => ({ ...prevState, createGroup: !prevState.createGroup }));
+  };
+  const toggleSendBroadcast = () => {
+    setSpeedDialDrawerOpen((prevState) => ({ ...prevState, sendBroadcast: !prevState.sendBroadcast }));
+  };
+
   const contextValue = {
     mediumScreen,
     drawerOpen,
@@ -48,6 +68,10 @@ const NavigationProvider = ({ children }) => {
     slideLeft,
     slideRight,
     slideStyles,
+    speedDialDrawerOpen,
+    toggleAddChat,
+    toggleCreateGroup,
+    toggleSendBroadcast,
   };
 
   return <NavigationContext.Provider value={contextValue}>{children}</NavigationContext.Provider>;

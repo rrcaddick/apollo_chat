@@ -1,7 +1,7 @@
 import { Avatar, Badge, Box, Typography } from "@mui/material";
 import React from "react";
 
-const OnlineFriendItem = ({ profilePicture, name, status }) => {
+const FriendItem = ({ profilePicture, name, status }) => {
   return (
     <Box
       display="flex"
@@ -38,4 +38,4 @@ const OnlineFriendItem = ({ profilePicture, name, status }) => {
   );
 };
 
-export default OnlineFriendItem;
+export default FriendItem;

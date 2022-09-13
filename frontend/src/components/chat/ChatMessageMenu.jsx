@@ -88,7 +88,7 @@ const ChatMessageMenu = () => {
           size="small"
           onClick={notificationHandler}
           sx={(theme) => ({
-            [theme.breakpoints.up("lg")]: {
+            [theme.breakpoints.up("md")]: {
               display: "none",
             },
           })}

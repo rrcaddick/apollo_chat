@@ -5,7 +5,15 @@ import { Avatar, Badge, IconButton } from "@mui/material";
 import ChatMenu from "../navigation/ChatMenu";
 
 const ChatListMenu = () => {
-  const { slideLeft } = useContext(NavigationContext);
+  const { slideLeft, mediumScreen, toggleDrawer } = useContext(NavigationContext);
+
+  const notificationHandler = () => {
+    if (mediumScreen) {
+      return toggleDrawer();
+    }
+    return slideLeft(2);
+  };
+
   return (
     <ChatMenu padding="12px 24px">
       <IconButton color="primary">
@@ -20,7 +28,7 @@ const ChatListMenu = () => {
       <IconButton
         color="primary"
         onClick={() => {
-          slideLeft(2);
+          notificationHandler();
         }}
       >
         <Badge badgeContent={4} color="secondary">

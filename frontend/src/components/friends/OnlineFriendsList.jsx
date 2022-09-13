@@ -4,7 +4,7 @@ import { ChevronLeftSharp } from "@mui/icons-material";
 import { IconButton, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import ScrollableList from "../layout/ScrollableList";
-import OnlineFriendItem from "./OnlineFriendItem";
+import FriendItem from "./FriendItem";
 
 const OnlineFriendsList = ({ onlineFriends }) => {
   const { mediumScreen, toggleDrawer, slideRight } = useContext(NavigationContext);
@@ -24,7 +24,7 @@ const OnlineFriendsList = ({ onlineFriends }) => {
       </Typography>
       <ScrollableList gap="0.5rem" thumbWidth="10px" thumbColor="#8f0acd73">
         {onlineFriends.map((friend) => (
-          <OnlineFriendItem {...friend} />
+          <FriendItem {...friend} />
         ))}
       </ScrollableList>
     </Box>
