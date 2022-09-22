@@ -1,12 +1,11 @@
 import { Drawer } from "@mui/material";
-import React from "react";
 
-const SlidingContainer = ({ open, children, anchor = "right" }) => {
+const ContainedDrawer = ({ children, open, anchor = "right", ...rest }) => {
   return (
     <Drawer
       open={open}
-      variant="persistent"
       anchor={anchor}
+      variant="persistent"
       sx={{
         "& .MuiDrawer-root": {
           position: "absolute",
@@ -17,10 +16,11 @@ const SlidingContainer = ({ open, children, anchor = "right" }) => {
           width: "100%",
         },
       }}
+      {...rest}
     >
       {children}
     </Drawer>
   );
 };
 
-export default SlidingContainer;
+export default ContainedDrawer;

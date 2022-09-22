@@ -1,6 +1,7 @@
 import { AppBar, Toolbar } from "@mui/material";
+import React from "react";
 
-const ChatMenu = ({ children, ...rest }) => {
+const MenuWrapper = ({ children, ...rest }) => {
   return (
     <AppBar position="static" sx={{ backgroundColor: "#fff", color: "black", marginBottom: "0.75rem" }}>
       <Toolbar
@@ -17,4 +18,4 @@ const ChatMenu = ({ children, ...rest }) => {
   );
 };
 
-export default ChatMenu;
+export default MenuWrapper;

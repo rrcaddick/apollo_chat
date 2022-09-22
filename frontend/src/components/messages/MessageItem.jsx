@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-const Message = ({ content, userMessage, firstMessage, lastMessage }) => {
+const MessageItem = ({ content, userMessage, firstMessage, lastMessage }) => {
   const backgroundColor = userMessage ? (theme) => theme.palette.primary.main : (theme) => theme.palette.grey["200"];
   const color = userMessage
     ? (theme) => theme.palette.primary.contrastText
@@ -42,4 +42,4 @@ const Message = ({ content, userMessage, firstMessage, lastMessage }) => {
   );
 };
 
-export default Message;
+export default MessageItem;

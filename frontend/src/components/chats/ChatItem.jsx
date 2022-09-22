@@ -3,7 +3,7 @@ import { NavigationContext } from "../../providers/NavigationProvider";
 import { Avatar, Badge, Box, Typography } from "@mui/material";
 
 const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) => {
-  const { slideLeft } = useContext(NavigationContext);
+  const { setPosition } = useContext(NavigationContext);
   const activestyles = active
     ? {
         backgroundColor: (theme) => theme.palette.primary.main,
@@ -28,7 +28,9 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) 
           color: theme.palette.primary.contrastText,
         },
       })}
-      onClick={slideLeft}
+      onClick={() => {
+        setPosition(1);
+      }}
       {...activestyles}
     >
       <Avatar alt="Ash Caddick" src={profilePicture} />

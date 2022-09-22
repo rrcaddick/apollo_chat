@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { NavigationContext } from "../../providers/NavigationProvider";
 import { Box } from "@mui/material";
-import MessageFeed from "../message/MessageFeed";
-import SendMessage from "../message/SendMessage";
-import ChatMessageMenu from "./ChatMessageMenu";
+import MessageFeed from "../messages/MessageFeed";
+import NewMessage from "../messages/NewMessage";
+import ChatMenu from "../menus/ChatMenu";
 
-const ChatMessage = () => {
-  const { slideStyles } = useContext(NavigationContext);
+const Chat = () => {
+  const { position } = useContext(NavigationContext);
   return (
     <Box
       flex="1 0 100%"
@@ -19,15 +19,16 @@ const ChatMessage = () => {
           flex: 3,
         },
         [theme.breakpoints.down("md")]: {
-          ...slideStyles,
+          transform: `translateX(-${100 * position}%)`,
+          transition: `transform 500ms ease-in-out`,
         },
       })}
     >
-      <ChatMessageMenu />
+      <ChatMenu />
       <MessageFeed />
-      <SendMessage />
+      <NewMessage />
     </Box>
   );
 };
 
-export default ChatMessage;
+export default Chat;

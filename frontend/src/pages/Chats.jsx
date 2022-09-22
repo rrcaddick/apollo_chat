@@ -1,18 +1,16 @@
-import LeftNav from "../components/navigation/LeftNav";
-import ChatMessage from "../components/chat/ChatMessage";
-import ChatLayout from "../components/layout/ChatLayout";
-import RightNav from "../components/navigation/RightNav";
+import Chat from "../components/chats/Chat";
+import ChatPageLayout from "../components/layout/ChatPageLayout";
 import NavigationProvider from "../providers/NavigationProvider";
+import Navigation from "../components/navigation/Navigation";
 
 const Chats = () => {
   return (
-    <ChatLayout>
+    <ChatPageLayout>
       <NavigationProvider>
-        <LeftNav />
-        <ChatMessage />
-        <RightNav />
+        <Navigation />
+        <Chat />
       </NavigationProvider>
-    </ChatLayout>
+    </ChatPageLayout>
   );
 };
 

@@ -1,7 +1,7 @@
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
-import { forwardRef } from "react";
+import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import React from "react";
 
-const ChatLayout = forwardRef(({ children }, ref) => {
+const ChatPageLayout = ({ children }) => {
   return (
     <>
       <AppBar
@@ -23,11 +23,11 @@ const ChatLayout = forwardRef(({ children }, ref) => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box ref={ref} component="main" display="flex" width="100%" overflow="hidden" flexGrow={1}>
+      <Box component="main" display="flex" width="100%" overflow="hidden" flexGrow={1}>
         {children}
       </Box>
     </>
   );
-});
+};
 
-export default ChatLayout;
+export default ChatPageLayout;

@@ -1,5 +1,4 @@
 import { Avatar, Badge, Box, Typography } from "@mui/material";
-import React from "react";
 
 const FriendItem = ({ profilePicture, name, status }) => {
   return (
