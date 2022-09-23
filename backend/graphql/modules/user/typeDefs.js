@@ -14,6 +14,7 @@ const typeDefs = gql`
     id: ID
     name: String!
     email: String!
+    mobile: String!
     profilePicture: String
     status: String
   }
@@ -21,10 +22,10 @@ const typeDefs = gql`
   input registerUserInput {
     name: String!
     email: String!
-    profilePicture: String
-    status: String
-    password: String
-    confirmPassword: String
+    mobile: String!
+    profilePicture: String!
+    password: String!
+    confirmPassword: String!
   }
 `;
 

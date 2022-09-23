@@ -25,12 +25,10 @@ const Home = () => {
               GraphQL Chat
             </Typography>
           </Box>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }} padding="1rem">
-            <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
-              <Tab label="Login" />
-              <Tab label="Register" />
-            </Tabs>
-          </Box>
+          <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
+            <Tab label="Login" />
+            <Tab label="Register" />
+          </Tabs>
           {tabIndex === 0 && <Login />}
           {tabIndex === 1 && <Register />}
         </Stack>
