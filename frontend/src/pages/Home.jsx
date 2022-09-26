@@ -11,6 +11,11 @@ const Home = () => {
   const handleChange = (_event, newValue) => {
     setTabIndex(newValue);
   };
+
+  const onRegister = () => {
+    setTabIndex(0);
+  };
+
   return (
     <Box flex={1} sx={{ backgroundImage: `url(${BackgroundImage})` }}>
       <Container maxWidth="sm" sx={{ paddingTop: "1.5rem" }}>
@@ -30,7 +35,7 @@ const Home = () => {
             <Tab label="Register" />
           </Tabs>
           {tabIndex === 0 && <Login />}
-          {tabIndex === 1 && <Register />}
+          {tabIndex === 1 && <Register onRegister={onRegister} />}
         </Stack>
       </Container>
     </Box>

@@ -23,7 +23,7 @@ const typeDefs = gql`
     name: String!
     email: String!
     mobile: String!
-    profilePicture: String!
+    profilePicture: String
     password: String!
     confirmPassword: String!
   }

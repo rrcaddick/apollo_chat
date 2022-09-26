@@ -1,9 +1,11 @@
-import React from "react";
+import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Global, css } from "@emotion/react";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./graphql/client";
 
 const GlobalStyles = () => (
   <Global
@@ -47,12 +49,14 @@ const theme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <GlobalStyles />
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <StrictMode>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <GlobalStyles />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </ApolloProvider>
+  </StrictMode>
 );

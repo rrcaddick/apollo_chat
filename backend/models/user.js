@@ -14,6 +14,11 @@ const userSchema = new Schema(
       required: "Email is required",
       unique: "Email already exists",
     },
+    mobile: {
+      type: String,
+      required: "Mobile number is required",
+      unique: "Mobile number already exists",
+    },
     password: {
       type: String,
       required: "Password is required",
