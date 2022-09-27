@@ -11,8 +11,6 @@ const loginController = asyncHandler(async (req, res, next) => {
       .clearCookie("refreshToken", refreshCookieOptions)
       .cookie("refreshToken", refreshToken, refreshCookieOptions)
       .json({
-        name: user.name,
-        email: user.email,
         token: generateAccessToken(user._id),
       });
   } catch (error) {

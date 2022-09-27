@@ -47,6 +47,8 @@ const theme = createTheme({
   },
 });
 
+// const client = createClient();
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
