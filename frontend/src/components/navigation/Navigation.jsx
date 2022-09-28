@@ -7,6 +7,7 @@ import OnlineFriendsNav from "./OnlineFriendsNav";
 import NotificationsNav from "./NotificationsNav";
 import NavigationMenu from "../menus/NavigationMenu";
 import UserMenu from "../menus/UserMenu";
+import { useGetMeFields } from "../../graphql/user/hooks";
 
 const Navigation = () => {
   const [navMenuPosition, setNavMenuPosition] = useState(0);

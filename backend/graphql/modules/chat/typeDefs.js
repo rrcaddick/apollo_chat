@@ -13,7 +13,14 @@ const typeDefs = gql`
   type Chat {
     id: ID
     members: [User!]
+    details: ChatDetail!
     latestMessage: Message
+  }
+
+  type ChatDetail {
+    name: String!
+    profilePicture: String
+    time: String!
   }
 
   input AddChatInput {

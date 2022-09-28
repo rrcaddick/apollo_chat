@@ -5,8 +5,11 @@ const resolvers = {
   },
   Chat: {
     id: (chat) => chat._id,
-    members: ({ members }, _args, { dataSources: { user } }) => user.getUsersByIds(members),
+    members: ({ members }, _args, { dataSources: { user } }) => {
+      return user.getUsersByIds(members);
+    },
     latestMessage: ({ latestMessage }, _args, { dataSources: { message } }) => message.getMessage(latestMessage),
+    details: (chat, _args, { dataSources: { chat: chatSource }, user }) => chatSource.getChatDetails(chat, user._id),
   },
   Mutation: {
     addChat: (_root, { input: { members } }, { dataSources: { chat }, user }) => {

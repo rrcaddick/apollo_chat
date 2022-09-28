@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { NavigationContext } from "../../providers/NavigationProvider";
 import { Avatar, Badge, Box, Typography } from "@mui/material";
 
-const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) => {
+const ChatItem = ({ active, latestMessage, details: { name, profilePicture, time } }) => {
   const { setPosition } = useContext(NavigationContext);
   const activestyles = active
     ? {
@@ -10,6 +10,18 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) 
         color: (theme) => theme.palette.primary.contrastText,
       }
     : {};
+
+  const timeString = (date) => {
+    const dateObj = new Date(+date);
+    if (dateObj.toDateString() === new Date().toDateString()) {
+      return dateObj.toLocaleString("default", { hour: "2-digit", minute: "2-digit", hour12: true });
+    }
+    return new Date(+date).toLocaleDateString("default", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    });
+  };
 
   return (
     <Box
@@ -33,20 +45,20 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture } }) 
       }}
       {...activestyles}
     >
-      <Avatar alt="Ash Caddick" src={profilePicture} />
+      <Avatar alt={name} src={profilePicture} />
 
       <Box overflow="hidden" textOverflow="ellipsis">
         <Typography fontWeight="bold" noWrap>
           {name}
         </Typography>
         <Typography fontSize="x-small" noWrap>
-          {latestMessage}
+          {latestMessage?.content}
         </Typography>
       </Box>
 
       <Box marginLeft="auto" display="flex" flexDirection="column" alignItems="flex-end" justifyContent="space-between">
         <Typography fontSize="x-small" noWrap>
-          3:43 PM
+          {timeString(time)}
         </Typography>
         <Badge badgeContent={Math.floor(Math.random() * (4 - 1 + 0) + 0)} color="secondary" />
       </Box>

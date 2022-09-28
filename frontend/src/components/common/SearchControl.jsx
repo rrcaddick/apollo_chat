@@ -34,6 +34,7 @@ const SearchControl = ({ placeholder, onSearch, backgroundColor = "#fff" }) => {
         Root: StyledInputRoot,
         Input: StyledInputElement,
       }}
+      onChange={onSearch}
       startAdornment={
         <InputAdornment>
           <Search />

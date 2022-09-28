@@ -1,12 +1,16 @@
 import { gql } from "@apollo/client";
 
-const getMe = gql`
+const GET_ME_QUERY = gql`
   query Me {
     me {
+      id
       name
       email
+      mobile
+      profilePicture
+      status
     }
   }
 `;
 
-export { getMe };
+export { GET_ME_QUERY };

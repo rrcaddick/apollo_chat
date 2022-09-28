@@ -1,10 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useState } from "react";
 import ChatItem from "../chats/ChatItem";
 import SearchControl from "../common/SearchControl";
 import ScrollableList from "../common/ScrollableList";
-import { CHATS_DUMMY as chats } from "../../data";
+// import { CHATS_DUMMY as chats } from "../../data";
 import AddChatsMenu from "../menus/AddChatsMenu";
+import { useGetChats } from "../../graphql/chat/hooks";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const ChatsNav = ({ position }) => {
   const [{ addChat, createGroup, sendBroadcast }, setAddChatsMenu] = useState({
@@ -12,6 +14,16 @@ const ChatsNav = ({ position }) => {
     createGroup: false,
     sendBroadcast: false,
   });
+
+  const { debounce } = useDebounce();
+  const { chats, filterChats, loading, error } = useGetChats();
+
+  const searchHandler = (e) => {
+    const searchTerm = e.target.value;
+    debounce(() => {
+      filterChats(searchTerm);
+    }, 250);
+  };
 
   const toggleAddChat = () => {
     setAddChatsMenu((prevState) => ({ ...prevState, addChat: !prevState.addChat }));
@@ -47,14 +59,27 @@ const ChatsNav = ({ position }) => {
         </Box>
 
         {/* Search  */}
-        <SearchControl placeholder="Search chats..." />
+        <SearchControl placeholder="Search chats..." onSearch={searchHandler} />
 
         {/* List */}
-        <ScrollableList gap="1rem" thumbWidth="10px" thumbColor="#8f0acd73">
-          {chats.map((chat) => (
-            <ChatItem key={chat.id} {...chat} active={chat.id === 2} />
-          ))}
-        </ScrollableList>
+
+        {error && (
+          <Typography fontSize="2rem" fontWeight="bold">
+            {error.messsage}
+          </Typography>
+        )}
+        {loading && (
+          <Box display="flex" justifyContent="center" marginTop="2rem">
+            <CircularProgress size="5rem" />
+          </Box>
+        )}
+        {chats && (
+          <ScrollableList gap="1rem" thumbWidth="10px" thumbColor="#8f0acd73">
+            {chats.map((chat) => (
+              <ChatItem key={chat.id} {...chat} />
+            ))}
+          </ScrollableList>
+        )}
       </Box>
     </Box>
   );

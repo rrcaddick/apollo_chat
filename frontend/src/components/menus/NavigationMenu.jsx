@@ -1,12 +1,14 @@
 import { Group, Message, Notifications, Phone } from "@mui/icons-material";
 import { Avatar, Badge, IconButton } from "@mui/material";
 import { useState } from "react";
+import { useGetMe } from "../../graphql/user/hooks";
 import MenuWrapper from "../common/MenuWrapper";
 import UserMenuOptions from "./UserMenuOptions";
 
 const NavigationMenu = ({ onNavigate, navMenuPosition, toggleMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const { me } = useGetMe();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -45,10 +47,7 @@ const NavigationMenu = ({ onNavigate, navMenuPosition, toggleMenu }) => {
       ))}
 
       <IconButton onClick={handleClick}>
-        <Avatar
-          alt="Ray Caddick"
-          src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-        />
+        <Avatar alt={me?.name} src={me?.profilePicture} />
       </IconButton>
       <UserMenuOptions anchorEl={anchorEl} open={open} handleClose={handleClose} toggleMenu={toggleMenu} />
     </MenuWrapper>
