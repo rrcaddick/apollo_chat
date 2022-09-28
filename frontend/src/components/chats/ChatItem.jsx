@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { NavigationContext } from "../../providers/NavigationProvider";
 import { Avatar, Badge, Box, Typography } from "@mui/material";
+import AvatarWithInitials from "../common/AvatarWithInitials";
 
 const ChatItem = ({ active, latestMessage, details: { name, profilePicture, time } }) => {
   const { setPosition } = useContext(NavigationContext);
@@ -45,7 +46,7 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture, time
       }}
       {...activestyles}
     >
-      <Avatar alt={name} src={profilePicture} />
+      <AvatarWithInitials alt={name} src={profilePicture} />
 
       <Box overflow="hidden" textOverflow="ellipsis">
         <Typography fontWeight="bold" noWrap>

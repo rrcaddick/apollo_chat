@@ -13,4 +13,15 @@ const GET_ME_QUERY = gql`
   }
 `;
 
-export { GET_ME_QUERY };
+const GET_ONLINE_FRIENDS = gql`
+  query GetOnlineFriends {
+    onlineFriends {
+      id
+      name
+      profilePicture
+      status
+    }
+  }
+`;
+
+export { GET_ME_QUERY, GET_ONLINE_FRIENDS };

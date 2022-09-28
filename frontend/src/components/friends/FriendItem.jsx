@@ -1,4 +1,5 @@
-import { Avatar, Badge, Box, Typography } from "@mui/material";
+import { Badge, Box, Typography } from "@mui/material";
+import AvatarWithInitials from "../common/AvatarWithInitials";
 
 const FriendItem = ({ profilePicture, name, status }) => {
   return (
@@ -25,7 +26,7 @@ const FriendItem = ({ profilePicture, name, status }) => {
           horizontal: "right",
         }}
       >
-        <Avatar src={profilePicture} />
+        <AvatarWithInitials src={profilePicture} alt={name} />
       </Badge>
       <Box>
         <Typography fontSize="1rem" fontWeight="bold">

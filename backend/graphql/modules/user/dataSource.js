@@ -5,6 +5,10 @@ class User extends MongoDataSource {
     return await this.model.find();
   }
 
+  async getOnlineFriends(userId) {
+    return await this.model.find({ _id: { $ne: userId } });
+  }
+
   async getUsersByIds(userIds) {
     return await this.findManyByIds(userIds);
   }
