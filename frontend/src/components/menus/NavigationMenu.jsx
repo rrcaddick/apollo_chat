@@ -1,5 +1,5 @@
 import { Group, Message, Notifications, Phone } from "@mui/icons-material";
-import { Avatar, Badge, IconButton } from "@mui/material";
+import { Avatar, Badge, CircularProgress, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useGetMe } from "../../graphql/user/hooks";
 import MenuWrapper from "../common/MenuWrapper";

@@ -1,17 +1,16 @@
 import { useContext, useState } from "react";
 import { NavigationContext } from "../../providers/NavigationProvider";
-import { Box } from "@mui/system";
+import { Box, CircularProgress, Backdrop } from "@mui/material";
 import ChatsNav from "./ChatsNav";
 import PhoneNav from "./PhoneNav";
 import OnlineFriendsNav from "./OnlineFriendsNav";
 import NotificationsNav from "./NotificationsNav";
 import NavigationMenu from "../menus/NavigationMenu";
 import UserMenu from "../menus/UserMenu";
-import { useGetMeFields } from "../../graphql/user/hooks";
 
 const Navigation = () => {
   const [navMenuPosition, setNavMenuPosition] = useState(0);
-  const { position } = useContext(NavigationContext);
+  const { position, logoutLoading } = useContext(NavigationContext);
 
   const navigationStyles = (theme) => ({
     backgroundColor: theme.palette.grey["200"],
@@ -43,28 +42,33 @@ const Navigation = () => {
   };
 
   return (
-    <Box
-      width="100%"
-      display="flex"
-      flexDirection="column"
-      flex="1 0 100%"
-      overflow="hidden"
-      position="relative"
-      sx={navigationStyles}
-    >
-      <NavigationMenu
-        onNavigate={setNavMenuPosition}
-        navMenuPosition={navMenuPosition}
-        toggleMenu={{ toggleProfile, toggleSettings }}
-      />
-      <UserMenu open={{ profile, settings }} toggleMenu={{ toggleProfile, toggleSettings }} />
-      <Box display="flex" width="100%" overflow="hidden" sx={{ "& > *": { transition: `transform 300ms linear` } }}>
-        <ChatsNav position={navMenuPosition} />
-        <PhoneNav position={navMenuPosition} />
-        <OnlineFriendsNav position={navMenuPosition} />
-        <NotificationsNav position={navMenuPosition} />
+    <>
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={logoutLoading}>
+        <CircularProgress size="10rem" />
+      </Backdrop>
+      <Box
+        width="100%"
+        display="flex"
+        flexDirection="column"
+        flex="1 0 100%"
+        overflow="hidden"
+        position="relative"
+        sx={navigationStyles}
+      >
+        <NavigationMenu
+          onNavigate={setNavMenuPosition}
+          navMenuPosition={navMenuPosition}
+          toggleMenu={{ toggleProfile, toggleSettings }}
+        />
+        <UserMenu open={{ profile, settings }} toggleMenu={{ toggleProfile, toggleSettings }} />
+        <Box display="flex" width="100%" overflow="hidden" sx={{ "& > *": { transition: `transform 300ms linear` } }}>
+          <ChatsNav position={navMenuPosition} />
+          <PhoneNav position={navMenuPosition} />
+          <OnlineFriendsNav position={navMenuPosition} />
+          <NotificationsNav position={navMenuPosition} />
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
