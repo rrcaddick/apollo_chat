@@ -20,6 +20,10 @@ class User extends MongoDataSource {
   async registerUser(input) {
     return await this.model.create({ ...input });
   }
+
+  async updateProfile(userId, input) {
+    return await this.model.findByIdAndUpdate(userId, { ...input }, { new: true });
+  }
 }
 
 module.exports = User;

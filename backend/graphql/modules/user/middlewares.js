@@ -8,6 +8,7 @@ const middlewares = {
   },
   Mutation: {
     registerUser: [validate(userSchema)],
+    updateProfile: [authGaurd],
   },
 };
 

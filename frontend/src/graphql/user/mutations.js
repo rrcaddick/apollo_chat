@@ -13,4 +13,14 @@ const REGISTER_USER_MUTATION = gql`
   }
 `;
 
-export { REGISTER_USER_MUTATION };
+const UPDATE_PROFILE = gql`
+  mutation UpdateProfile($input: updateProfileInput) {
+    updateProfile(input: $input) {
+      profilePicture
+      mobile
+      status
+    }
+  }
+`;
+
+export { REGISTER_USER_MUTATION, UPDATE_PROFILE };
