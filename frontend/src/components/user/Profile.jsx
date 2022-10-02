@@ -6,42 +6,46 @@ import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 const Profile = ({ onClose }) => {
-  const { me } = useGetMe();
-  const { uploadImage, disgardImage, imageUrl, loading: imageUploadLoading } = useImageUpload();
-  const { loading: updateProfileLoading, serverErrors, mutate: updateProfile } = useUpdateProfile();
-  const AvatarRef = useRef();
   const {
     register,
     setValue,
     watch,
     handleSubmit,
-    formState: { dirtyFields },
+    formState: { dirtyFields, isValid, errors },
   } = useForm({
     defaultValues: {
       status: "",
       mobile: "",
+      profilePicture: "",
     },
     mode: "all",
   });
+
+  const setDefaultValues = (me) => {
+    setValue("status", me.status);
+    setValue("mobile", me.mobile);
+    setValue("profilePicture", me.profilePicture);
+  };
+
+  const onUpdateCompleted = () => {
+    onClose();
+  };
+
+  const { me } = useGetMe(setDefaultValues);
+  const { uploadImage, disgardImage, imageUrl, loading: imageUploadLoading } = useImageUpload();
+  const { loading: updateProfileLoading, serverErrors, mutate: updateProfile } = useUpdateProfile(onUpdateCompleted);
+  const AvatarRef = useRef();
 
   useEffect(() => {
     if (imageUrl) {
       setValue("profilePicture", imageUrl);
     }
-
-    if (!imageUrl && me?.profilePicture) {
-      setValue("profilePicture", me.profilePicture);
-    }
-
-    if (me) {
-      setValue("status", me.status);
-      setValue("mobile", me.mobile);
-      setValue("profilePicture", me.profilePicture);
-    }
-  }, [setValue, imageUrl, me]);
+  }, [setValue, imageUrl]);
 
   const imageHandler = ({ target }) => {
+    dirtyFields.profilePicture = true;
     uploadImage(target.files[0]);
+    target.value = null;
   };
 
   const updateHandler = (userData) => {
@@ -55,6 +59,7 @@ const Profile = ({ onClose }) => {
 
   const onCloseHandler = () => {
     disgardImage();
+    setDefaultValues(me);
     onClose();
   };
 
@@ -100,7 +105,9 @@ const Profile = ({ onClose }) => {
           placeholder="Set a new status"
           fullWidth
           InputLabelProps={{ shrink: Boolean(watch("status", true)) }}
-          {...register("status")}
+          helperText={errors?.status?.message || serverErrors?.status}
+          error={errors?.status || Boolean(serverErrors?.status)}
+          {...register("status", { required: "Status cannot be blank" })}
         />
         <TextField
           variant="standard"
@@ -108,10 +115,17 @@ const Profile = ({ onClose }) => {
           label="Mobile Number"
           fullWidth
           InputLabelProps={{ shrink: Boolean(watch("mobile", true)) }}
-          {...register("mobile")}
+          helperText={errors?.mobile?.message || serverErrors?.mobile}
+          error={errors?.mobile || Boolean(serverErrors?.mobile)}
+          {...register("mobile", { required: "Status cannot be blank" })}
         />
-        <Button variant="contained" fullWidth onClick={handleSubmit(updateHandler)}>
-          Update
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={handleSubmit(updateHandler)}
+          disabled={!isValid || updateProfileLoading}
+        >
+          {updateProfileLoading ? "Loading..." : "Update"}
         </Button>
       </Box>
     </Box>

@@ -16,6 +16,7 @@ const REGISTER_USER_MUTATION = gql`
 const UPDATE_PROFILE = gql`
   mutation UpdateProfile($input: updateProfileInput) {
     updateProfile(input: $input) {
+      id
       profilePicture
       mobile
       status

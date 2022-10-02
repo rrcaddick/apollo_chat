@@ -8,8 +8,12 @@ const useRegisterUser = baseMutation(REGISTER_USER_MUTATION);
 
 const useUpdateProfile = baseMutation(UPDATE_PROFILE);
 
-const useGetMe = () => {
-  const { data, loading, error } = useQuery(GET_ME_QUERY);
+const useGetMe = (onCompletedFn = null) => {
+  const { data, loading, error } = useQuery(GET_ME_QUERY, {
+    onCompleted: ({ me }) => {
+      onCompletedFn(me);
+    },
+  });
   return { me: data?.me, loading, error };
 };
 
