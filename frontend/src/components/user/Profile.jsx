@@ -14,7 +14,7 @@ const Profile = ({ onClose }) => {
     reset,
     watch,
     handleSubmit,
-    formState: { dirtyFields, isValid, errors },
+    formState: { dirtyFields, isValid, errors, isDirty },
   } = useForm({
     mode: "all",
   });
@@ -34,7 +34,7 @@ const Profile = ({ onClose }) => {
 
   useEffect(() => {
     if (imageUrl) {
-      setValue("profilePicture", imageUrl);
+      setValue("profilePicture", imageUrl, { shouldDirty: true });
     }
   }, [setValue, imageUrl]);
 
@@ -47,6 +47,7 @@ const Profile = ({ onClose }) => {
   const updateHandler = (userData) => {
     const input = getDirtyFields(userData, dirtyFields);
     updateProfile({ variables: { input }, mutation: createUpdateProfile(input) });
+    onClose();
   };
 
   const onCloseHandler = () => {
@@ -115,7 +116,7 @@ const Profile = ({ onClose }) => {
           variant="contained"
           fullWidth
           onClick={handleSubmit(updateHandler)}
-          disabled={!isValid || updateProfileLoading}
+          disabled={!isValid || !isDirty || updateProfileLoading}
         >
           {updateProfileLoading ? "Loading..." : "Update"}
         </Button>

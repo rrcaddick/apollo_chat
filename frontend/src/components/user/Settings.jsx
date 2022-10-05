@@ -12,7 +12,7 @@ const Settings = ({ onClose }) => {
     watch,
     handleSubmit,
     reset,
-    formState: { dirtyFields, isValid, errors },
+    formState: { dirtyFields, isValid, errors, isDirty },
   } = useForm({
     mode: "all",
   });
@@ -174,7 +174,12 @@ const Settings = ({ onClose }) => {
             },
           })}
         />
-        <Button variant="contained" fullWidth onClick={handleSubmit(updateHandler)} disabled={!isValid || loading}>
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={handleSubmit(updateHandler)}
+          disabled={!isValid || !isDirty || loading}
+        >
           {loading ? "Loading..." : "Update"}
         </Button>
       </Box>

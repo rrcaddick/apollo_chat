@@ -10,13 +10,16 @@ const PhoneItem = ({ profilePicture, name, mobile }) => {
       alignItems="center"
       p="0.5rem"
       borderRadius="10px"
-      // sx={{
-      //   cursor: "pointer",
-      //   "&:hover": {
-      //     backgroundColor: (theme) => theme.palette.primary.main,
-      //     color: (theme) => theme.palette.primary.contrastText,
-      //   },
-      // }}
+      sx={{
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: (theme) => theme.palette.primary.main,
+          color: (theme) => theme.palette.primary.contrastText,
+          "& .MuiIconButton-colorSuccess": {
+            color: "white",
+          },
+        },
+      }}
     >
       <Badge
         variant="dot"
