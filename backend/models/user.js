@@ -30,24 +30,33 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+const hashPassword = async (password) => {
+  const saltRounds = Number(process.env.HASH_SALT_ROUNDS);
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hash = await bcrypt.hash(password, salt);
+  return hash;
+};
+
 userSchema.pre("save", async function (next) {
   const user = this;
-  const saltRounds = Number(process.env.HASH_SALT_ROUNDS);
-  const plainPassword = String(user.password);
-
   if (!user.isModified("password")) return next();
 
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hash = await bcrypt.hash(plainPassword, salt);
-  user.password = hash;
+  user.password = await hashPassword(user.password);
 
   if (user.status === undefined) user.status = "Available";
-
   next();
 });
 
-userSchema.methods.validatePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const user = this;
+  if (!user._update.password) return next();
+  const hash = await hashPassword(user._update.password);
+  user._update.password = hash;
+  next();
+});
+
+userSchema.methods.validatePassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
 };
 
 userSchema.methods.rotateRefreshToken = async function (refreshToken) {

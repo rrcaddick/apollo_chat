@@ -11,6 +11,7 @@ import {
   confirmPasswordValidator,
 } from "./validators";
 import { useRegisterUser } from "../../graphql/user/hooks";
+import { useShowPassword } from "../../hooks/useShowPassword";
 
 const RegisterForm = styled.form`
   display: flex;
@@ -19,10 +20,7 @@ const RegisterForm = styled.form`
 `;
 
 const Register = ({ onRegister }) => {
-  const [visibility, setVisibility] = useState({
-    password: false,
-    confirmPassword: false,
-  });
+  const { showPassword, showConfirmPassword, toggleShowPassword, toggleShowConfirmPassword } = useShowPassword();
 
   const {
     register,
@@ -78,7 +76,7 @@ const Register = ({ onRegister }) => {
       />
       <TextField
         variant="standard"
-        type={visibility.password ? "text" : "password"}
+        type={showPassword ? "text" : "password"}
         label="Password"
         placeholder="P@ssw0rd!2$"
         helperText={errors?.password?.message || serverErrors?.password}
@@ -86,16 +84,14 @@ const Register = ({ onRegister }) => {
         fullWidth
         InputProps={{
           endAdornment: (
-            <IconButton onClick={() => setVisibility((prevState) => ({ ...prevState, password: !prevState.password }))}>
-              {visibility.password ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
+            <IconButton onClick={toggleShowPassword}>{showPassword ? <VisibilityOff /> : <Visibility />}</IconButton>
           ),
         }}
         {...register("password", passwordValidator)}
       />
       <TextField
         variant="standard"
-        type={visibility.confirmPassword ? "text" : "password"}
+        type={showConfirmPassword ? "text" : "password"}
         label="Confirm Password"
         placeholder="P@ssw0rd!2$"
         helperText={errors?.confirmPassword?.message || serverErrors?.confirmPassword}
@@ -103,12 +99,8 @@ const Register = ({ onRegister }) => {
         fullWidth
         InputProps={{
           endAdornment: (
-            <IconButton
-              onClick={() =>
-                setVisibility((prevState) => ({ ...prevState, confirmPassword: !prevState.confirmPassword }))
-              }
-            >
-              {visibility.confirmPassword ? <VisibilityOff /> : <Visibility />}
+            <IconButton onClick={toggleShowConfirmPassword}>
+              {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           ),
         }}

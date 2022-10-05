@@ -3,10 +3,10 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Alert, Button, IconButton, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
+import { useShowPassword } from "../../hooks/useShowPassword";
 import { useForm } from "react-hook-form";
 import { emailValidator } from "./validators";
 import { useNavigate } from "react-router-dom";
-import { Server } from "ws";
 
 const LoginForm = styled.form`
   display: flex;
@@ -16,7 +16,7 @@ const LoginForm = styled.form`
 `;
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const { showPassword, toggleShowPassword } = useShowPassword();
 
   const { login, loading, serverError, success } = useLogin();
 
@@ -73,13 +73,7 @@ const Login = () => {
           {...register("password", { required: "Please enter your password" })}
           InputProps={{
             endAdornment: (
-              <IconButton
-                onClick={() => {
-                  setShowPassword(!showPassword);
-                }}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
+              <IconButton onClick={toggleShowPassword}>{showPassword ? <VisibilityOff /> : <Visibility />}</IconButton>
             ),
           }}
         />

@@ -9,7 +9,8 @@ const typeDefs = gql`
 
   type Mutation {
     registerUser(input: registerUserInput!): User
-    updateProfile(input: updateProfileInput): User
+    updateUser(input: updateUserInput!): User
+    updateProfile(input: updateProfileInput!): User
   }
 
   type User {
@@ -28,6 +29,14 @@ const typeDefs = gql`
     profilePicture: String
     password: String!
     confirmPassword: String!
+  }
+
+  input updateUserInput {
+    name: String
+    email: String
+    currentPassword: String
+    password: String
+    confirmPassword: String
   }
 
   input updateProfileInput {

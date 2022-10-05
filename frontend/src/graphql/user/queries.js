@@ -14,12 +14,13 @@ const GET_ME_QUERY = gql`
 `;
 
 const GET_ONLINE_FRIENDS = gql`
-  query GetOnlineFriends {
+  query GetFriends {
     onlineFriends {
       id
       name
       profilePicture
       status
+      mobile
     }
   }
 `;

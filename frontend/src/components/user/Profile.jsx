@@ -4,27 +4,23 @@ import { useGetMe, useUpdateProfile } from "../../graphql/user/hooks";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
+import { createUpdateProfile } from "../../graphql/user/mutations";
+import { getDirtyFields } from "../../utils/formUtils";
 
 const Profile = ({ onClose }) => {
   const {
     register,
     setValue,
+    reset,
     watch,
     handleSubmit,
     formState: { dirtyFields, isValid, errors },
   } = useForm({
-    defaultValues: {
-      status: "",
-      mobile: "",
-      profilePicture: "",
-    },
     mode: "all",
   });
 
   const setDefaultValues = (me) => {
-    setValue("status", me.status);
-    setValue("mobile", me.mobile);
-    setValue("profilePicture", me.profilePicture);
+    reset(me);
   };
 
   const onUpdateCompleted = () => {
@@ -49,12 +45,8 @@ const Profile = ({ onClose }) => {
   };
 
   const updateHandler = (userData) => {
-    const dirtyData = Object.keys(dirtyFields).reduce(
-      (dirtyData, field) => ({ ...dirtyData, [field]: userData[field] }),
-      {}
-    );
-
-    updateProfile({ variables: { input: dirtyData } });
+    const input = getDirtyFields(userData, dirtyFields);
+    updateProfile({ variables: { input }, mutation: createUpdateProfile(input) });
   };
 
   const onCloseHandler = () => {
@@ -117,7 +109,7 @@ const Profile = ({ onClose }) => {
           InputLabelProps={{ shrink: Boolean(watch("mobile", true)) }}
           helperText={errors?.mobile?.message || serverErrors?.mobile}
           error={errors?.mobile || Boolean(serverErrors?.mobile)}
-          {...register("mobile", { required: "Status cannot be blank" })}
+          {...register("mobile", { required: "Mobile cannot be blank" })}
         />
         <Button
           variant="contained"

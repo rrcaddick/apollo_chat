@@ -1,11 +1,46 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { useGetFriends } from "../../graphql/user/hooks";
+import { useDebounce } from "../../hooks/useDebounce";
+import ScrollableList from "../common/ScrollableList";
+import SearchControl from "../common/SearchControl";
+import PhoneItem from "../friends/PhoneItem";
 
 const PhoneNav = ({ position }) => {
+  const { debounce } = useDebounce();
+  const { onlineFriends, filterOnlineFriends, loading, error } = useGetFriends();
+
+  const searchHandler = (e) => {
+    const searchTerm = e.target.value;
+    debounce(() => {
+      filterOnlineFriends(searchTerm);
+    }, 250);
+  };
+
   return (
-    <Box flex="1 0 100%" width="100%" sx={{ transform: `translateX(-${100 * position}%)` }}>
-      Phone Menu
-      <a href="tel:+6199942413">call us!</a>
-    </Box>
+    <Stack flex="1 0 100%" p="12px" width="100%" spacing={1} sx={{ transform: `translateX(-${100 * position}%)` }}>
+      <Typography fontSize="1.5rem" fontWeight="bold">
+        Call a Friend
+      </Typography>
+      <SearchControl placeholder="Search friends..." onSearch={searchHandler} />
+
+      {error && (
+        <Typography fontSize="2rem" fontWeight="bold">
+          {error.messsage}
+        </Typography>
+      )}
+      {loading && (
+        <Box display="flex" justifyContent="center" marginTop="2rem">
+          <CircularProgress size="5rem" />
+        </Box>
+      )}
+      {onlineFriends && (
+        <ScrollableList gap="0.5rem" thumbWidth="10px" thumbColor="#8f0acd73">
+          {onlineFriends.map((friend) => (
+            <PhoneItem key={friend.id} {...friend} />
+          ))}
+        </ScrollableList>
+      )}
+    </Stack>
   );
 };
 

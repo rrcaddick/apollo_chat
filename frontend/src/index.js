@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
@@ -51,14 +50,12 @@ const theme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <StrictMode>
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <GlobalStyles />
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-      </BrowserRouter>
-    </ApolloProvider>
-  </StrictMode>
+  <ApolloProvider client={client}>
+    <BrowserRouter>
+      <GlobalStyles />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </BrowserRouter>
+  </ApolloProvider>
 );
