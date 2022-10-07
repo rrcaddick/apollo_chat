@@ -29,7 +29,6 @@ const AddChatsMenuOptions = ({ onOpen: { toggleAddChat, toggleCreateGroup, toggl
     <Box display="flex" alignItems="center" flexShrink={1} position="relative">
       <Backdrop open={open} sx={{ zIndex: "10" }} />
       <SpeedDial
-        backgroundColor="green"
         ariaLabel="SpeedDial tooltip example"
         sx={{ position: "absolute", top: "-1.8rem", right: 0 }}
         direction="down"

@@ -1,6 +1,6 @@
 const resolvers = {
   Query: {
-    chats: (_root, _args, { dataSources: { chat } }) => chat.getChats(),
+    chats: (_root, _args, { dataSources: { chat }, user: { _id } }) => chat.getUserChats(_id),
     chat: (_root, { id }, { dataSources: { chat } }) => chat.getChat(id),
   },
   Chat: {

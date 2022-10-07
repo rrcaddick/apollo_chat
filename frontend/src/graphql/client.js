@@ -1,5 +1,9 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { chatPolicies } from "./chat/typePolicies";
+import { messagePolicies } from "./message/typePolicies";
+
+const typePolicies = Object.assign({}, ...[chatPolicies, messagePolicies]);
 
 const createClient = () => {
   let token;
@@ -19,7 +23,9 @@ const createClient = () => {
 
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies,
+    }),
   });
 
   client.setToken = (newToken) => {

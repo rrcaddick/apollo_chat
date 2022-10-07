@@ -30,7 +30,7 @@ const PhoneNav = ({ position }) => {
       )}
       {loading && (
         <Box display="flex" justifyContent="center" marginTop="2rem">
-          <CircularProgress size="5rem" />
+          <CircularProgress size="5rem" thickness={5} />
         </Box>
       )}
       {onlineFriends && (

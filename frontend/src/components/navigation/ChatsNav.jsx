@@ -70,13 +70,13 @@ const ChatsNav = ({ position }) => {
         )}
         {loading && (
           <Box display="flex" justifyContent="center" marginTop="2rem">
-            <CircularProgress size="5rem" />
+            <CircularProgress size="5rem" thickness={5} />
           </Box>
         )}
         {chats && (
           <ScrollableList gap="1rem" thumbWidth="10px" thumbColor="#8f0acd73">
             {chats.map((chat) => (
-              <ChatItem key={chat.id} {...chat} />
+              <ChatItem key={chat.id} chat={chat} />
             ))}
           </ScrollableList>
         )}

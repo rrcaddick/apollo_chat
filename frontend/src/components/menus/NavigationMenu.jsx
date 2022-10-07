@@ -1,9 +1,10 @@
 import { Group, Message, Notifications, Phone } from "@mui/icons-material";
-import { Avatar, Badge, CircularProgress, IconButton } from "@mui/material";
+import { Avatar, Badge, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useGetMe } from "../../graphql/user/hooks";
 import MenuWrapper from "../common/MenuWrapper";
 import UserMenuOptions from "./UserMenuOptions";
+import { getAvatarUrl } from "../../utils/cloudinary";
 
 const NavigationMenu = ({ onNavigate, navMenuPosition, toggleMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -47,7 +48,7 @@ const NavigationMenu = ({ onNavigate, navMenuPosition, toggleMenu }) => {
       ))}
 
       <IconButton onClick={handleClick}>
-        <Avatar alt={me?.name} src={me?.profilePicture} />
+        <Avatar alt={me?.name} src={getAvatarUrl(me?.profilePicture)} />
       </IconButton>
       <UserMenuOptions anchorEl={anchorEl} open={open} handleClose={handleClose} toggleMenu={toggleMenu} />
     </MenuWrapper>

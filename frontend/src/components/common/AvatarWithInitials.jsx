@@ -29,8 +29,9 @@ function stringAvatar(name) {
   };
 }
 
-const AvatarWithInitials = ({ alt, ...rest }) => {
-  return <Avatar {...rest} {...stringAvatar(alt)} alt={alt} />;
+const AvatarWithInitials = ({ alt, src, ...rest }) => {
+  if (!src) src = "";
+  return <Avatar {...rest} {...stringAvatar(alt)} alt={alt} src={src} />;
 };
 
 export default AvatarWithInitials;

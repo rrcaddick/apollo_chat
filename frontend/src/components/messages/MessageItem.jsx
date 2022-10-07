@@ -1,23 +1,23 @@
 import { Box } from "@mui/material";
 
-const MessageItem = ({ content, userMessage, firstMessage, lastMessage }) => {
-  const backgroundColor = userMessage ? (theme) => theme.palette.primary.main : (theme) => theme.palette.grey["200"];
-  const color = userMessage
+const MessageItem = ({ content, isUserMessage, isFirstInCluster, isLastInCluster }) => {
+  const backgroundColor = isUserMessage ? (theme) => theme.palette.primary.main : (theme) => theme.palette.grey["200"];
+  const color = isUserMessage
     ? (theme) => theme.palette.primary.contrastText
     : (theme) => theme.palette.grey.contrastText;
 
-  if (userMessage)
+  if (isUserMessage)
     return (
       <Box
         backgroundColor={backgroundColor}
         color={color}
         p="0.5rem 1rem"
-        alignSelf={userMessage ? "flex-end" : "flex-start"}
+        alignSelf={isUserMessage ? "flex-end" : "flex-start"}
         sx={{
           borderTopLeftRadius: "30px",
           borderBottomLeftRadius: "30px",
-          borderTopRightRadius: firstMessage && "30px",
-          borderBottomRightRadius: lastMessage && "30px",
+          borderTopRightRadius: isFirstInCluster && "30px",
+          borderBottomRightRadius: isLastInCluster && "30px",
         }}
       >
         {content}
@@ -29,12 +29,12 @@ const MessageItem = ({ content, userMessage, firstMessage, lastMessage }) => {
       backgroundColor={backgroundColor}
       color={color}
       p="0.5rem 1rem"
-      alignSelf={userMessage ? "flex-end" : "flex-start"}
+      alignSelf={isUserMessage ? "flex-end" : "flex-start"}
       sx={{
         borderTopRightRadius: "30px",
         borderBottomRightRadius: "30px",
-        borderTopLeftRadius: firstMessage && "30px",
-        borderBottomLeftRadius: lastMessage && "30px",
+        borderTopLeftRadius: isFirstInCluster && "30px",
+        borderBottomLeftRadius: isLastInCluster && "30px",
       }}
     >
       {content}

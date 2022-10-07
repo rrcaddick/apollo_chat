@@ -10,7 +10,8 @@ const resolvers = {
   Mutation: {
     registerUser: (_root, { input }, { dataSources: { user } }) => user.registerUser(input),
     updateUser: (_root, { input }, { dataSources: { user }, user: { _id } }) => user.updateUser(_id, input),
-    updateProfile: (_root, { input }, { dataSources: { user }, user: { _id } }) => user.updateUser(_id, input),
+    updateProfile: (_root, { input }, { dataSources: { user: userSource }, user }) =>
+      userSource.updateUser(user, input),
   },
 };
 

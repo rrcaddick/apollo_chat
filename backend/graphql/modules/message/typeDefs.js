@@ -4,6 +4,7 @@ const typeDefs = gql`
   type Query {
     messages: [Message!]
     message(id: ID): Message
+    chatMessages(chatId: ID): [Message]
   }
 
   type Mutation {
@@ -19,6 +20,7 @@ const typeDefs = gql`
     sender: User!
     chat: Chat
     content: String
+    isUserMessage: Boolean
   }
 
   input MessageInput {

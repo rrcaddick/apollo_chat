@@ -1,4 +1,5 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
+const { destroyImage } = require("../../../utils/cloudinary");
 
 class User extends MongoDataSource {
   async getUsers() {
@@ -21,8 +22,11 @@ class User extends MongoDataSource {
     return await this.model.create({ ...input });
   }
 
-  async updateUser(userId, input) {
-    return await this.model.findByIdAndUpdate(userId, { ...input }, { new: true });
+  async updateUser(user, input) {
+    const currentProfilePicture = user.profilePicture;
+    const updatedUser = await this.model.findByIdAndUpdate(user._id, { ...input }, { new: true });
+    await destroyImage(currentProfilePicture);
+    return updatedUser;
   }
 }
 

@@ -32,7 +32,7 @@ const Participants = ({ participants }) => {
           },
         }}
       >
-        {participants.map((participant) => (
+        {/* {participants.map((participant) => (
           <Box display="flex" justifyContent="flex-start" alignItems="flex-start">
             <Badge
               overlap="circular"
@@ -46,7 +46,7 @@ const Participants = ({ participants }) => {
               <Avatar src={participant.profilePicture} />
             </Badge>
           </Box>
-        ))}
+        ))} */}
       </Box>
     </Box>
   );

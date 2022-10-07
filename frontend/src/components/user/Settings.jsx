@@ -32,22 +32,28 @@ const Settings = ({ onClose }) => {
   };
   const { me } = useGetMe(setDefaultValues);
 
-  const onUpdateCompleted = () => {
-    onClose();
-  };
-
-  const onCloseHandler = () => {
-    const defaultFormState = { ...me, currentPassword: "", password: "", confirmPassword: "" };
-    reset(defaultFormState);
-    resetVisibility();
-    onClose();
-  };
-
-  const { mutate: updateUser, loading, serverErrors } = useUpdateUser(onUpdateCompleted);
-
   const updateHandler = (userData) => {
     const input = getDirtyFields(userData, dirtyFields);
     updateUser({ variables: { input }, mutation: createUpdateUser(input) });
+  };
+
+  const onUpdateCompleted = (me) => {
+    resetForm(me);
+    onClose();
+  };
+
+  const { mutate: updateUser, loading, serverErrors, clearServerErrors } = useUpdateUser(onUpdateCompleted);
+
+  const resetForm = (me) => {
+    const defaultFormState = { ...me, currentPassword: "", password: "", confirmPassword: "" };
+    reset(defaultFormState);
+    clearServerErrors();
+    resetVisibility();
+  };
+
+  const onCloseHandler = () => {
+    resetForm(me);
+    onClose();
   };
 
   return (

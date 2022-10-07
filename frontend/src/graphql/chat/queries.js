@@ -13,6 +13,7 @@ const GET_CHATS_QUERY = gql`
         profilePicture
         time
       }
+      isSelected @client
     }
   }
 `;

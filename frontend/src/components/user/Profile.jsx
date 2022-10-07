@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { createUpdateProfile } from "../../graphql/user/mutations";
 import { getDirtyFields } from "../../utils/formUtils";
+import { getAvatarUrl } from "../../utils/cloudinary";
 
 const Profile = ({ onClose }) => {
   const {
@@ -28,15 +29,15 @@ const Profile = ({ onClose }) => {
   };
 
   const { me } = useGetMe(setDefaultValues);
-  const { uploadImage, disgardImage, imageUrl, loading: imageUploadLoading } = useImageUpload();
+  const { uploadImage, disgardImage, public_id, loading: imageUploadLoading } = useImageUpload();
   const { loading: updateProfileLoading, serverErrors, mutate: updateProfile } = useUpdateProfile(onUpdateCompleted);
   const AvatarRef = useRef();
 
   useEffect(() => {
-    if (imageUrl) {
-      setValue("profilePicture", imageUrl, { shouldDirty: true });
+    if (public_id) {
+      setValue("profilePicture", public_id, { shouldDirty: true });
     }
-  }, [setValue, imageUrl]);
+  }, [setValue, public_id]);
 
   const imageHandler = ({ target }) => {
     dirtyFields.profilePicture = true;
@@ -47,7 +48,6 @@ const Profile = ({ onClose }) => {
   const updateHandler = (userData) => {
     const input = getDirtyFields(userData, dirtyFields);
     updateProfile({ variables: { input }, mutation: createUpdateProfile(input) });
-    onClose();
   };
 
   const onCloseHandler = () => {
@@ -80,7 +80,7 @@ const Profile = ({ onClose }) => {
           sx={{ flex: "0 1 50%", height: "100%", position: "relative" }}
           ref={AvatarRef}
         >
-          <Avatar alt={me?.name} src={watch("profilePicture", true)} sx={{ width: "100%", height: "100%" }} />
+          <Avatar alt={me?.name} src={getAvatarUrl(watch("profilePicture"))} sx={{ width: "100%", height: "100%" }} />
           <input hidden accept="image/*" type="file" onChange={imageHandler} />
           <PhotoCamera sx={{ position: "absolute", bottom: "10%" }} />
         </IconButton>
@@ -97,7 +97,7 @@ const Profile = ({ onClose }) => {
           label="Status"
           placeholder="Set a new status"
           fullWidth
-          InputLabelProps={{ shrink: Boolean(watch("status", true)) }}
+          InputLabelProps={{ shrink: Boolean(watch("status")) }}
           helperText={errors?.status?.message || serverErrors?.status}
           error={errors?.status || Boolean(serverErrors?.status)}
           {...register("status", { required: "Status cannot be blank" })}
@@ -107,7 +107,7 @@ const Profile = ({ onClose }) => {
           placeholder="Update your mobile number"
           label="Mobile Number"
           fullWidth
-          InputLabelProps={{ shrink: Boolean(watch("mobile", true)) }}
+          InputLabelProps={{ shrink: Boolean(watch("mobile")) }}
           helperText={errors?.mobile?.message || serverErrors?.mobile}
           error={errors?.mobile || Boolean(serverErrors?.mobile)}
           {...register("mobile", { required: "Mobile cannot be blank" })}

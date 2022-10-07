@@ -29,9 +29,9 @@ const AddBroadcast = ({ onClose }) => {
 
       <Box p="12px" overflow="hidden" display="flex" flexGrow={1} position="relative`">
         <ScrollableList gap="0.5rem" thumbWidth="10px" thumbColor="#8f0acd73">
-          {DUMMY_USERS.map((friend) => (
+          {/* {DUMMY_USERS.map((friend) => (
             <FriendItem key={friend.id} {...friend} active={friend.id === 2} />
-          ))}
+          ))} */}
         </ScrollableList>
         <Fab
           color="primary"

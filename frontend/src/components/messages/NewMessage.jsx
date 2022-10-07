@@ -42,7 +42,7 @@ const NewMessage = () => {
         >
           <AttachFile />
         </IconButton>
-        <MessageInput multiline maxRows={4} placeholder="Message..." />
+        <MessageInput multiline="true" maxRows={4} placeholder="Message..." />
         <Box display="flex" alignItems="center">
           <IconButton size="small">
             <EmojiEmotions />

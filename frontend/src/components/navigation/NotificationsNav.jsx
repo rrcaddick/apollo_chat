@@ -10,9 +10,9 @@ const NotificationsNav = ({ position }) => {
         Notifications
       </Typography>
       <ScrollableList gap="0.5rem" thumbWidth="10px" thumbColor="#8f0acd73">
-        {DUMMY_NOTIFICATIONS.map((notification) => (
+        {/* {DUMMY_NOTIFICATIONS.map((notification) => (
           <NotificationItem {...notification} />
-        ))}
+        ))} */}
       </ScrollableList>
     </Stack>
   );

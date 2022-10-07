@@ -1,28 +1,24 @@
 import { useContext } from "react";
 import { NavigationContext } from "../../providers/NavigationProvider";
-import { Avatar, Badge, Box, Typography } from "@mui/material";
+import { Badge, Box, Typography } from "@mui/material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
+import { formatChatTime } from "../../utils/dateUtils";
+import { selectedChatVar } from "../../graphql/variables/selectedChat";
 
-const ChatItem = ({ active, latestMessage, details: { name, profilePicture, time } }) => {
+const ChatItem = ({ chat }) => {
   const { setPosition } = useContext(NavigationContext);
-  const activestyles = active
+  const {
+    latestMessage,
+    isSelected,
+    details: { name, profilePicture, time },
+  } = chat;
+
+  const activestyles = isSelected
     ? {
         backgroundColor: (theme) => theme.palette.primary.main,
         color: (theme) => theme.palette.primary.contrastText,
       }
     : {};
-
-  const timeString = (date) => {
-    const dateObj = new Date(+date);
-    if (dateObj.toDateString() === new Date().toDateString()) {
-      return dateObj.toLocaleString("default", { hour: "2-digit", minute: "2-digit", hour12: true });
-    }
-    return new Date(+date).toLocaleDateString("default", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    });
-  };
 
   return (
     <Box
@@ -43,6 +39,8 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture, time
       })}
       onClick={() => {
         setPosition(1);
+        selectedChatVar(chat);
+        console.log(selectedChatVar().id);
       }}
       {...activestyles}
     >
@@ -59,9 +57,9 @@ const ChatItem = ({ active, latestMessage, details: { name, profilePicture, time
 
       <Box marginLeft="auto" display="flex" flexDirection="column" alignItems="flex-end" justifyContent="space-between">
         <Typography fontSize="x-small" noWrap>
-          {timeString(time)}
+          {formatChatTime(time)}
         </Typography>
-        <Badge badgeContent={Math.floor(Math.random() * (4 - 1 + 0) + 0)} color="secondary" />
+        {/* <Badge badgeContent={Math.floor(Math.random() * (4 - 1 + 0) + 0)} color="secondary" /> */}
       </Box>
     </Box>
   );

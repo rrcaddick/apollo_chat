@@ -22,6 +22,8 @@ const messageSchema = new Schema(
   { timestamps: true }
 );
 
+messageSchema.index({"createdAt": 1});
+
 messageSchema.post("save", async function (message, next) {
   await Chat.findByIdAndUpdate(message.chat, { latestMessage: message });
   next();

@@ -38,6 +38,26 @@ const passwordValidator = yup
   })
   .required("Password is required to create an account");
 
+const newPasswordValidator = yup
+  .string()
+  .matches(strongPasswordPattern, {
+    message: "Password should be least 8 characters, with at least 1 lowercase, capital, number and special character",
+  })
+  .required("Password is required to create an account")
+  .when(["currentPassword", "$user"], function (currentPassword, user, schema) {
+    const isValid = currentPassword && user.validatePassword(currentPassword);
+    if (!isValid) {
+      return yup.string().test({
+        test: () => {
+          const invalidPasswordError = new yup.ValidationError();
+          invalidPasswordError.path = "currentPassword";
+          invalidPasswordError.message = "Current password not correct";
+          return invalidPasswordError;
+        },
+      });
+    }
+  });
+
 const confirmPasswordValidator = yup
   .string()
   .required("Please confirm your password")
@@ -58,21 +78,8 @@ const updateUserSchema = yup.object({
   email: yup.lazy((email) => {
     return onExistValidate(email, emailValidator);
   }),
-  password: yup.string().when(["currentPassword", "$user"], function (currentPassword, user, schema) {
-    const isValid = currentPassword && user.validatePassword(currentPassword);
-    if (!isValid) {
-      return yup.string().test({
-        test: () => {
-          const invalidPasswordError = new yup.ValidationError();
-          invalidPasswordError.path = "currentPassword";
-          invalidPasswordError.message = "Current password not correct";
-          return invalidPasswordError;
-        },
-      });
-    }
-    return yup.lazy((password) => {
-      return onExistValidate(password, passwordValidator);
-    });
+  password: yup.lazy((password) => {
+    return onExistValidate(password, newPasswordValidator);
   }),
   confirmPassword: yup.string().when(["password"], function (password) {
     if (password) {
@@ -93,10 +100,7 @@ const updateProfileSchema = yup.object().shape({
     return onExistValidate(mobile, mobileValidator);
   }),
   profilePicture: yup.lazy((profilePicture) => {
-    const profilePictureValidator = yup
-      .string()
-      .url()
-      .required("Something went wrong. Please try upload picture again");
+    const profilePictureValidator = yup.string().required("Something went wrong. Please try upload picture again");
     return onExistValidate(profilePicture, profilePictureValidator);
   }),
 });

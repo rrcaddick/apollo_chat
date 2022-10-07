@@ -44,7 +44,7 @@ const Navigation = () => {
   return (
     <>
       <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={logoutLoading}>
-        <CircularProgress size="10rem" />
+        <CircularProgress size="10rem" thickness={5} />
       </Backdrop>
       <Box
         width="100%"

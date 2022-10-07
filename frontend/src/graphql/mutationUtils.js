@@ -16,9 +16,14 @@ export const baseMutation = (mutation) => (onCompelteFn) => {
     },
   });
 
+  const clearServerErrors = () => {
+    setServerErrors({});
+  };
+
   return {
     loading,
     serverErrors,
+    clearServerErrors,
     mutate,
   };
 };
