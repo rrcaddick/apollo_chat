@@ -54,6 +54,9 @@ const Navigation = () => {
         overflow="hidden"
         position="relative"
         sx={navigationStyles}
+        boxShadow={(theme) => {
+          return theme.shadows["10"];
+        }}
       >
         <NavigationMenu
           onNavigate={setNavMenuPosition}

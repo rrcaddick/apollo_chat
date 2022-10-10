@@ -1,9 +1,13 @@
 import { useContext, useState } from "react";
 import { NavigationContext } from "../../providers/NavigationProvider";
 import { Phone, VideoCall, MoreVert, ChevronLeftSharp, Person } from "@mui/icons-material";
-import { Avatar, Box, IconButton, ListItemIcon, MenuItem, Typography } from "@mui/material";
+import { Box, IconButton, ListItemIcon, MenuItem, Typography } from "@mui/material";
 import MenuWrapper from "../common/MenuWrapper";
 import DropDownMenu from "../common/DropDownMenu";
+import { useReactiveVar } from "@apollo/client";
+import { selectedChatVar } from "../../graphql/variables/selectedChat";
+import { getAvatarUrl } from "../../utils/cloudinary";
+import AvatarWithInitials from "../common/AvatarWithInitials";
 
 const ChatMenu = () => {
   const { setPosition } = useContext(NavigationContext);
@@ -17,6 +21,12 @@ const ChatMenu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const selectedChat = useReactiveVar(selectedChatVar);
+
+  const {
+    details: { name, profilePicture },
+  } = selectedChat || { details: {} };
 
   return (
     <MenuWrapper
@@ -41,14 +51,11 @@ const ChatMenu = () => {
               },
             })}
           />
-          <Avatar
-            padding="0"
-            src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-          />
+          <AvatarWithInitials padding="0" src={getAvatarUrl(profilePicture)} alt={name} />
         </IconButton>
         <Box overflow="hidden" textOverflow="ellipsis">
           <Typography fontWeight="bold" fontSize="1rem" noWrap>
-            Raymond Caddick
+            {name}
           </Typography>
           <Typography fontSize="0.8rem" noWrap>
             Last Seen 3 hours ago

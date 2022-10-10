@@ -1,6 +1,8 @@
 import { Avatar } from "@mui/material";
 
 function stringToColor(string) {
+  if (!string) return "#ececec";
+
   let hash = 0;
   let i;
 
@@ -21,6 +23,14 @@ function stringToColor(string) {
 }
 
 function stringAvatar(name) {
+  if (!name) return "";
+  if (!name.includes(" "))
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name[0]}`,
+    };
   return {
     sx: {
       bgcolor: stringToColor(name),
