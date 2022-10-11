@@ -1,15 +1,20 @@
 import EmojiPicker from "emoji-picker-react";
-import { Box } from "@mui/material";
+import { Backdrop, Box } from "@mui/material";
 import { useReactiveVar } from "@apollo/client";
 import { emojiTrayOpenVar } from "../../graphql/variables/common";
-import ScreenBackdrop from "./ScreenBackdrop";
 
 const EmoticonPicker = () => {
   const isOpen = useReactiveVar(emojiTrayOpenVar);
+
+  const onPickHandler = (emojiData, e) => {
+    console.log(emojiData);
+  };
+
   return (
     <>
-      <ScreenBackdrop
-        isOpen={isOpen}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isOpen}
         invisible={true}
         onClick={() => {
           emojiTrayOpenVar(false);
@@ -20,7 +25,8 @@ const EmoticonPicker = () => {
         padding="0 1rem"
         width="100%"
         sx={{
-          zIndex: 1,
+          zIndex: (theme) => theme.zIndex.drawer + 2,
+          bottom: "10px",
           transition: "transform 200ms linear",
           transform: `translateY(${isOpen ? "0%" : "110%"})`,
           "& li[data-name='suggested']": {
@@ -44,7 +50,7 @@ const EmoticonPicker = () => {
           },
         }}
       >
-        <EmojiPicker previewConfig={{ showPreview: false }} />
+        <EmojiPicker previewConfig={{ showPreview: false }} onEmojiClick={onPickHandler} />
       </Box>
     </>
   );

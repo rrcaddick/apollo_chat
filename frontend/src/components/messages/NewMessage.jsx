@@ -29,7 +29,7 @@ const MessageInput = styled(TextareaAutosize)`
 const NewMessage = () => {
   const isOpen = useReactiveVar(emojiTrayOpenVar);
   return (
-    <Box p="12px 12px 0" sx={{ zIndex: isOpen ? 1 : 0 }}>
+    <Box p="12px 12px 0" sx={{ zIndex: isOpen ? (theme) => theme.zIndex.drawer + 2 : 0 }}>
       <Box
         backgroundColor={(theme) => theme.palette.grey["200"]}
         borderRadius="30px"

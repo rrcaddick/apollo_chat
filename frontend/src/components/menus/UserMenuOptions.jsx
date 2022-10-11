@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { DarkMode, LightMode, Logout, Person, Settings } from "@mui/icons-material";
-import { CircularProgress, ListItemIcon, MenuItem } from "@mui/material";
+import { Backdrop, CircularProgress, ListItemIcon, MenuItem } from "@mui/material";
 import DropDownMenu from "../common/DropDownMenu";
 import { useNavigate } from "react-router-dom";
-import ScreenBackdrop from "../common/ScreenBackdrop";
 import { useLogout } from "../../hooks/useLogout";
 
 const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, toggleSettings } }) => {
@@ -24,9 +23,9 @@ const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, to
 
   return (
     <>
-      <ScreenBackdrop isOpen={loading} invisible={false}>
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading} invisible={false}>
         <CircularProgress size="10rem" thickness={5} />
-      </ScreenBackdrop>
+      </Backdrop>
       <DropDownMenu anchorEl={anchorEl} open={open} onClose={handleClose} onClick={handleClose}>
         <MenuItem onClick={toggleProfile}>
           <ListItemIcon>
