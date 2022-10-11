@@ -1,17 +1,14 @@
-import { useContext, useState } from "react";
-import { NavigationContext } from "../../providers/NavigationProvider";
+import { useState } from "react";
 import { Phone, VideoCall, MoreVert, ChevronLeftSharp, Person } from "@mui/icons-material";
 import { Box, IconButton, ListItemIcon, MenuItem, Typography } from "@mui/material";
 import MenuWrapper from "../common/MenuWrapper";
 import DropDownMenu from "../common/DropDownMenu";
 import { useReactiveVar } from "@apollo/client";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
-import { getAvatarUrl } from "../../utils/cloudinary";
 import AvatarWithInitials from "../common/AvatarWithInitials";
+import { navigationPositionVar } from "../../graphql/variables/common";
 
 const ChatMenu = () => {
-  const { setPosition } = useContext(NavigationContext);
-
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -25,7 +22,7 @@ const ChatMenu = () => {
   const selectedChat = useReactiveVar(selectedChatVar);
 
   const {
-    details: { name, profilePicture },
+    details: { name, profilePicture, mobile },
   } = selectedChat || { details: {} };
 
   return (
@@ -41,7 +38,7 @@ const ChatMenu = () => {
           size="small"
           padding="0"
           onClick={() => {
-            setPosition(0);
+            navigationPositionVar(0);
           }}
         >
           <ChevronLeftSharp
@@ -51,7 +48,7 @@ const ChatMenu = () => {
               },
             })}
           />
-          <AvatarWithInitials padding="0" src={getAvatarUrl(profilePicture)} alt={name} />
+          <AvatarWithInitials padding="0" src={profilePicture} alt={name} />
         </IconButton>
         <Box overflow="hidden" textOverflow="ellipsis">
           <Typography fontWeight="bold" fontSize="1rem" noWrap>
@@ -73,7 +70,7 @@ const ChatMenu = () => {
           },
         })}
       >
-        <IconButton size="small">
+        <IconButton size="small" href={`tel:${mobile}`}>
           <Phone />
         </IconButton>
 

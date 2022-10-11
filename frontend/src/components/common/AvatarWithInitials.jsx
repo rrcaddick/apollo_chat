@@ -1,4 +1,5 @@
 import { Avatar } from "@mui/material";
+import { getAvatarUrl } from "../../utils/cloudinary";
 
 function stringToColor(string) {
   if (!string) return "#ececec";
@@ -41,7 +42,7 @@ function stringAvatar(name) {
 
 const AvatarWithInitials = ({ alt, src, ...rest }) => {
   if (!src) src = "";
-  return <Avatar {...rest} {...stringAvatar(alt)} alt={alt} src={src} />;
+  return <Avatar {...rest} {...stringAvatar(alt)} alt={alt} src={getAvatarUrl(src)} />;
 };
 
 export default AvatarWithInitials;

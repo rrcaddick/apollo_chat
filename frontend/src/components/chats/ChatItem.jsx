@@ -1,12 +1,10 @@
-import { useContext } from "react";
-import { NavigationContext } from "../../providers/NavigationProvider";
 import { Badge, Box, Typography } from "@mui/material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 import { formatChatTime } from "../../utils/dateUtils";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
+import { navigationPositionVar } from "../../graphql/variables/common";
 
 const ChatItem = ({ chat }) => {
-  const { setPosition } = useContext(NavigationContext);
   const {
     latestMessage,
     isSelected,
@@ -38,9 +36,8 @@ const ChatItem = ({ chat }) => {
         },
       })}
       onClick={() => {
-        setPosition(1);
+        navigationPositionVar(1);
         selectedChatVar(chat);
-        console.log(selectedChatVar().id);
       }}
       {...activestyles}
     >

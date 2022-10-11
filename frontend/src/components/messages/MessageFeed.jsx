@@ -2,6 +2,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import ScrollableList from "../common/ScrollableList";
 import MessageItem from "./MessageItem";
 import { useGetChatMessages } from "../../graphql/message/hooks";
+import EmoticonPicker from "../common/EmoticonPicker";
 
 const MessageFeed = () => {
   const { chatMessages, loading, error } = useGetChatMessages();
@@ -17,9 +18,11 @@ const MessageFeed = () => {
       justifyContent="center"
       alignItems="flex-end"
       flexGrow={1}
+      position="relative"
     >
+      <EmoticonPicker />
       {loading && <CircularProgress sx={{ alignSelf: "center" }} size="10rem" thickness={5} />}
-      {!hasChatMessage && (
+      {!hasChatMessage && !loading && (
         <Box alignSelf="center">
           <Typography>Send a message to start the conversation</Typography>
         </Box>

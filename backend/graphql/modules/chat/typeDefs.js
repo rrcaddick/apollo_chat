@@ -21,6 +21,7 @@ const typeDefs = gql`
     name: String!
     profilePicture: String
     time: String!
+    mobile: String
   }
 
   input AddChatInput {

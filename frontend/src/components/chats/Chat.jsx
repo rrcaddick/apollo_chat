@@ -1,12 +1,12 @@
-import { useContext } from "react";
-import { NavigationContext } from "../../providers/NavigationProvider";
 import { Box } from "@mui/material";
 import MessageFeed from "../messages/MessageFeed";
 import NewMessage from "../messages/NewMessage";
 import ChatMenu from "../menus/ChatMenu";
+import { navigationPositionVar } from "../../graphql/variables/common";
+import { useReactiveVar } from "@apollo/client";
 
 const Chat = () => {
-  const { position } = useContext(NavigationContext);
+  const position = useReactiveVar(navigationPositionVar);
   return (
     <Box
       flex="1 0 100%"

@@ -19,22 +19,30 @@ const StyledInputElement = styled.input`
   border-radius: inherit;
   font-weight: 400;
   line-height: 1;
-  flex-grow: 1;
   border: none;
   padding: 12px 0 12px 6px;
   outline: 0;
+  width: 100%;
 `;
 
 const SearchControl = ({ placeholder, onSearch, backgroundColor = "#fff" }) => {
+  const handleEnterHandler = (e) => {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  };
+
   return (
     <InputUnstyled
       backgroundColor={backgroundColor}
       placeholder={placeholder}
+      type="search"
       components={{
         Root: StyledInputRoot,
         Input: StyledInputElement,
       }}
       onChange={onSearch}
+      onKeyPress={handleEnterHandler}
       startAdornment={
         <InputAdornment position="start">
           <Search />

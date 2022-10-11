@@ -12,6 +12,7 @@ const GET_CHATS_QUERY = gql`
         name
         profilePicture
         time
+        mobile
       }
       isSelected @client
     }

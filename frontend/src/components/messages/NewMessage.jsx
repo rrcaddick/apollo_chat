@@ -2,6 +2,8 @@ import { AttachFile, EmojiEmotions, Mic, Send } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import styled from "@emotion/styled";
+import { useReactiveVar } from "@apollo/client";
+import { emojiTrayOpenVar } from "../../graphql/variables/common";
 
 const MessageInput = styled(TextareaAutosize)`
   width: 100%;
@@ -25,8 +27,9 @@ const MessageInput = styled(TextareaAutosize)`
 `;
 
 const NewMessage = () => {
+  const isOpen = useReactiveVar(emojiTrayOpenVar);
   return (
-    <Box p="12px 12px 0">
+    <Box p="12px 12px 0" sx={{ zIndex: isOpen ? 1 : 0 }}>
       <Box
         backgroundColor={(theme) => theme.palette.grey["200"]}
         borderRadius="30px"
@@ -44,7 +47,12 @@ const NewMessage = () => {
         </IconButton>
         <MessageInput multiline="true" maxRows={4} placeholder="Message..." />
         <Box display="flex" alignItems="center">
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            onClick={() => {
+              emojiTrayOpenVar(!isOpen);
+            }}
+          >
             <EmojiEmotions />
           </IconButton>
           <IconButton size="small">

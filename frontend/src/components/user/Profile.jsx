@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { createUpdateProfile } from "../../graphql/user/mutations";
 import { getDirtyFields } from "../../utils/formUtils";
 import { getAvatarUrl } from "../../utils/cloudinary";
+import DefaultAvatar from "../../assets/default-avatar.png";
 
 const Profile = ({ onClose }) => {
   const {
@@ -80,7 +81,11 @@ const Profile = ({ onClose }) => {
           sx={{ flex: "0 1 50%", height: "100%", position: "relative" }}
           ref={AvatarRef}
         >
-          <Avatar alt={me?.name} src={getAvatarUrl(watch("profilePicture"))} sx={{ width: "100%", height: "100%" }} />
+          <Avatar
+            alt={me?.name}
+            src={getAvatarUrl(watch("profilePicture")) || DefaultAvatar}
+            sx={{ width: "100%", height: "100%" }}
+          />
           <input hidden accept="image/*" type="file" onChange={imageHandler} />
           <PhotoCamera sx={{ position: "absolute", bottom: "10%" }} />
         </IconButton>
