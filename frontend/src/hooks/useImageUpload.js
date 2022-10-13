@@ -12,6 +12,7 @@ export const useImageUpload = () => {
 
   // TODO: Handle upload error
   const [loadSignature, { error }] = useLazyQuery(GET_UPLOAD_SIGNATURE, {
+    fetchPolicy: "no-cache",
     onCompleted: async ({ imageSignature }) => {
       const { timestamp, signature } = imageSignature;
       const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload?api_key=${CLOUDINARY_API_KEY}&timestamp=${timestamp}&signature=${signature}`;

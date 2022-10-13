@@ -3,12 +3,8 @@ import { Backdrop, Box } from "@mui/material";
 import { useReactiveVar } from "@apollo/client";
 import { emojiTrayOpenVar } from "../../graphql/variables/common";
 
-const EmoticonPicker = () => {
+const EmoticonPicker = ({ onSelect }) => {
   const isOpen = useReactiveVar(emojiTrayOpenVar);
-
-  const onPickHandler = (emojiData, e) => {
-    console.log(emojiData);
-  };
 
   return (
     <>
@@ -43,14 +39,14 @@ const EmoticonPicker = () => {
             height: "350px !important",
             "& > .epr-body": {
               overflowY: "overlay",
-              "&:hover::-webkit-scrollbar": {
+              "&::-webkit-scrollbar": {
                 display: "none",
               },
             },
           },
         }}
       >
-        <EmojiPicker previewConfig={{ showPreview: false }} onEmojiClick={onPickHandler} />
+        <EmojiPicker previewConfig={{ showPreview: false }} onEmojiClick={onSelect} lazyLoadEmojis={true} />
       </Box>
     </>
   );

@@ -1,6 +1,6 @@
 import { selectedChatVar } from "../variables/selectedChat";
 
-const chatPolicies = {
+const chatTypePolicies = {
   Chat: {
     fields: {
       isSelected: {
@@ -12,4 +12,4 @@ const chatPolicies = {
   },
 };
 
-export { chatPolicies };
+export { chatTypePolicies };

@@ -10,7 +10,7 @@ const resolvers = {
   Message: {
     id: ({ _id }) => _id,
     isUserMessage: ({ sender }, args, { user }) => {
-      return sender._id.equals(user._id);
+      return sender._id.equals(user?._id);
     },
   },
   Mutation: {

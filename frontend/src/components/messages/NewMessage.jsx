@@ -4,6 +4,8 @@ import TextareaAutosize from "@mui/base/TextareaAutosize";
 import styled from "@emotion/styled";
 import { useReactiveVar } from "@apollo/client";
 import { emojiTrayOpenVar } from "../../graphql/variables/common";
+import { useNewMessage } from "../../hooks/useNewMessage";
+import { useAddMessage } from "../../graphql/message/hooks";
 
 const MessageInput = styled(TextareaAutosize)`
   width: 100%;
@@ -28,6 +30,16 @@ const MessageInput = styled(TextareaAutosize)`
 
 const NewMessage = () => {
   const isOpen = useReactiveVar(emojiTrayOpenVar);
+  const { content, setContentHandler, reset, chatId } = useNewMessage();
+  const { mutate: addMessage, loading, error } = useAddMessage();
+
+  const sendMessageHandler = () => {
+    const input = { chatId, content };
+    addMessage({ variables: { input } });
+    reset();
+    emojiTrayOpenVar(false);
+  };
+
   return (
     <Box p="12px 12px 0" sx={{ zIndex: isOpen ? (theme) => theme.zIndex.drawer + 2 : 0 }}>
       <Box
@@ -45,7 +57,13 @@ const NewMessage = () => {
         >
           <AttachFile />
         </IconButton>
-        <MessageInput multiline="true" maxRows={4} placeholder="Message..." />
+        <MessageInput
+          multiline="true"
+          maxRows={4}
+          placeholder="Message..."
+          value={content}
+          onChange={setContentHandler}
+        />
         <Box display="flex" alignItems="center">
           <IconButton
             size="small"
@@ -76,6 +94,7 @@ const NewMessage = () => {
                 transform: "rotate(-20deg)",
               }}
               color="inherit"
+              onClick={sendMessageHandler}
             >
               <Send />
             </IconButton>

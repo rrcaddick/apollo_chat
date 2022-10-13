@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
+import { forwardRef } from "react";
 
-const MessageItem = ({ content, isUserMessage, isFirstInCluster, isLastInCluster }) => {
+const MessageItem = forwardRef(({ content, isUserMessage, isFirstInCluster, isLastInCluster }, ref) => {
   const backgroundColor = isUserMessage ? (theme) => theme.palette.primary.main : (theme) => theme.palette.grey["200"];
   const color = isUserMessage
     ? (theme) => theme.palette.primary.contrastText
@@ -19,6 +20,7 @@ const MessageItem = ({ content, isUserMessage, isFirstInCluster, isLastInCluster
           borderTopRightRadius: isFirstInCluster && "30px",
           borderBottomRightRadius: isLastInCluster && "30px",
         }}
+        ref={ref}
       >
         {content}
       </Box>
@@ -36,10 +38,11 @@ const MessageItem = ({ content, isUserMessage, isFirstInCluster, isLastInCluster
         borderTopLeftRadius: isFirstInCluster && "30px",
         borderBottomLeftRadius: isLastInCluster && "30px",
       }}
+      ref={ref}
     >
       {content}
     </Box>
   );
-};
+});
 
 export default MessageItem;

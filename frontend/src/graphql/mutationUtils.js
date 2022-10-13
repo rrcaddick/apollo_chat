@@ -1,12 +1,12 @@
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 
-export const baseMutation = (mutation) => (onCompelteFn) => {
+export const baseMutation = (mutation, updateFn) => (onCompelteFn) => {
   const [serverErrors, setServerErrors] = useState({});
 
   const [mutate, { loading }] = useMutation(mutation, {
     onError: ({ graphQLErrors }) => {
-      if (graphQLErrors.length > 0) {
+      if (graphQLErrors?.length > 0) {
         const { data: errors } = graphQLErrors[0];
         setServerErrors(errors);
       }
@@ -14,6 +14,7 @@ export const baseMutation = (mutation) => (onCompelteFn) => {
     onCompleted: (data) => {
       onCompelteFn();
     },
+    update: updateFn,
   });
 
   const clearServerErrors = () => {
