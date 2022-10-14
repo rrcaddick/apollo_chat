@@ -36,10 +36,7 @@ const resolvers = {
         },
         ({ chat, sender }, { userId }) => {
           if (sender._id.toString() === userId) return false;
-
-          return chat.members.reduce((_, member) => {
-            return member._id.toString() === userId;
-          }, false);
+          return chat.members.includes(userId);
         }
       ),
       resolve: (root) => root,

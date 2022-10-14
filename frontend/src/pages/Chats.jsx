@@ -4,9 +4,11 @@ import Navigation from "../components/navigation/Navigation";
 import { selectedChatVar } from "../graphql/variables/selectedChat";
 import { useReactiveVar } from "@apollo/client";
 import ChatSplash from "../components/chats/ChatSplash";
+import { useReceiveMessage } from "../graphql/message/hooks";
 
 const Chats = () => {
   const selectedChat = useReactiveVar(selectedChatVar);
+  useReceiveMessage();
   return (
     <ChatPageLayout>
       <Navigation />

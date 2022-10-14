@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { baseMutation } from "../mutationUtils";
 import { REGISTER_USER_MUTATION, createUpdateProfile, createUpdateUser } from "./mutations";
 import { GET_ME_QUERY, GET_ONLINE_FRIENDS } from "./queries";
+import { currentUserIdVar } from "../variables/currentUser";
 
 const useRegisterUser = baseMutation(REGISTER_USER_MUTATION);
 const useUpdateProfile = baseMutation(createUpdateProfile());
@@ -12,6 +13,7 @@ const useGetMe = (onCompletedFn = null) => {
   const { data, loading, error } = useQuery(GET_ME_QUERY, {
     onCompleted: ({ me }) => {
       onCompletedFn && onCompletedFn(me);
+      currentUserIdVar(me.id);
     },
   });
   return { me: data?.me, loading, error };
