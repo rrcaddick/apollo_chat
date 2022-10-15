@@ -29,8 +29,8 @@ const useLogin = () => {
         setServerError(message);
       } else {
         const { token } = await response.json();
-
         client.setToken(token);
+        client.resolveToken({ token });
         setSuccess(true);
       }
     } catch (err) {

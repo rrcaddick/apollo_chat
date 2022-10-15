@@ -11,6 +11,11 @@ let client;
 
 const createClient = () => {
   let token;
+  let resolveToken;
+
+  const getToken = new Promise((resolve, reject) => {
+    resolveToken = resolve;
+  });
 
   const httpLink = createHttpLink({
     uri: "/graphql",
@@ -25,12 +30,21 @@ const createClient = () => {
     };
   });
 
-  const wsLink = new GraphQLWsLink(
-    createWsClient({
-      url: "ws://localhost:5000/graphql",
-    })
-  );
+  const subscriptionClient = createWsClient({
+    url: "ws://localhost:5000/graphql",
+    connectionParams: async () => await getToken,
+    shouldRetry: true,
+    retryAttempts: 1,
+    on: {
+      closed: ({ code, reason }) => {
+        if (code === 3000) {
+          // TODO: Add error handling for unauthorized websocket connections
+        }
+      },
+    },
+  });
 
+  const wsLink = new GraphQLWsLink(subscriptionClient);
   const splitLink = split(
     ({ query }) => {
       const definition = getMainDefinition(query);
@@ -51,9 +65,11 @@ const createClient = () => {
     token = newToken;
   };
 
+  client.resolveToken = resolveToken;
+
   return client;
 };
 
 client = createClient();
 
-export { client, createClient };
+export { client };

@@ -12,7 +12,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    messageAdded(userId: ID): Message
+    messageAdded: Message
   }
 
   type Message {

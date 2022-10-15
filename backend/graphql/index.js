@@ -12,8 +12,6 @@ const Message = require("../models/message");
 const { pubSubToken } = require("./common/injectionTokens");
 const { imagesModule } = require("./modules/images/module");
 
-// const pubSubToken = new InjectionToken("pub-sub");
-
 const graphqlApplication = createApplication({
   modules: [userModule, chatModule, messageModule, imagesModule],
   providers: [
@@ -57,5 +55,5 @@ module.exports = {
   context,
   dataSources,
   formatError,
-  pubSubToken,
+  injector: graphqlApplication.injector,
 };

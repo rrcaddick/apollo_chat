@@ -34,9 +34,9 @@ const resolvers = {
           const pubSub = context.injector.get(pubSubToken);
           return pubSub.asyncIterator(["MESSAGE_ADDED"]);
         },
-        ({ chat, sender }, { userId }) => {
-          if (sender._id.toString() === userId) return false;
-          return chat.members.includes(userId);
+        ({ chat, sender }, _args, { user }) => {
+          if (sender._id.equals(user._id)) return false;
+          return chat.members.includes(user._id.toString());
         }
       ),
       resolve: (root) => root,

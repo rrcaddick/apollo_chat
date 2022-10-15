@@ -9,6 +9,8 @@ const { ApolloServer } = require("apollo-server-express");
 const { schema, executor, context, dataSources, formatError, execute, subscribe } = require("./graphql");
 const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
+const jwt = require("jsonwebtoken");
+const User = require("./models/user");
 const PORT = process.env.PORT || 5000;
 
 // Express app and middleware
@@ -36,11 +38,33 @@ const wsServer = new WebSocketServer({
   server: httpServer,
   path: "/graphql",
 });
-const wsContext = (ctx, msg, args) => {
-  const context = {};
-  return context;
+
+const wsContext = ({ connectionParams }, msg, args) => {
+  const { user } = connectionParams;
+  return { user };
 };
-useServer({ schema, execute, subscribe, context: wsContext }, wsServer);
+
+useServer(
+  {
+    schema,
+    execute,
+    subscribe,
+    context: wsContext,
+    onConnect: async ({ connectionParams, extra: { socket } }) => {
+      const { token } = connectionParams;
+      try {
+        const { userId } = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+        connectionParams.user = await User.findById(userId);
+      } catch {
+        socket.close(3000, "Invalid access token");
+      }
+    },
+    onDisconnect: ({ connectionParams }) => {
+      console.log(connectionParams);
+    },
+  },
+  wsServer
+);
 
 (async () => {
   await connectDb();
