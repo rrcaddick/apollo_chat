@@ -11,7 +11,7 @@ const { authenticate } = require("./middleware/authenticate");
 const { ApolloServer } = require("apollo-server-express");
 const { schema, executor, context, dataSources, formatError, execute, subscribe, injector } = require("./graphql");
 const { pubSubToken } = require("./graphql/common/injectionTokens");
-const { createServerFrom } = require("wss");
+const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
 const jwt = require("jsonwebtoken");
 const User = require("./models/user");
@@ -37,22 +37,28 @@ const apolloServer = new ApolloServer({
 });
 
 // HTTPS Server
-const serverOptions = {
-  cert: fs.readFileSync(path.join(__dirname, "ssl", "server.cert")),
-  key: fs.readFileSync(path.join(__dirname, "ssl", "server.key")),
-};
-const httpsServer = createHttpsServer(serverOptions, app);
-const wssServer = createServerFrom(httpsServer, () => {}, { path: "/graphql" });
+// const serverOptions = {
+//   cert: fs.readFileSync(path.join(__dirname, "ssl", "server.cert")),
+//   key: fs.readFileSync(path.join(__dirname, "ssl", "server.key")),
+// };
+// const httpsServer = createHttpsServer(serverOptions, app);
+// const wssServer = createServerFrom(
+//   httpsServer,
+//   (test) => {
+//     console.log(test);
+//   },
+//   { path: "wss://192.168.0.122:5000/graphql" }
+// );
 
 // HTTP Server
-// const httpServer = createHttpServer(app);
+const httpServer = createHttpServer(app);
 // Web sockets set up
-// const wsServer = new WebSocketServer({
-//   server: httpServer,
-//   path: "/graphql",
-// });
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: "/graphql",
+});
 
-const wsContext = ({ connectionParams }, msg, args) => {
+const wsContext = ({ connectionParams }) => {
   const { user } = connectionParams;
   return { user };
 };
@@ -83,7 +89,7 @@ useServer(
       pubSub.publish("USER_LOGOUT", user);
     },
   },
-  wssServer
+  wsServer
 );
 
 (async () => {
@@ -98,7 +104,7 @@ useServer(
   //   console.log(`Server started on port ${PORT}`.bgWhite.black);
   // });
 
-  httpsServer.listen(PORT, () => {
+  httpServer.listen(PORT, () => {
     console.log(`HTTPS Server started on port ${PORT}`.bgWhite.black);
   });
 })();

@@ -31,14 +31,14 @@ const createClient = () => {
   });
 
   const subscriptionClient = createWsClient({
-    url: "wss://localhost:5000/graphql",
+    url: "ws://192.168.0.122:5000/graphql",
     connectionParams: async () => await getToken,
     shouldRetry: true,
     retryAttempts: 1,
     on: {
       closed: ({ code, reason }) => {
         if (code === 3000) {
-          // TODO: Add error handling for unauthorized websocket connections
+          // TODO: Add error handling for unauthorized websocket connection
         }
       },
     },
