@@ -1,13 +1,17 @@
+const fs = require("fs");
+const path = require("path");
 const dotenv = require("dotenv").config();
 const colors = require("colors");
 const { connectDb } = require("./config/db");
 const { createServer: createHttpServer } = require("http");
+const { createServer: createHttpsServer } = require("https");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const { authenticate } = require("./middleware/authenticate");
 const { ApolloServer } = require("apollo-server-express");
-const { schema, executor, context, dataSources, formatError, execute, subscribe } = require("./graphql");
-const { WebSocketServer } = require("ws");
+const { schema, executor, context, dataSources, formatError, execute, subscribe, injector } = require("./graphql");
+const { pubSubToken } = require("./graphql/common/injectionTokens");
+const { createServerFrom } = require("wss");
 const { useServer } = require("graphql-ws/lib/use/ws");
 const jwt = require("jsonwebtoken");
 const User = require("./models/user");
@@ -32,12 +36,21 @@ const apolloServer = new ApolloServer({
   formatError,
 });
 
+// HTTPS Server
+const serverOptions = {
+  cert: fs.readFileSync(path.join(__dirname, "ssl", "server.cert")),
+  key: fs.readFileSync(path.join(__dirname, "ssl", "server.key")),
+};
+const httpsServer = createHttpsServer(serverOptions, app);
+const wssServer = createServerFrom(httpsServer, () => {}, { path: "/graphql" });
+
+// HTTP Server
+// const httpServer = createHttpServer(app);
 // Web sockets set up
-const httpServer = createHttpServer(app);
-const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: "/graphql",
-});
+// const wsServer = new WebSocketServer({
+//   server: httpServer,
+//   path: "/graphql",
+// });
 
 const wsContext = ({ connectionParams }, msg, args) => {
   const { user } = connectionParams;
@@ -51,19 +64,26 @@ useServer(
     subscribe,
     context: wsContext,
     onConnect: async ({ connectionParams, extra: { socket } }) => {
+      // TODO: Refactor token validation into util function
       const { token } = connectionParams;
       try {
         const { userId } = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-        connectionParams.user = await User.findById(userId);
+        const user = await User.findByIdAndUpdate(userId, { isOnline: true }, { new: true });
+        connectionParams.user = user;
+        const pubSub = injector.get(pubSubToken);
+        pubSub.publish("USER_LOGIN", user);
       } catch {
         socket.close(3000, "Invalid access token");
       }
     },
-    onDisconnect: ({ connectionParams }) => {
-      console.log(connectionParams);
+    onDisconnect: async ({ connectionParams }) => {
+      const { user } = connectionParams;
+      await user.update({ isOnline: false });
+      const pubSub = injector.get(pubSubToken);
+      pubSub.publish("USER_LOGOUT", user);
     },
   },
-  wsServer
+  wssServer
 );
 
 (async () => {
@@ -74,7 +94,11 @@ useServer(
   // REST 404 handler
   app.use(require("./controllers/404.controller"));
 
-  httpServer.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`.bgWhite.black);
+  // httpServer.listen(PORT, () => {
+  //   console.log(`Server started on port ${PORT}`.bgWhite.black);
+  // });
+
+  httpsServer.listen(PORT, () => {
+    console.log(`HTTPS Server started on port ${PORT}`.bgWhite.black);
   });
 })();

@@ -30,8 +30,8 @@ const resolvers = {
   Subscription: {
     messageAdded: {
       subscribe: withFilter(
-        (_root, _args, context) => {
-          const pubSub = context.injector.get(pubSubToken);
+        (_root, _args, { injector }) => {
+          const pubSub = injector.get(pubSubToken);
           return pubSub.asyncIterator(["MESSAGE_ADDED"]);
         },
         ({ chat, sender }, _args, { user }) => {

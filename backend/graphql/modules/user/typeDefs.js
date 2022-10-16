@@ -13,6 +13,11 @@ const typeDefs = gql`
     updateProfile(input: updateProfileInput!): User
   }
 
+  type Subscription {
+    userLogIn: User
+    userLogOut: User
+  }
+
   type User {
     id: ID
     name: String!

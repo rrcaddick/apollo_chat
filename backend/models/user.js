@@ -26,6 +26,7 @@ const userSchema = new Schema(
     profilePicture: String,
     status: String,
     refreshToken: String,
+    isOnline: Boolean,
   },
   { timestamps: true }
 );

@@ -31,7 +31,7 @@ const createClient = () => {
   });
 
   const subscriptionClient = createWsClient({
-    url: "ws://localhost:5000/graphql",
+    url: "wss://localhost:5000/graphql",
     connectionParams: async () => await getToken,
     shouldRetry: true,
     retryAttempts: 1,

@@ -1,3 +1,6 @@
+const { withFilter } = require("graphql-subscriptions");
+const { pubSubToken } = require("../../common/injectionTokens");
+
 const resolvers = {
   Query: {
     me: (_root, _args, { user }) => user,
@@ -14,6 +17,34 @@ const resolvers = {
     updateUser: (_root, { input }, { dataSources: { user }, user: { _id } }) => user.updateUser(_id, input),
     updateProfile: (_root, { input }, { dataSources: { user: userSource }, user }) =>
       userSource.updateUser(user, input),
+  },
+  Subscription: {
+    userLogIn: {
+      subscribe: withFilter(
+        (_root, _args, { injector }) => {
+          const pubSub = injector.get(pubSubToken);
+          return pubSub.asyncIterator(["USER_LOGIN"]);
+        },
+        ({ id }, _args, { user }) => {
+          if (id.equals(user._id)) return false;
+          return true;
+        }
+      ),
+      resolve: (root) => root,
+    },
+    userLogOut: {
+      subscribe: withFilter(
+        (_root, _args, { injector }) => {
+          const pubSub = injector.get(pubSubToken);
+          return pubSub.asyncIterator(["USER_LOGOUT"]);
+        },
+        ({ id }, _args, { user }) => {
+          if (id.equals(user._id)) return false;
+          return true;
+        }
+      ),
+      resolve: (root) => root,
+    },
   },
 };
 

@@ -9,6 +9,9 @@ const middlewares = {
   Mutation: {
     addMessage: [authGaurd, validate(messageSchema)],
   },
+  Subscription: {
+    "*": [authGaurd],
+  },
 };
 
 module.exports = {

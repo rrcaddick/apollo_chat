@@ -11,6 +11,9 @@ const middlewares = {
     updateUser: [authGaurd, validate(updateUserSchema)],
     updateProfile: [authGaurd, validate(updateProfileSchema)],
   },
+  Subscription: {
+    "*": [authGaurd],
+  },
 };
 
 module.exports = {
