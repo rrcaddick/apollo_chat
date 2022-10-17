@@ -3,8 +3,7 @@ const { gql } = require("apollo-server-express");
 const typeDefs = gql`
   type Query {
     me: User
-    users: [User!]
-    onlineFriends: [User!]
+    friends: [User!]
   }
 
   type Mutation {
@@ -14,8 +13,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    userLogIn: User
-    userLogOut: User
+    userOnline: User
   }
 
   type User {
@@ -25,6 +23,7 @@ const typeDefs = gql`
     mobile: String!
     profilePicture: String
     status: String
+    isOnline: Boolean
   }
 
   input registerUserInput {

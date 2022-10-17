@@ -2,13 +2,13 @@ import { CircularProgress, Stack, Typography } from "@mui/material";
 import ScrollableList from "../common/ScrollableList";
 import FriendItem from "../friends/FriendItem";
 import SearchControl from "../common/SearchControl";
-import { useGetFriends } from "../../graphql/user/hooks";
+import { useGetOnlineFriends } from "../../graphql/user/hooks";
 import { useDebounce } from "../../hooks/useDebounce";
 import { Box } from "@mui/system";
 
 const OnlineFriendsNav = ({ position }) => {
   const { debounce } = useDebounce();
-  const { onlineFriends, filterOnlineFriends, loading, error } = useGetFriends();
+  const { onlineFriends, filterOnlineFriends, loading, error } = useGetOnlineFriends();
 
   const searchHandler = (e) => {
     const searchTerm = e.target.value;

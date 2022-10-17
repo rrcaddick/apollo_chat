@@ -1,10 +1,10 @@
 import { selectedChatVar } from "./variables/selectedChat";
 import { emojiTrayOpenVar, navigationPositionVar } from "./variables/common";
 
-const resetAll = () => {
+const resetAllVars = () => {
   selectedChatVar(null);
   emojiTrayOpenVar(false);
   navigationPositionVar(0);
 };
 
-export { resetAll };
+export { resetAllVars };

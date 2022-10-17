@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { client } from "../graphql/client";
-import { resetAll } from "../graphql/variableUtils";
+import { resetClient } from "../graphql/client";
 
 const useLogout = () => {
   // Stops fetch from being overidden to expose token
@@ -28,9 +27,7 @@ const useLogout = () => {
         const { message } = await response.json();
         setServerError(message);
       } else {
-        client.setToken(null);
-        await client.clearStore();
-        resetAll();
+        resetClient();
         setSuccess(true);
       }
     } catch (err) {

@@ -1,9 +1,9 @@
-import { useQuery } from "@apollo/client";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { baseMutation } from "../mutationUtils";
 import { REGISTER_USER_MUTATION, createUpdateProfile, createUpdateUser } from "./mutations";
-import { GET_ME_QUERY, GET_ONLINE_FRIENDS } from "./queries";
-import { currentUserIdVar } from "../variables/currentUser";
+import { GET_ME_QUERY, GET_FRIENDS, READ_ONLINE_FRIENDS } from "./queries";
+import { ON_USER_ONLINE } from "./subscriptions";
 
 const useRegisterUser = baseMutation(REGISTER_USER_MUTATION);
 const useUpdateProfile = baseMutation(createUpdateProfile());
@@ -13,7 +13,6 @@ const useGetMe = (onCompletedFn = null) => {
   const { data, loading, error } = useQuery(GET_ME_QUERY, {
     onCompleted: ({ me }) => {
       onCompletedFn && onCompletedFn(me);
-      currentUserIdVar(me.id);
     },
   });
   return { me: data?.me, loading, error };
@@ -21,7 +20,27 @@ const useGetMe = (onCompletedFn = null) => {
 
 const useGetFriends = () => {
   const [filteredFriends, setFilteredFriends] = useState();
-  const { data, loading, error } = useQuery(GET_ONLINE_FRIENDS);
+  const { data, loading, error } = useQuery(GET_FRIENDS);
+
+  const filterFriends = (searchTerm) => {
+    if (searchTerm === "") {
+      return setFilteredFriends(data.friends);
+    }
+    setFilteredFriends(data.friends.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())));
+  };
+
+  useEffect(() => {
+    if (data?.friends) {
+      setFilteredFriends(data.friends);
+    }
+  }, [data]);
+
+  return { friends: filteredFriends, filterFriends, loading, error };
+};
+
+const useGetOnlineFriends = () => {
+  const [filteredFriends, setFilteredFriends] = useState();
+  const { data, loading, error } = useQuery(READ_ONLINE_FRIENDS);
 
   const filterOnlineFriends = (searchTerm) => {
     if (searchTerm === "") {
@@ -39,4 +58,37 @@ const useGetFriends = () => {
   return { onlineFriends: filteredFriends, filterOnlineFriends, loading, error };
 };
 
-export { useRegisterUser, useGetMe, useGetFriends, useUpdateProfile, useUpdateUser };
+const useUserOnline = () => {
+  const { loading, data, error } = useSubscription(ON_USER_ONLINE, {
+    onData: ({ client, data }) => {
+      const { userOnline } = data.data;
+
+      client.cache.writeFragment({
+        id: client.cache.identify(userOnline),
+        fragment: gql`
+          fragment updateOnlineStatus on User {
+            isOnline
+          }
+        `,
+        data: {
+          isOnline: userOnline.isOnline,
+        },
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  return { loading, data, error };
+};
+
+export {
+  useRegisterUser,
+  useGetMe,
+  useGetFriends,
+  useGetOnlineFriends,
+  useUpdateProfile,
+  useUpdateUser,
+  useUserOnline,
+};

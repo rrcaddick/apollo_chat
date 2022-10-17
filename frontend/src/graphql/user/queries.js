@@ -13,16 +13,30 @@ const GET_ME_QUERY = gql`
   }
 `;
 
-const GET_ONLINE_FRIENDS = gql`
+const GET_FRIENDS = gql`
   query GetFriends {
-    onlineFriends {
+    friends {
       id
       name
       profilePicture
       status
       mobile
+      isOnline
     }
   }
 `;
 
-export { GET_ME_QUERY, GET_ONLINE_FRIENDS };
+const READ_ONLINE_FRIENDS = gql`
+  query readOnlineFriends {
+    onlineFriends @client {
+      id
+      name
+      profilePicture
+      status
+      mobile
+      isOnline
+    }
+  }
+`;
+
+export { GET_ME_QUERY, READ_ONLINE_FRIENDS, GET_FRIENDS };

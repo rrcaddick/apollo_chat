@@ -4,10 +4,7 @@ const { pubSubToken } = require("../../common/injectionTokens");
 const resolvers = {
   Query: {
     me: (_root, _args, { user }) => user,
-    users: (_root, _args, { dataSources: { user }, user: { _id } }) => user.getUsers(_id),
-    onlineFriends: (_root, _args, { dataSources: { user }, user: { _id }, injector }) => {
-      return user.getOnlineFriends(_id);
-    },
+    friends: (_root, _args, { dataSources: { user }, user: { _id } }) => user.getUsers(_id),
   },
   User: {
     id: (user) => user._id,
@@ -19,27 +16,14 @@ const resolvers = {
       userSource.updateUser(user, input),
   },
   Subscription: {
-    userLogIn: {
+    userOnline: {
       subscribe: withFilter(
         (_root, _args, { injector }) => {
           const pubSub = injector.get(pubSubToken);
-          return pubSub.asyncIterator(["USER_LOGIN"]);
+          return pubSub.asyncIterator(["USER_ONLINE"]);
         },
         ({ id }, _args, { user }) => {
-          if (id.equals(user._id)) return false;
-          return true;
-        }
-      ),
-      resolve: (root) => root,
-    },
-    userLogOut: {
-      subscribe: withFilter(
-        (_root, _args, { injector }) => {
-          const pubSub = injector.get(pubSubToken);
-          return pubSub.asyncIterator(["USER_LOGOUT"]);
-        },
-        ({ id }, _args, { user }) => {
-          if (id.equals(user._id)) return false;
+          if (id === user._id.toString()) return false;
           return true;
         }
       ),

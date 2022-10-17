@@ -7,12 +7,12 @@ import PhoneItem from "../friends/PhoneItem";
 
 const PhoneNav = ({ position }) => {
   const { debounce } = useDebounce();
-  const { onlineFriends, filterOnlineFriends, loading, error } = useGetFriends();
+  const { friends, filterFriends, loading, error } = useGetFriends();
 
   const searchHandler = (e) => {
     const searchTerm = e.target.value;
     debounce(() => {
-      filterOnlineFriends(searchTerm);
+      filterFriends(searchTerm);
     }, 250);
   };
 
@@ -33,9 +33,9 @@ const PhoneNav = ({ position }) => {
           <CircularProgress size="5rem" thickness={5} />
         </Box>
       )}
-      {onlineFriends && (
+      {friends && (
         <ScrollableList gap="0.5rem" thumbWidth="10px" thumbColor="#8f0acd73">
-          {onlineFriends.map((friend) => (
+          {friends.map((friend) => (
             <PhoneItem key={friend.id} {...friend} />
           ))}
         </ScrollableList>

@@ -6,4 +6,6 @@ const navigationPositionVar = makeVar(0);
 
 const selectedEmojiVar = makeVar();
 
-export { emojiTrayOpenVar, navigationPositionVar, selectedEmojiVar };
+const recreateClientVar = makeVar(false);
+
+export { emojiTrayOpenVar, navigationPositionVar, selectedEmojiVar, recreateClientVar };

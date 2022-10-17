@@ -5,9 +5,6 @@ import { ON_MESSAGE_ADDED } from "./subscriptions";
 import { selectedChatVar } from "../variables/selectedChat";
 import { useReactiveVar } from "@apollo/client";
 import { baseMutation } from "../mutationUtils";
-import { useGetMe } from "../user/hooks";
-import { useEffect } from "react";
-import { currentUserIdVar } from "../variables/currentUser";
 
 const useGetChatMessages = (onCompletedFn = null) => {
   const selectedChat = useReactiveVar(selectedChatVar);
@@ -29,13 +26,9 @@ const useAddMessage = baseMutation(ADD_MESSAGE, (cache, { data: { addMessage } }
 });
 
 const useReceiveMessage = () => {
-  const userId = useReactiveVar(currentUserIdVar);
   const { loading, data, error } = useSubscription(ON_MESSAGE_ADDED, {
-    variables: { userId },
-    skip: !userId,
     onData: ({ client, data }) => {
       const { messageAdded } = data.data;
-      console.log(messageAdded);
 
       const {
         chat: { id: chatId },

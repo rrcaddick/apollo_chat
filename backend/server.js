@@ -72,21 +72,25 @@ useServer(
     onConnect: async ({ connectionParams, extra: { socket } }) => {
       // TODO: Refactor token validation into util function
       const { token } = connectionParams;
+
       try {
         const { userId } = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
         const user = await User.findByIdAndUpdate(userId, { isOnline: true }, { new: true });
         connectionParams.user = user;
         const pubSub = injector.get(pubSubToken);
-        pubSub.publish("USER_LOGIN", user);
+        pubSub.publish("USER_ONLINE", user);
       } catch {
         socket.close(3000, "Invalid access token");
       }
     },
     onDisconnect: async ({ connectionParams }) => {
       const { user } = connectionParams;
-      await user.update({ isOnline: false });
-      const pubSub = injector.get(pubSubToken);
-      pubSub.publish("USER_LOGOUT", user);
+      if (user) {
+        user.isOnline = false;
+        await user.save();
+        const pubSub = injector.get(pubSubToken);
+        pubSub.publish("USER_ONLINE", user);
+      }
     },
   },
   wsServer

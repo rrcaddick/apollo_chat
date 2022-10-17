@@ -5,9 +5,10 @@ import { createClient as createWsClient } from "graphql-ws";
 import { setContext } from "@apollo/client/link/context";
 import { chatTypePolicies } from "./chat/typePolicies";
 import { queryTypePolicies } from "./typePolicies";
+import { recreateClientVar } from "./variables/common";
+import { resetAllVars } from "./variableUtils";
 
 const typePolicies = Object.assign({}, ...[queryTypePolicies, chatTypePolicies]);
-let client;
 
 const createClient = () => {
   let token;
@@ -33,8 +34,8 @@ const createClient = () => {
   const subscriptionClient = createWsClient({
     url: "ws://192.168.0.122:5000/graphql",
     connectionParams: async () => await getToken,
-    shouldRetry: true,
-    retryAttempts: 1,
+    shouldRetry: false,
+    retryAttempts: 0,
     on: {
       closed: ({ code, reason }) => {
         if (code === 3000) {
@@ -43,6 +44,8 @@ const createClient = () => {
       },
     },
   });
+
+  subscriptionClient.dispose();
 
   const wsLink = new GraphQLWsLink(subscriptionClient);
   const splitLink = split(
@@ -66,10 +69,13 @@ const createClient = () => {
   };
 
   client.resolveToken = resolveToken;
-
+  client.subscriptionClient = subscriptionClient;
   return client;
 };
 
-client = createClient();
+const resetClient = () => {
+  recreateClientVar(!recreateClientVar());
+  resetAllVars();
+};
 
-export { client };
+export { createClient, resetClient };

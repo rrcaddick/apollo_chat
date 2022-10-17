@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { client } from "../graphql/client";
+import { useApolloClient } from "@apollo/client";
 
 const useLogin = () => {
   // Stops fetch from being overidden to expose token
@@ -8,6 +8,7 @@ const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const client = useApolloClient();
 
   const login = async (userData) => {
     try {

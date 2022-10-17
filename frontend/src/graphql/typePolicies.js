@@ -54,6 +54,14 @@ const queryTypePolicies = {
           return incoming;
         },
       },
+      onlineFriends: {
+        read(_, { readField }) {
+          return readField("friends")?.filter((friendRef) => {
+            const isOnline = readField("isOnline", friendRef);
+            return isOnline === true;
+          });
+        },
+      },
     },
   },
 };
