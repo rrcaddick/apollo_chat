@@ -6,6 +6,7 @@ const GET_CHAT_MESSAGES = gql`
       id
       content
       isUserMessage
+      createdAt
       isFirstInCluster @client
       isLastInCluster @client
     }

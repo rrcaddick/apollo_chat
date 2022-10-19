@@ -21,6 +21,7 @@ const typeDefs = gql`
     chat: Chat
     content: String
     isUserMessage: Boolean
+    createdAt: String
   }
 
   input MessageInput {

@@ -68,10 +68,12 @@ const useUserOnline = () => {
         fragment: gql`
           fragment updateOnlineStatus on User {
             isOnline
+            lastSeen
           }
         `,
         data: {
           isOnline: userOnline.isOnline,
+          lastSeen: userOnline.lastSeen,
         },
       });
     },

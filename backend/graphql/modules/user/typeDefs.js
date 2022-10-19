@@ -24,6 +24,7 @@ const typeDefs = gql`
     profilePicture: String
     status: String
     isOnline: Boolean
+    lastSeen: String
   }
 
   input registerUserInput {

@@ -20,6 +20,9 @@ const isLastInCluster = (messages, index, readField) => {
   // Only message in chat
   if (messages.length === 1) return true;
 
+  // Last message in chat
+  if (index === messages.length - 1) return true;
+
   // First message in next group
   const nextIsUser = readField("isUserMessage", messages[index + 1]);
   const currIsUser = readField("isUserMessage", messages[index]);
@@ -60,6 +63,19 @@ const queryTypePolicies = {
             const isOnline = readField("isOnline", friendRef);
             return isOnline === true;
           });
+        },
+      },
+      selectedChat: {
+        read(_, { cache, readField, toReference }) {
+          return readField("chats")?.find((chatRef) => {
+            const isSelected = readField("isSelected", chatRef);
+            return isSelected === true;
+          });
+
+          // return toReference({
+          //   __typename: "Chat",
+          //   id: readField("id", selectedChat),
+          // });
         },
       },
     },

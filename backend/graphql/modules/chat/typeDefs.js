@@ -17,11 +17,14 @@ const typeDefs = gql`
     latestMessage: Message
   }
 
-  type ChatDetail {
+  union ChatDetail = User | GroupDetail
+
+  type GroupDetail {
     name: String!
     profilePicture: String
     time: String!
     mobile: String
+    lastSeen: String
   }
 
   input AddChatInput {

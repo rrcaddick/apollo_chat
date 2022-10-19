@@ -3,10 +3,10 @@ import { Phone, VideoCall, MoreVert, ChevronLeftSharp, Person } from "@mui/icons
 import { Box, IconButton, ListItemIcon, MenuItem, Typography } from "@mui/material";
 import MenuWrapper from "../common/MenuWrapper";
 import DropDownMenu from "../common/DropDownMenu";
-import { useReactiveVar } from "@apollo/client";
-import { selectedChatVar } from "../../graphql/variables/selectedChat";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 import { navigationPositionVar } from "../../graphql/variables/common";
+import { useReadSelectedChat } from "../../graphql/chat/hooks";
+import { formatLastSeen } from "../../utils/dateUtils";
 
 const ChatMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -19,10 +19,9 @@ const ChatMenu = () => {
     setAnchorEl(null);
   };
 
-  const selectedChat = useReactiveVar(selectedChatVar);
-
+  const { selectedChat } = useReadSelectedChat();
   const {
-    details: { name, profilePicture, mobile },
+    details: { name, profilePicture, mobile, isOnline, lastSeen },
   } = selectedChat || { details: {} };
 
   return (
@@ -48,14 +47,35 @@ const ChatMenu = () => {
               },
             })}
           />
-          <AvatarWithInitials padding="0" src={profilePicture} alt={name} />
+          <AvatarWithInitials src={profilePicture} alt={name} isOnline={isOnline} />
         </IconButton>
         <Box overflow="hidden" textOverflow="ellipsis">
           <Typography fontWeight="bold" fontSize="1rem" noWrap>
             {name}
           </Typography>
-          <Typography fontSize="0.8rem" noWrap>
-            Last Seen 3 hours ago
+          <Typography
+            fontSize="0.8rem"
+            noWrap
+            sx={(theme) => ({
+              display: "none",
+              [theme.breakpoints.up("450")]: {
+                display: "block",
+              },
+            })}
+          >
+            {formatLastSeen(isOnline, lastSeen)}
+          </Typography>
+          <Typography
+            fontSize="0.8rem"
+            noWrap
+            sx={(theme) => ({
+              display: "block",
+              [theme.breakpoints.up("450")]: {
+                display: "none",
+              },
+            })}
+          >
+            {formatLastSeen(isOnline, lastSeen, true)}
           </Typography>
         </Box>
       </Box>

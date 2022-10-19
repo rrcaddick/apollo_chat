@@ -1,8 +1,8 @@
 import { Phone } from "@mui/icons-material";
-import { Badge, Box, IconButton, Typography, Link } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 
-const PhoneItem = ({ profilePicture, name, mobile }) => {
+const PhoneItem = ({ profilePicture, name, mobile, isOnline }) => {
   return (
     <Box
       display="flex"
@@ -21,17 +21,7 @@ const PhoneItem = ({ profilePicture, name, mobile }) => {
         },
       }}
     >
-      <Badge
-        variant="dot"
-        color="success"
-        overlap="circular"
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-      >
-        <AvatarWithInitials src={profilePicture} alt={name} />
-      </Badge>
+      <AvatarWithInitials src={profilePicture} alt={name} isOnline={isOnline} />
       <Box>
         <Typography fontSize="1rem" fontWeight="bold">
           {name}

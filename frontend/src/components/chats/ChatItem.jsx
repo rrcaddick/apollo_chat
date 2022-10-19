@@ -8,7 +8,7 @@ const ChatItem = ({ chat }) => {
   const {
     latestMessage,
     isSelected,
-    details: { name, profilePicture, time },
+    details: { name, profilePicture, isOnline },
   } = chat;
 
   const activestyles = isSelected
@@ -41,7 +41,7 @@ const ChatItem = ({ chat }) => {
       }}
       {...activestyles}
     >
-      <AvatarWithInitials alt={name} src={profilePicture} />
+      <AvatarWithInitials alt={name} src={profilePicture} isOnline={isOnline} />
 
       <Box overflow="hidden" textOverflow="ellipsis">
         <Typography fontWeight="bold" noWrap>
@@ -53,9 +53,11 @@ const ChatItem = ({ chat }) => {
       </Box>
 
       <Box marginLeft="auto" display="flex" flexDirection="column" alignItems="flex-end" justifyContent="space-between">
-        <Typography fontSize="x-small" noWrap>
-          {formatChatTime(time)}
-        </Typography>
+        {latestMessage && (
+          <Typography fontSize="x-small" noWrap>
+            {formatChatTime(latestMessage?.createdAt)}
+          </Typography>
+        )}
         {/* <Badge badgeContent={Math.floor(Math.random() * (4 - 1 + 0) + 0)} color="secondary" /> */}
       </Box>
     </Box>

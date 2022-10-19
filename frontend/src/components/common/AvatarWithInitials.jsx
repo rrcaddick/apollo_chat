@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, Badge } from "@mui/material";
 import { getAvatarUrl } from "../../utils/cloudinary";
 
 function stringToColor(string) {
@@ -40,9 +40,24 @@ function stringAvatar(name) {
   };
 }
 
-const AvatarWithInitials = ({ alt, src, ...rest }) => {
+const AvatarWithInitials = ({ alt, src, isOnline, ...rest }) => {
   if (!src) src = "";
-  return <Avatar {...rest} {...stringAvatar(alt)} alt={alt} src={getAvatarUrl(src)} />;
+  return (
+    <>
+      <Badge
+        variant="dot"
+        color="success"
+        overlap="circular"
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        invisible={!isOnline}
+      >
+        <Avatar {...rest} {...stringAvatar(alt)} alt={alt} src={getAvatarUrl(src)} />
+      </Badge>
+    </>
+  );
 };
 
 export default AvatarWithInitials;

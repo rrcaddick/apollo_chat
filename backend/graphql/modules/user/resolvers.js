@@ -8,6 +8,7 @@ const resolvers = {
   },
   User: {
     id: (user) => user._id,
+    lastSeen: (user) => user.updatedAt,
   },
   Mutation: {
     registerUser: (_root, { input }, { dataSources: { user } }) => user.registerUser(input),

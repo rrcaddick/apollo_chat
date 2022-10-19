@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { GET_CHATS_QUERY } from "./queries";
+import { GET_CHATS_QUERY, READ_SELECTED_CHAT } from "./queries";
 
 const useGetChats = () => {
   const [filteredChats, setFilteredChats] = useState();
@@ -22,4 +22,13 @@ const useGetChats = () => {
   return { chats: filteredChats, filterChats, loading, error };
 };
 
-export { useGetChats };
+const useReadSelectedChat = (onCompletedFn = null) => {
+  const { data, loading, error } = useQuery(READ_SELECTED_CHAT, {
+    onCompleted: ({ selectedChat }) => {
+      onCompletedFn && onCompletedFn(selectedChat);
+    },
+  });
+  return { selectedChat: data?.selectedChat, loading, error };
+};
+
+export { useGetChats, useReadSelectedChat };

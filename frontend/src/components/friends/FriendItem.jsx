@@ -1,7 +1,7 @@
 import { Badge, Box, Typography } from "@mui/material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 
-const FriendItem = ({ profilePicture, name, status }) => {
+const FriendItem = ({ profilePicture, name, status, isOnline }) => {
   return (
     <Box
       display="flex"
@@ -17,17 +17,7 @@ const FriendItem = ({ profilePicture, name, status }) => {
         },
       }}
     >
-      <Badge
-        variant="dot"
-        color="success"
-        overlap="circular"
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-      >
-        <AvatarWithInitials src={profilePicture} alt={name} />
-      </Badge>
+      <AvatarWithInitials src={profilePicture} alt={name} isOnline={isOnline} />
       <Box>
         <Typography fontSize="1rem" fontWeight="bold">
           {name}

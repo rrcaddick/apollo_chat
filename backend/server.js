@@ -86,10 +86,9 @@ useServer(
     onDisconnect: async ({ connectionParams }) => {
       const { user } = connectionParams;
       if (user) {
-        user.isOnline = false;
-        await user.save();
+        const latestUser = await User.findByIdAndUpdate(user._id, { isOnline: false }, { new: true });
         const pubSub = injector.get(pubSubToken);
-        pubSub.publish("USER_ONLINE", user);
+        pubSub.publish("USER_ONLINE", latestUser);
       }
     },
   },

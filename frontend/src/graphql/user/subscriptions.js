@@ -5,6 +5,7 @@ const ON_USER_ONLINE = gql`
     userOnline {
       id
       isOnline
+      lastSeen
     }
   }
 `;

@@ -3,6 +3,11 @@ const resolvers = {
     chats: (_root, _args, { dataSources: { chat }, user: { _id } }) => chat.getUserChats(_id),
     chat: (_root, { id }, { dataSources: { chat } }) => chat.getChat(id),
   },
+  ChatDetail: {
+    __resolveType(obj, context, info) {
+      return "User";
+    },
+  },
   Chat: {
     id: (chat) => chat._id,
     members: ({ members }, _args, { dataSources: { user } }) => {

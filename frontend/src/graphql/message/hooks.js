@@ -1,10 +1,27 @@
-import { useQuery, useSubscription } from "@apollo/client";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 import { GET_CHAT_MESSAGES } from "./queries";
 import { ADD_MESSAGE } from "./mutations";
 import { ON_MESSAGE_ADDED } from "./subscriptions";
 import { selectedChatVar } from "../variables/selectedChat";
 import { useReactiveVar } from "@apollo/client";
 import { baseMutation } from "../mutationUtils";
+
+const updateLastestMessage = (cache, newMessage, chatId) => {
+  const newMessageRef = cache.identify(newMessage);
+  cache.writeFragment({
+    id: `Chat:${chatId}`,
+    fragment: gql`
+      fragment UpdateLastestMessage on Chat {
+        latestMessage
+      }
+    `,
+    data: {
+      latestMessage: {
+        __ref: newMessageRef,
+      },
+    },
+  });
+};
 
 const useGetChatMessages = (onCompletedFn = null) => {
   const selectedChat = useReactiveVar(selectedChatVar);
@@ -20,6 +37,7 @@ const useGetChatMessages = (onCompletedFn = null) => {
 
 const useAddMessage = baseMutation(ADD_MESSAGE, (cache, { data: { addMessage } }) => {
   const selectedChat = selectedChatVar();
+  updateLastestMessage(cache, addMessage, selectedChat?.id);
   cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId: selectedChat?.id } }, ({ chatMessages }) => {
     return { chatMessages: [...chatMessages, addMessage] };
   });
@@ -33,6 +51,8 @@ const useReceiveMessage = () => {
       const {
         chat: { id: chatId },
       } = messageAdded;
+
+      updateLastestMessage(client.cache, messageAdded, chatId);
 
       const { __typename, id, content, isUserMessage } = messageAdded;
 
