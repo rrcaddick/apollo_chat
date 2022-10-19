@@ -5,7 +5,6 @@ import { getTimeString, getDateName } from "../../utils/dateUtils";
 const MessageItem = forwardRef(
   ({ content, isUserMessage, isFirstInCluster, isLastInCluster, createdAt, isNewDate }, ref) => {
     const theme = useTheme();
-    console.log(isFirstInCluster);
     const messageStyles = isUserMessage
       ? {
           alignSelf: "flex-end",

@@ -6,6 +6,7 @@ const ADD_MESSAGE = gql`
       id
       content
       isUserMessage
+      createdAt
     }
   }
 `;

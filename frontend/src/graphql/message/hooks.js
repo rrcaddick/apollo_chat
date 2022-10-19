@@ -54,10 +54,9 @@ const useReceiveMessage = () => {
 
       updateLastestMessage(client.cache, messageAdded, chatId);
 
-      const { __typename, id, content, isUserMessage } = messageAdded;
-
-      client.cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId } }, ({ chatMessages }) => {
-        return { chatMessages: [...chatMessages, { __typename, id, content, isUserMessage }] };
+      client.cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId } }, (data) => {
+        if (!data) return;
+        return { chatMessages: [...data.chatMessages, messageAdded] };
       });
     },
     onError: (error) => {

@@ -6,6 +6,7 @@ const ON_MESSAGE_ADDED = gql`
       id
       content
       isUserMessage
+      createdAt
       chat {
         id
       }

@@ -27,7 +27,7 @@ const MessageFeed = () => {
       overflow="hidden"
     >
       <EmoticonPicker onSelect={onSelectHandler} />
-      {loading && <CircularProgress sx={{ alignSelf: "center" }} size="10rem" thickness={5} />}
+      {loading && <CircularProgress disableShrink sx={{ alignSelf: "center" }} size="10rem" thickness={5} />}
       {error && (
         <Box alignSelf="center">
           <Typography>{error.message}</Typography>

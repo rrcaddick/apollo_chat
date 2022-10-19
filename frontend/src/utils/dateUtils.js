@@ -46,7 +46,7 @@ const getDateString = (date) => {
 };
 
 const getTimeString = (date) => {
-  return new Date(+date).toLocaleString("default", { hour: "2-digit", minute: "2-digit", hour12: true });
+  return new Date(+date).toLocaleString("default", { hour: "2-digit", minute: "2-digit", hour12: false });
 };
 
 export { formatChatTime, formatLastSeen, getDateString, getTimeString, getDateName };
