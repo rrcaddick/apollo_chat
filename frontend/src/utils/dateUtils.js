@@ -10,9 +10,9 @@ const formatChatTime = (date) => {
   });
 };
 
-const formatLastSeenDate = (date) => {
+const getDateName = (date) => {
   const today = new Date();
-
+  date = new Date(+date);
   // Today
   if (date.toDateString() === today.toDateString()) return "today";
 
@@ -34,12 +34,19 @@ const formatLastSeenDate = (date) => {
 const formatLastSeen = (isOnline, date, mobile = false) => {
   if (isOnline) return "Online";
 
-  const lastSeenDate = new Date(+date);
-  const time = lastSeenDate.toLocaleString("default", { hour: "2-digit", minute: "2-digit", hour12: false });
+  const time = new Date(+date).toLocaleString("default", { hour: "2-digit", minute: "2-digit", hour12: false });
 
-  if (mobile) return `Seen ${formatLastSeenDate(lastSeenDate)}: ${time}`;
+  if (mobile) return `Seen ${getDateName(date)}: ${time}`;
 
-  return `Last seen ${formatLastSeenDate(lastSeenDate)} at: ${time}`;
+  return `Last seen ${getDateName(date)} at: ${time}`;
 };
 
-export { formatChatTime, formatLastSeen };
+const getDateString = (date) => {
+  return new Date(+date).toDateString();
+};
+
+const getTimeString = (date) => {
+  return new Date(+date).toLocaleString("default", { hour: "2-digit", minute: "2-digit", hour12: true });
+};
+
+export { formatChatTime, formatLastSeen, getDateString, getTimeString, getDateName };

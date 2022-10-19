@@ -1,35 +1,48 @@
 import { gql } from "@apollo/client";
+import { getDateString } from "../utils/dateUtils";
 
-const isFirstInCluster = (messages, index, readField) => {
+const getClientFields = (messages, index, readField) => {
   // Only message in chat
-  if (messages.length === 1) return true;
+  if (messages.length === 1)
+    return {
+      isFirstInCluster: true,
+      isLastInCluster: true,
+      isNewDate: true,
+    };
+
+  const currIsUser = readField("isUserMessage", messages[index]);
+  const currCreatedAt = readField("createdAt", messages[index]);
 
   // First message in chat
-  if (index === 0) return true;
-
-  // First message in next group
-  const prevIsUser = readField("isUserMessage", messages[index - 1]);
-  const currIsUser = readField("isUserMessage", messages[index]);
-  if (prevIsUser !== currIsUser) return true;
-
-  // Not the first message in group
-  return false;
-};
-
-const isLastInCluster = (messages, index, readField) => {
-  // Only message in chat
-  if (messages.length === 1) return true;
+  if (index === 0) {
+    const nextIsUser = readField("isUserMessage", messages[index + 1]);
+    return {
+      isFirstInCluster: true,
+      isLastInCluster: nextIsUser !== currIsUser,
+      isNewDate: true,
+    };
+  }
 
   // Last message in chat
-  if (index === messages.length - 1) return true;
+  if (index === messages.length - 1) {
+    const prevIsUser = readField("isUserMessage", messages[index - 1]);
+    const prevCreatedAt = readField("createdAt", messages[index - 1]);
+    return {
+      isFirstInCluster: prevIsUser !== currIsUser,
+      isLastInCluster: true,
+      isNewDate: getDateString(currCreatedAt) !== getDateString(prevCreatedAt),
+    };
+  }
 
-  // First message in next group
+  const prevIsUser = readField("isUserMessage", messages[index - 1]);
   const nextIsUser = readField("isUserMessage", messages[index + 1]);
-  const currIsUser = readField("isUserMessage", messages[index]);
-  if (nextIsUser !== currIsUser) return true;
+  const prevCreatedAt = readField("createdAt", messages[index - 1]);
 
-  // Not the first message in group
-  return false;
+  return {
+    isFirstInCluster: prevIsUser !== currIsUser,
+    isLastInCluster: nextIsUser !== currIsUser,
+    isNewDate: getDateString(currCreatedAt) !== getDateString(prevCreatedAt),
+  };
 };
 
 const queryTypePolicies = {
@@ -45,12 +58,10 @@ const queryTypePolicies = {
                 fragment UpdateUIFields on Message {
                   isFirstInCluster
                   isLastInCluster
+                  isNewDate
                 }
               `,
-              data: {
-                isFirstInCluster: isFirstInCluster(incoming, i, readField),
-                isLastInCluster: isLastInCluster(incoming, i, readField),
-              },
+              data: getClientFields(incoming, i, readField),
             });
           }
 

@@ -1,48 +1,61 @@
-import { Box } from "@mui/material";
+import { Box, Typography, useTheme, Stack } from "@mui/material";
 import { forwardRef } from "react";
+import { getTimeString, getDateName } from "../../utils/dateUtils";
 
-const MessageItem = forwardRef(({ content, isUserMessage, isFirstInCluster, isLastInCluster }, ref) => {
-  const backgroundColor = isUserMessage ? (theme) => theme.palette.primary.main : (theme) => theme.palette.grey["200"];
-  const color = isUserMessage
-    ? (theme) => theme.palette.primary.contrastText
-    : (theme) => theme.palette.grey.contrastText;
-
-  if (isUserMessage)
-    return (
-      <Box
-        backgroundColor={backgroundColor}
-        color={color}
-        p="0.5rem 1rem"
-        alignSelf={isUserMessage ? "flex-end" : "flex-start"}
-        sx={{
+const MessageItem = forwardRef(
+  ({ content, isUserMessage, isFirstInCluster, isLastInCluster, createdAt, isNewDate }, ref) => {
+    const theme = useTheme();
+    console.log(isFirstInCluster);
+    const messageStyles = isUserMessage
+      ? {
+          alignSelf: "flex-end",
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
           borderTopLeftRadius: "30px",
           borderBottomLeftRadius: "30px",
           borderTopRightRadius: isFirstInCluster && "30px",
           borderBottomRightRadius: isLastInCluster && "30px",
-        }}
-        ref={ref}
-      >
-        {content}
-      </Box>
-    );
+        }
+      : {
+          alignSelf: "flex-start",
+          backgroundColor: theme.palette.grey["200"],
+          color: theme.palette.grey.contrastText,
+          borderTopRightRadius: "30px",
+          borderBottomRightRadius: "30px",
+          borderTopLeftRadius: isFirstInCluster && "30px",
+          borderBottomLeftRadius: isLastInCluster && "30px",
+        };
 
-  return (
-    <Box
-      backgroundColor={backgroundColor}
-      color={color}
-      p="0.5rem 1rem"
-      alignSelf={isUserMessage ? "flex-end" : "flex-start"}
-      sx={{
-        borderTopRightRadius: "30px",
-        borderBottomRightRadius: "30px",
-        borderTopLeftRadius: isFirstInCluster && "30px",
-        borderBottomLeftRadius: isLastInCluster && "30px",
-      }}
-      ref={ref}
-    >
-      {content}
-    </Box>
-  );
-});
+    return (
+      <Stack>
+        {isNewDate && (
+          <Typography
+            backgroundColor="#666"
+            padding="0.1rem 0.5rem"
+            alignSelf="center"
+            color="white"
+            // fontWeight="600"
+            fontSize="0.6rem"
+            borderRadius="5px"
+            marginY="1rem"
+          >
+            {getDateName(+createdAt, false).toUpperCase()}
+          </Typography>
+        )}
+        <Box p="0.5rem 1rem" sx={messageStyles} ref={ref} display="flex" gap="0.5rem">
+          <Typography>{content}</Typography>
+          <Typography
+            fontSize="0.5rem"
+            fontWeight="600"
+            alignSelf="flex-end"
+            color={isUserMessage ? "purple" : "orange"}
+          >
+            {getTimeString(createdAt)}
+          </Typography>
+        </Box>
+      </Stack>
+    );
+  }
+);
 
 export default MessageItem;

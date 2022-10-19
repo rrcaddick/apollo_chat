@@ -9,6 +9,7 @@ const GET_CHAT_MESSAGES = gql`
       createdAt
       isFirstInCluster @client
       isLastInCluster @client
+      isNewDate @client
     }
   }
 `;
