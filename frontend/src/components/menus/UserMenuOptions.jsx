@@ -4,6 +4,7 @@ import { Backdrop, CircularProgress, ListItemIcon, MenuItem } from "@mui/materia
 import DropDownMenu from "../common/DropDownMenu";
 import { useNavigate } from "react-router-dom";
 import { useLogout } from "../../hooks/useLogout";
+import { resetClient } from "../../graphql/client";
 
 const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, toggleSettings } }) => {
   const [darkMode, setDarkMode] = useState(false);
@@ -18,6 +19,7 @@ const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, to
   useEffect(() => {
     if (success) {
       navigate("/");
+      resetClient();
     }
   }, [success, navigate]);
 

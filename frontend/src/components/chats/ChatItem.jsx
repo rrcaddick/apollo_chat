@@ -11,13 +11,6 @@ const ChatItem = ({ chat }) => {
     details: { name, profilePicture, isOnline },
   } = chat;
 
-  const activestyles = isSelected
-    ? {
-        backgroundColor: (theme) => theme.palette.primary.main,
-        color: (theme) => theme.palette.primary.contrastText,
-      }
-    : {};
-
   return (
     <Box
       p="1rem"
@@ -30,8 +23,10 @@ const ChatItem = ({ chat }) => {
       // boxShadow={(theme) => theme.shadows["2"]}
       sx={(theme) => ({
         cursor: "pointer",
-        "&:hover": {
-          backgroundColor: theme.palette.primary.main,
+        backgroundColor: isSelected ? theme.palette.primary.main : "white",
+        color: isSelected && theme.palette.primary.contrastText,
+        "&:hover": !isSelected && {
+          backgroundColor: theme.palette.primary.light,
           color: theme.palette.primary.contrastText,
         },
       })}
@@ -39,7 +34,6 @@ const ChatItem = ({ chat }) => {
         navigationPositionVar(1);
         selectedChatVar(chat);
       }}
-      {...activestyles}
     >
       <AvatarWithInitials alt={name} src={profilePicture} isOnline={isOnline} />
 

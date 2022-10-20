@@ -25,6 +25,31 @@ const GET_CHATS_QUERY = gql`
   }
 `;
 
+const READ_ORDERED_CHATS = gql`
+  query GetChats {
+    chats {
+      id
+      latestMessage {
+        id
+        content
+        createdAt
+      }
+      details {
+        __typename
+        ... on User {
+          id
+          name
+          profilePicture
+          mobile
+          isOnline
+          lastSeen
+        }
+      }
+      isSelected @client
+    }
+  }
+`;
+
 const READ_SELECTED_CHAT = gql`
   query ReadSelectedChat @client {
     selectedChat {
