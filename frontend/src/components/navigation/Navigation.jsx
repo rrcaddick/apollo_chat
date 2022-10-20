@@ -15,6 +15,7 @@ const Navigation = () => {
 
   const navigationStyles = (theme) => ({
     backgroundColor: theme.palette.grey["200"],
+    boxShadow: theme.shadows["10"],
     [theme.breakpoints.down("md")]: {
       transform: `translateX(-${100 * position}%)`,
       transition: `transform 500ms ease-in-out`,
@@ -51,9 +52,6 @@ const Navigation = () => {
       overflow="hidden"
       position="relative"
       sx={navigationStyles}
-      boxShadow={(theme) => {
-        return theme.shadows["10"];
-      }}
     >
       <NavigationMenu
         onNavigate={setNavMenuPosition}
@@ -61,7 +59,13 @@ const Navigation = () => {
         toggleMenu={{ toggleProfile, toggleSettings }}
       />
       <UserMenu open={{ profile, settings }} toggleMenu={{ toggleProfile, toggleSettings }} />
-      <Box display="flex" width="100%" overflow="hidden" sx={{ "& > *": { transition: `transform 300ms linear` } }}>
+      <Box
+        display="flex"
+        flexGrow={1}
+        width="100%"
+        overflow="hidden"
+        sx={{ "& > *": { transition: `transform 300ms linear` } }}
+      >
         <ChatsNav position={navMenuPosition} />
         <PhoneNav position={navMenuPosition} />
         <OnlineFriendsNav position={navMenuPosition} />
