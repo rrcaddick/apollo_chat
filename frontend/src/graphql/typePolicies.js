@@ -82,11 +82,17 @@ const queryTypePolicies = {
             const isSelected = readField("isSelected", chatRef);
             return isSelected === true;
           });
+        },
+      },
+      orderedChats: {
+        read(root, { cache, readField }) {
+          const chats = [...readField("chats")];
 
-          // return toReference({
-          //   __typename: "Chat",
-          //   id: readField("id", selectedChat),
-          // });
+          return chats.sort((chatRefA, chatRefB) => {
+            const messageDateA = readField("createdAt", readField("latestMessage", chatRefA));
+            const messageDateB = readField("createdAt", readField("latestMessage", chatRefB));
+            return Number(messageDateB) - Number(messageDateA);
+          });
         },
       },
     },

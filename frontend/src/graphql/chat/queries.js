@@ -26,8 +26,8 @@ const GET_CHATS_QUERY = gql`
 `;
 
 const READ_ORDERED_CHATS = gql`
-  query GetChats {
-    chats {
+  query ReadOrderedChats @client {
+    orderedChats {
       id
       latestMessage {
         id
@@ -75,4 +75,4 @@ const READ_SELECTED_CHAT = gql`
   }
 `;
 
-export { GET_CHATS_QUERY, READ_SELECTED_CHAT };
+export { GET_CHATS_QUERY, READ_SELECTED_CHAT, READ_ORDERED_CHATS };

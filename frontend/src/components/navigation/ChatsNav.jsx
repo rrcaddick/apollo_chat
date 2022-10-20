@@ -5,7 +5,7 @@ import SearchControl from "../common/SearchControl";
 import ScrollableList from "../common/ScrollableList";
 // import { CHATS_DUMMY as chats } from "../../data";
 import AddChatsMenu from "../menus/AddChatsMenu";
-import { useGetChats } from "../../graphql/chat/hooks";
+import { useReadOrderedChats } from "../../graphql/chat/hooks";
 import { useDebounce } from "../../hooks/useDebounce";
 
 const ChatsNav = ({ position }) => {
@@ -16,7 +16,7 @@ const ChatsNav = ({ position }) => {
   });
 
   const { debounce } = useDebounce();
-  const { chats, filterChats, loading, error } = useGetChats();
+  const { chats, filterChats, loading, error } = useReadOrderedChats();
 
   const searchHandler = (e) => {
     const searchTerm = e.target.value;
