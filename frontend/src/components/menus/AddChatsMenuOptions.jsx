@@ -35,7 +35,9 @@ const AddChatsMenuOptions = ({ onOpen: { toggleAddChat, toggleCreateGroup, toggl
         icon={<AddRounded />}
         onClose={handleClose}
         onClick={toggleOpen}
+        onBlur={undefined}
         open={open}
+        onMouseLeave={undefined}
       >
         {speedDialActions.map(({ name, icon, action }) => (
           <SpeedDialAction
