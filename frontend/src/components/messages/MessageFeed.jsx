@@ -17,15 +17,7 @@ const MessageFeed = () => {
   };
 
   return (
-    <Box
-      p="12px 8px"
-      boxShadow={(theme) => theme.shadows["10"]}
-      display="flex"
-      justifyContent="center"
-      flexGrow={1}
-      position="relative"
-      overflow="hidden"
-    >
+    <Box p="12px 8px" display="flex" justifyContent="center" flexGrow={1} position="relative" overflow="hidden">
       <EmoticonPicker onSelect={onSelectHandler} />
       {loading && <CircularProgress disableShrink sx={{ alignSelf: "center" }} size="10rem" thickness={5} />}
       {error && (

@@ -47,7 +47,7 @@ const MessageItem = forwardRef(
             fontSize="0.5rem"
             fontWeight="600"
             alignSelf="flex-end"
-            color={isUserMessage ? "purple" : "orange"}
+            color={isUserMessage ? "#d3a9d3" : "orange"}
           >
             {getTimeString(createdAt)}
           </Typography>
