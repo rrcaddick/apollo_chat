@@ -1,5 +1,8 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { baseMutation } from "../mutationUtils";
+import { selectedChatVar } from "../variables/selectedChat";
+import { ADD_CHAT } from "./mutations";
 import { GET_CHATS_QUERY, READ_SELECTED_CHAT, READ_ORDERED_CHATS } from "./queries";
 
 const useGetChats = () => {
@@ -38,4 +41,12 @@ const useReadSelectedChat = (onCompletedFn = null) => {
   return { selectedChat: data?.selectedChat, loading, error };
 };
 
-export { useGetChats, useReadSelectedChat, useReadOrderedChats };
+const useAddChat = baseMutation(ADD_CHAT, (cache, { data }) => {
+  const { addChat } = data;
+  cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
+    return { chats: [...chats, addChat] };
+  });
+  selectedChatVar(addChat);
+});
+
+export { useGetChats, useReadSelectedChat, useReadOrderedChats, useAddChat };

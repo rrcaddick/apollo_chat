@@ -1,78 +1,40 @@
 import { gql } from "@apollo/client";
+import { CHAT_FIELDS } from "./fragments";
 
 const GET_CHATS_QUERY = gql`
+  ${CHAT_FIELDS}
   query GetChats {
     chats {
-      id
-      latestMessage {
-        id
-        content
-        createdAt
-      }
-      details {
-        __typename
-        ... on User {
-          id
-          name
-          profilePicture
-          mobile
-          isOnline
-          lastSeen
-        }
-      }
-      isSelected @client
+      ...ChatFields
     }
   }
 `;
 
 const READ_ORDERED_CHATS = gql`
+  ${CHAT_FIELDS}
   query ReadOrderedChats @client {
     orderedChats {
-      id
-      latestMessage {
-        id
-        content
-        createdAt
-      }
-      details {
-        __typename
-        ... on User {
-          id
-          name
-          profilePicture
-          mobile
-          isOnline
-          lastSeen
-        }
-      }
-      isSelected @client
+      ...ChatFields
+    }
+  }
+`;
+
+const READ_EXISTING_CHAT = gql`
+  ${CHAT_FIELDS}
+  query ReadExistingChat @client {
+    existingChat(userId: ID) {
+      ...ChatFields
     }
   }
 `;
 
 const READ_SELECTED_CHAT = gql`
+  ${CHAT_FIELDS}
   query ReadSelectedChat @client {
     selectedChat {
-      id
-      latestMessage {
-        id
-        content
-        createdAt
-      }
-      details {
-        __typename
-        ... on User {
-          id
-          name
-          profilePicture
-          mobile
-          isOnline
-          lastSeen
-        }
-      }
-      isSelected @client
+      ...ChatFields
     }
   }
 `;
 
-export { GET_CHATS_QUERY, READ_SELECTED_CHAT, READ_ORDERED_CHATS };
+export { GET_CHATS_QUERY, READ_SELECTED_CHAT, READ_ORDERED_CHATS, READ_EXISTING_CHAT };

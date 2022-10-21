@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { FRIEND_FIELDS } from "./fragments";
 
 const GET_ME_QUERY = gql`
   query Me {
@@ -14,27 +15,19 @@ const GET_ME_QUERY = gql`
 `;
 
 const GET_FRIENDS = gql`
+  ${FRIEND_FIELDS}
   query GetFriends {
     friends {
-      id
-      name
-      profilePicture
-      status
-      mobile
-      isOnline
+      ...FriendFields
     }
   }
 `;
 
 const READ_ONLINE_FRIENDS = gql`
+  ${FRIEND_FIELDS}
   query readOnlineFriends {
     onlineFriends @client {
-      id
-      name
-      profilePicture
-      status
-      mobile
-      isOnline
+      ...FriendFields
     }
   }
 `;

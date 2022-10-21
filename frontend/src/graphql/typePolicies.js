@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import { getDateString } from "../utils/dateUtils";
+import { CHAT_FIELDS } from "./chat/fragments";
 
 const getClientFields = (messages, index, readField) => {
   // Only message in chat
@@ -77,10 +78,26 @@ const queryTypePolicies = {
         },
       },
       selectedChat: {
-        read(_, { cache, readField, toReference }) {
+        read(_, { cache, readField }) {
           return readField("chats")?.find((chatRef) => {
             const isSelected = readField("isSelected", chatRef);
             return isSelected === true;
+          });
+        },
+      },
+      existingChat: {
+        read(root, { cache, readField, variables: { userId } }) {
+          const chatRef = readField("chats")?.find((chatRef) => {
+            const userRef = readField("details", chatRef);
+            const chatUserId = readField("id", userRef);
+            return chatUserId === userId;
+          });
+
+          if (!chatRef) return;
+
+          return cache.readFragment({
+            id: chatRef.__ref,
+            fragment: CHAT_FIELDS,
           });
         },
       },
@@ -89,8 +106,10 @@ const queryTypePolicies = {
           const chats = [...readField("chats")];
 
           return chats.sort((chatRefA, chatRefB) => {
-            const messageDateA = readField("createdAt", readField("latestMessage", chatRefA));
-            const messageDateB = readField("createdAt", readField("latestMessage", chatRefB));
+            const messageDateA =
+              readField("createdAt", readField("latestMessage", chatRefA)) || readField("createdAt", chatRefA);
+            const messageDateB =
+              readField("createdAt", readField("latestMessage", chatRefB)) || readField("createdAt", chatRefB);
             return Number(messageDateB) - Number(messageDateA);
           });
         },

@@ -1,7 +1,12 @@
 import { Badge, Box, Typography } from "@mui/material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 
-const FriendItem = ({ profilePicture, name, status, isOnline }) => {
+const FriendItem = ({ friend, onSelect = null }) => {
+  const { profilePicture, name, status, isOnline } = friend;
+  const onSelectHandler = () => {
+    onSelect(friend);
+  };
+
   return (
     <Box
       display="flex"
@@ -16,6 +21,7 @@ const FriendItem = ({ profilePicture, name, status, isOnline }) => {
           color: (theme) => theme.palette.primary.contrastText,
         },
       }}
+      onClick={onSelect && onSelectHandler}
     >
       <AvatarWithInitials src={profilePicture} alt={name} isOnline={isOnline} />
       <Box>

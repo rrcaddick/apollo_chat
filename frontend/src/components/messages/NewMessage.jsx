@@ -35,7 +35,18 @@ const NewMessage = () => {
 
   const sendMessageHandler = () => {
     const input = { chatId, content };
-    addMessage({ variables: { input } });
+    addMessage({
+      variables: { input },
+      optimisticResponse: {
+        addMessage: {
+          __typename: "Message",
+          id: "Temp_Message_ID",
+          content,
+          createdAt: Date.now().toString(),
+          isUserMessage: true,
+        },
+      },
+    });
     reset();
     emojiTrayOpenVar(false);
   };

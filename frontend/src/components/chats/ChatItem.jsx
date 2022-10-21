@@ -8,8 +8,11 @@ const ChatItem = ({ chat }) => {
   const {
     latestMessage,
     isSelected,
+    createdAt,
     details: { name, profilePicture, isOnline },
   } = chat;
+
+  const chatTime = latestMessage?.createdAt || createdAt;
 
   return (
     <Box
@@ -47,11 +50,10 @@ const ChatItem = ({ chat }) => {
       </Box>
 
       <Box marginLeft="auto" display="flex" flexDirection="column" alignItems="flex-end" justifyContent="space-between">
-        {latestMessage && (
-          <Typography fontSize="x-small" noWrap>
-            {formatChatTime(latestMessage?.createdAt)}
-          </Typography>
-        )}
+        <Typography fontSize="x-small" noWrap>
+          {formatChatTime(chatTime)}
+        </Typography>
+
         {/* <Badge badgeContent={Math.floor(Math.random() * (4 - 1 + 0) + 0)} color="secondary" /> */}
       </Box>
     </Box>
