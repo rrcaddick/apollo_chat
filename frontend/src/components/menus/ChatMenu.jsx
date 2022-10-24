@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Phone, VideoCall, MoreVert, ChevronLeftSharp, Person } from "@mui/icons-material";
+import { Phone, VideoCall, MoreVert, ChevronLeftSharp, Person, Delete, ClearAll, Search } from "@mui/icons-material";
 import { Box, IconButton, ListItemIcon, MenuItem, Typography } from "@mui/material";
 import MenuWrapper from "../common/MenuWrapper";
 import DropDownMenu from "../common/DropDownMenu";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 import { navigationPositionVar } from "../../graphql/variables/common";
-import { useReadSelectedChat } from "../../graphql/chat/hooks";
 import { formatLastSeen } from "../../utils/dateUtils";
+import { useRemoveChat } from "../../graphql/chat/hooks";
+import { useReactiveVar } from "@apollo/client";
+import { selectedChatVar } from "../../graphql/variables/selectedChat";
 
 const ChatMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -19,10 +21,25 @@ const ChatMenu = () => {
     setAnchorEl(null);
   };
 
-  const { selectedChat } = useReadSelectedChat();
+  const { mutate: removeChat } = useRemoveChat();
+
+  const selectedChat = useReactiveVar(selectedChatVar);
   const {
+    id,
     details: { name, profilePicture, mobile, isOnline, lastSeen },
   } = selectedChat || { details: {} };
+
+  const removeChatHandler = (e) => {
+    removeChat({
+      variables: { chatId: id },
+      optimisticResponse: {
+        removeChat: {
+          id,
+        },
+      },
+    });
+    navigationPositionVar(0);
+  };
 
   return (
     <MenuWrapper
@@ -108,6 +125,24 @@ const ChatMenu = () => {
               <Person fontSize="small" />
             </ListItemIcon>
             Profile
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <Search fontSize="small" />
+            </ListItemIcon>
+            Search
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <ClearAll fontSize="small" />
+            </ListItemIcon>
+            Clear
+          </MenuItem>
+          <MenuItem onClick={removeChatHandler}>
+            <ListItemIcon>
+              <Delete fontSize="small" />
+            </ListItemIcon>
+            Delete
           </MenuItem>
         </DropDownMenu>
       </Box>

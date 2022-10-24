@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { baseMutation } from "../mutationUtils";
 import { selectedChatVar } from "../variables/selectedChat";
-import { ADD_CHAT } from "./mutations";
+import { ADD_CHAT, REMOVE_CHAT } from "./mutations";
 import { GET_CHATS_QUERY, READ_SELECTED_CHAT, READ_ORDERED_CHATS } from "./queries";
 
 const useGetChats = () => {
@@ -49,4 +49,15 @@ const useAddChat = baseMutation(ADD_CHAT, (cache, { data }) => {
   selectedChatVar(addChat);
 });
 
-export { useGetChats, useReadSelectedChat, useReadOrderedChats, useAddChat };
+const useRemoveChat = baseMutation(REMOVE_CHAT, (cache, { data: { removeChat } }) => {
+  try {
+    cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
+      return { chats: chats.filter((chat) => chat.id !== removeChat.id) };
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  selectedChatVar(null);
+});
+
+export { useGetChats, useReadSelectedChat, useReadOrderedChats, useAddChat, useRemoveChat };

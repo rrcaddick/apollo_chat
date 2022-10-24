@@ -10,4 +10,12 @@ const ADD_CHAT = gql`
   }
 `;
 
-export { ADD_CHAT };
+const REMOVE_CHAT = gql`
+  mutation RemoveChat($chatId: ID) {
+    removeChat(chatId: $chatId) {
+      id
+    }
+  }
+`;
+
+export { ADD_CHAT, REMOVE_CHAT };

@@ -21,6 +21,9 @@ const resolvers = {
       const currentUserId = user._id.toString();
       return chat.addChat([currentUserId, ...members]);
     },
+    removeChat: (_root, { chatId }, { dataSources: { chat } }) => {
+      return chat.removeChat(chatId);
+    },
   },
 };
 

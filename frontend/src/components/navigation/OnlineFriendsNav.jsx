@@ -37,7 +37,7 @@ const OnlineFriendsNav = ({ position }) => {
       {onlineFriends && (
         <ScrollableList gap="0.5rem" thumbWidth="10px" thumbColor="#8f0acd73">
           {onlineFriends.map((friend) => (
-            <FriendItem key={friend.id} {...friend} />
+            <FriendItem key={friend.id} friend={friend} />
           ))}
         </ScrollableList>
       )}

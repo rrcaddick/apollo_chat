@@ -17,6 +17,11 @@ class Chat extends MongoDataSource {
   async addChat(members) {
     return await this.model.create({ members });
   }
+
+  async removeChat(chatId) {
+    const chat = await this.model.findByIdAndDelete(chatId);
+    return chat;
+  }
 }
 
 module.exports = Chat;
