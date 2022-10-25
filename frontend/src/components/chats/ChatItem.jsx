@@ -11,11 +11,11 @@ const ChatItem = ({ chat }) => {
     id,
     latestMessage,
     isSelected,
-    createdAt,
+    updatedAt,
     details: { name, profilePicture, isOnline },
   } = chat;
 
-  const chatTime = latestMessage?.createdAt || createdAt;
+  const chatTime = latestMessage?.createdAt || updatedAt;
 
   const { mutate: removeChat } = useRemoveChat();
 

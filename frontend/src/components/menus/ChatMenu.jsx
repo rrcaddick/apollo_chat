@@ -9,6 +9,7 @@ import { formatLastSeen } from "../../utils/dateUtils";
 import { useRemoveChat } from "../../graphql/chat/hooks";
 import { useReactiveVar } from "@apollo/client";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
+import { useClearChatMessages } from "../../graphql/message/hooks";
 
 const ChatMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -21,7 +22,17 @@ const ChatMenu = () => {
     setAnchorEl(null);
   };
 
+  const [clearedCount, setClearedCount] = useState(0);
+  const [showClearedBanner, setShowClearedBanner] = useState(false);
+
   const { mutate: removeChat } = useRemoveChat();
+  const { mutate: clearChatMessages } = useClearChatMessages(({ clearChatMessages }) => {
+    setClearedCount(clearChatMessages?.clearedMessageCount);
+    setShowClearedBanner(true);
+    setTimeout(() => {
+      setShowClearedBanner(false);
+    }, 3000);
+  });
 
   const selectedChat = useReactiveVar(selectedChatVar);
   const {
@@ -41,9 +52,14 @@ const ChatMenu = () => {
     navigationPositionVar(0);
   };
 
+  const clearChatMessagesHandler = () => {
+    clearChatMessages({ variables: { chatId: id } });
+  };
+
   return (
     <MenuWrapper
       sx={(theme) => ({
+        position: "relative",
         [theme.breakpoints.down("md")]: {
           padding: "0",
         },
@@ -132,7 +148,7 @@ const ChatMenu = () => {
             </ListItemIcon>
             Search
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={clearChatMessagesHandler}>
             <ListItemIcon>
               <ClearAll fontSize="small" />
             </ListItemIcon>
@@ -145,6 +161,23 @@ const ChatMenu = () => {
             Delete
           </MenuItem>
         </DropDownMenu>
+      </Box>
+      <Box
+        position="absolute"
+        backgroundColor={(theme) => theme.palette.success.main}
+        color="white"
+        width="100%"
+        textAlign="center"
+        py="0.5rem"
+        sx={{
+          bottom: 0,
+          left: 0,
+          transform: `translateY(${showClearedBanner ? 100 : 0}%)`,
+          transition: "transform 200ms linear",
+        }}
+        zIndex="-1"
+      >
+        {`${clearedCount} Message${clearedCount > 1 ? "s" : ""} cleared`}
       </Box>
     </MenuWrapper>
   );

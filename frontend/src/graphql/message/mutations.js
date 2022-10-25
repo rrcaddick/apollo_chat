@@ -11,4 +11,12 @@ const ADD_MESSAGE = gql`
   }
 `;
 
-export { ADD_MESSAGE };
+const CLEAR_CHAT_MESSAGES = gql`
+  mutation ClearChatMessages($chatId: ID) {
+    clearChatMessages(chatId: $chatId) {
+      clearedMessageCount
+    }
+  }
+`;
+
+export { ADD_MESSAGE, CLEAR_CHAT_MESSAGES };

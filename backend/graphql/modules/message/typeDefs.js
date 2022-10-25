@@ -9,6 +9,7 @@ const typeDefs = gql`
 
   type Mutation {
     addMessage(input: MessageInput!): Message!
+    clearChatMessages(chatId: ID): ClearMessageCount
   }
 
   type Subscription {
@@ -22,6 +23,10 @@ const typeDefs = gql`
     content: String
     isUserMessage: Boolean
     createdAt: String
+  }
+
+  type ClearMessageCount {
+    clearedMessageCount: Int
   }
 
   input MessageInput {

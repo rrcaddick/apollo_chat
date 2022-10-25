@@ -50,6 +50,9 @@ const queryTypePolicies = {
   Query: {
     fields: {
       chatMessages: {
+        keyArgs: ({ chatId }, { fieldName }) => {
+          return `${fieldName}:${chatId}`;
+        },
         merge(existing = [], incoming = [], { cache, readField }) {
           let i = existing.length === 0 ? 0 : existing.length - 1;
           for (i; i < incoming.length; i++) {
@@ -64,6 +67,8 @@ const queryTypePolicies = {
               `,
               data: getClientFields(incoming, i, readField),
             });
+            // Allows clear messages to clear the cache effectively
+            cache.release(incoming[i].__ref);
           }
 
           return incoming;
@@ -107,9 +112,9 @@ const queryTypePolicies = {
 
           return chats.sort((chatRefA, chatRefB) => {
             const messageDateA =
-              readField("createdAt", readField("latestMessage", chatRefA)) || readField("createdAt", chatRefA);
+              readField("createdAt", readField("latestMessage", chatRefA)) || readField("updatedAt", chatRefA);
             const messageDateB =
-              readField("createdAt", readField("latestMessage", chatRefB)) || readField("createdAt", chatRefB);
+              readField("createdAt", readField("latestMessage", chatRefB)) || readField("updatedAt", chatRefB);
             return Number(messageDateB) - Number(messageDateA);
           });
         },

@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 const CHAT_FIELDS = gql`
   fragment ChatFields on Chat {
     id
-    createdAt
+    updatedAt
     latestMessage {
       id
       content

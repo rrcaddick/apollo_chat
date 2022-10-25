@@ -13,7 +13,7 @@ const typeDefs = gql`
 
   type Chat {
     id: ID
-    createdAt: String
+    updatedAt: String
     members: [User!]
     details: ChatDetail!
     latestMessage: Message

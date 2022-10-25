@@ -22,11 +22,17 @@ const messageSchema = new Schema(
   { timestamps: true }
 );
 
-messageSchema.index({"createdAt": 1});
+messageSchema.index({ createdAt: 1 });
 
 messageSchema.post("save", async function (message, next) {
   await Chat.findByIdAndUpdate(message.chat, { latestMessage: message });
   next();
+});
+
+messageSchema.post("deleteMany", async function () {
+  const chatId = this?._conditions?.chat;
+  if (!chatId) return;
+  await Chat.findByIdAndUpdate(chatId, { latestMessage: undefined });
 });
 
 module.exports = mongoose.model("Message", messageSchema);

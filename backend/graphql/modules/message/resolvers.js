@@ -26,6 +26,7 @@ const resolvers = {
       pubSub.publish("MESSAGE_ADDED", newMessage);
       return newMessage;
     },
+    clearChatMessages: async (_root, { chatId }, { dataSources: { message } }) => message.clearChatMessages(chatId),
   },
   Subscription: {
     messageAdded: {

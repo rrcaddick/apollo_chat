@@ -1,6 +1,6 @@
 import { gql, useQuery, useSubscription } from "@apollo/client";
 import { GET_CHAT_MESSAGES } from "./queries";
-import { ADD_MESSAGE } from "./mutations";
+import { ADD_MESSAGE, CLEAR_CHAT_MESSAGES } from "./mutations";
 import { ON_MESSAGE_ADDED } from "./subscriptions";
 import { selectedChatVar } from "../variables/selectedChat";
 import { useReactiveVar } from "@apollo/client";
@@ -16,9 +16,11 @@ const updateLastestMessage = (cache, newMessage, chatId) => {
       }
     `,
     data: {
-      latestMessage: {
-        __ref: newMessageRef,
-      },
+      latestMessage: newMessage
+        ? {
+            __ref: newMessageRef,
+          }
+        : null,
     },
   });
 };
@@ -67,4 +69,21 @@ const useReceiveMessage = () => {
   return { loading, data, error };
 };
 
-export { useGetChatMessages, useAddMessage, useReceiveMessage };
+const useClearChatMessages = baseMutation(CLEAR_CHAT_MESSAGES, (cache, _data, { variables: { chatId } }) => {
+  updateLastestMessage(cache, null, chatId);
+
+  cache.modify({
+    fields: {
+      [`chatMessages:${chatId}`](chatMessages = []) {
+        for (let message of chatMessages) {
+          cache.evict({ id: message.__ref });
+        }
+        return [];
+      },
+    },
+  });
+
+  cache.gc();
+});
+
+export { useGetChatMessages, useAddMessage, useReceiveMessage, useClearChatMessages };

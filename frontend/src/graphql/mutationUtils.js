@@ -12,7 +12,7 @@ export const baseMutation = (mutation, updateFn) => (onCompelteFn) => {
       }
     },
     onCompleted: (data) => {
-      onCompelteFn();
+      onCompelteFn(data);
     },
     update: updateFn,
   });

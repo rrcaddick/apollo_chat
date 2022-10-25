@@ -17,6 +17,11 @@ class Message extends MongoDataSource {
     const message = await this.model.create({ sender, chat, content });
     return await message.populate("sender chat");
   }
+
+  async clearChatMessages(chatId) {
+    const { deletedCount: clearedMessageCount } = await this.model.deleteMany({ chat: chatId });
+    return { clearedMessageCount };
+  }
 }
 
 module.exports = Message;
