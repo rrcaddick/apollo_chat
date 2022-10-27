@@ -10,6 +10,7 @@ import { useRemoveChat } from "../../graphql/chat/hooks";
 import { useReactiveVar } from "@apollo/client";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
 import { useClearChatMessages } from "../../graphql/message/hooks";
+import { useReadSelectedChat } from "../../graphql/chat/hooks";
 
 const ChatMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -34,7 +35,7 @@ const ChatMenu = () => {
     }, 3000);
   });
 
-  const selectedChat = useReactiveVar(selectedChatVar);
+  const { selectedChat } = useReadSelectedChat();
   const {
     id,
     chatType,
