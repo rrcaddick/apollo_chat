@@ -21,13 +21,28 @@ const useGetMe = (onCompletedFn = null) => {
 const useGetFriends = () => {
   const [filteredFriends, setFilteredFriends] = useState();
   const { data, loading, error } = useQuery(GET_FRIENDS);
+  const [filter, setFilter] = useState([]);
+  const [searchTerm, setSearchTerm] = useState([]);
 
   const filterFriends = (searchTerm) => {
-    if (searchTerm === "") {
-      return setFilteredFriends(data.friends);
-    }
-    setFilteredFriends(data.friends.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())));
+    setSearchTerm(searchTerm.toLowerCase());
   };
+
+  const removeFriend = (friendId) => {
+    setFilter((prevState) => [...prevState, friendId]);
+  };
+
+  const addFriend = (friendId) => {
+    setFilter((prevState) => prevState.filter((id) => id !== friendId));
+  };
+
+  useEffect(() => {
+    if (data?.friends) {
+      setFilteredFriends(
+        data.friends.filter((friend) => friend.name.toLowerCase().includes(searchTerm) && !filter.includes(friend.id))
+      );
+    }
+  }, [filter, searchTerm, data?.friends]);
 
   useEffect(() => {
     if (data?.friends) {
@@ -35,7 +50,7 @@ const useGetFriends = () => {
     }
   }, [data]);
 
-  return { friends: filteredFriends, filterFriends, loading, error };
+  return { friends: filteredFriends, filterFriends, removeFriend, addFriend, loading, error };
 };
 
 const useGetOnlineFriends = () => {

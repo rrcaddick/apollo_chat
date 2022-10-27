@@ -43,9 +43,13 @@ const useReadSelectedChat = (onCompletedFn = null) => {
 
 const useAddChat = baseMutation(ADD_CHAT, (cache, { data }) => {
   const { addChat } = data;
-  cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
-    return { chats: [...chats, addChat] };
-  });
+  try {
+    cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
+      return { chats: [...chats, addChat] };
+    });
+  } catch (error) {
+    console.log(error);
+  }
   selectedChatVar(addChat);
 });
 

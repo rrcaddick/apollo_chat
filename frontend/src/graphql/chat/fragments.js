@@ -4,6 +4,7 @@ const CHAT_FIELDS = gql`
   fragment ChatFields on Chat {
     id
     updatedAt
+    chatType
     latestMessage {
       id
       content
@@ -18,6 +19,10 @@ const CHAT_FIELDS = gql`
         mobile
         isOnline
         lastSeen
+      }
+      ... on Detail {
+        name
+        profilePicture
       }
     }
     isSelected @client

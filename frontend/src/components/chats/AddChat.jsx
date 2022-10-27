@@ -43,8 +43,8 @@ const AddChat = ({ onClose }) => {
         optimisticResponse: {
           addChat: {
             __typename: "Chat",
-            id: "Temp_Chat_ID",
-            createdAt: Date.now().toString(),
+            id: "Temp_Chat_Id",
+            updatedAt: Date.now().toString(),
             latestMessage: null,
             details: {
               __typename: "User",

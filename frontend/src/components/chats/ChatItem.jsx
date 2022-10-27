@@ -1,5 +1,5 @@
 import { Badge, Box, Typography, IconButton } from "@mui/material";
-import { Delete } from "@mui/icons-material";
+import { Campaign, Delete } from "@mui/icons-material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 import { formatChatTime } from "../../utils/dateUtils";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
@@ -12,6 +12,7 @@ const ChatItem = ({ chat }) => {
     latestMessage,
     isSelected,
     updatedAt,
+    chatType,
     details: { name, profilePicture, isOnline },
   } = chat;
 

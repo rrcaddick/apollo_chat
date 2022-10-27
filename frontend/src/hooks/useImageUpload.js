@@ -2,20 +2,21 @@ import { useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_UPLOAD_SIGNATURE } from "../graphql/images/queries";
 
-const CLOUDINARY_CLOUD_NAME = "raytechprojects";
-const CLOUDINARY_API_KEY = "124122254676488";
+const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.REACT_APP_CLOUDINARY_API_KEY;
 
 export const useImageUpload = () => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState();
-  const [imageDetails, setImageDetails] = useState({});
+  const [public_id, setPublicId] = useState();
+  const [deleteToken, setDeleteToken] = useState("");
 
   // TODO: Handle upload error
   const [loadSignature, { error }] = useLazyQuery(GET_UPLOAD_SIGNATURE, {
     fetchPolicy: "no-cache",
     onCompleted: async ({ imageSignature }) => {
       const { timestamp, signature } = imageSignature;
-      const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload?api_key=${CLOUDINARY_API_KEY}&timestamp=${timestamp}&signature=${signature}`;
+      const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload?api_key=${apiKey}&timestamp=${timestamp}&signature=${signature}`;
 
       const form = new FormData();
       form.append("file", image);
@@ -27,7 +28,8 @@ export const useImageUpload = () => {
       });
       const { public_id, delete_token } = await response.json();
 
-      setImageDetails({ public_id, delete_token });
+      setPublicId(public_id);
+      setDeleteToken(delete_token);
       setLoading(false);
     },
   });
@@ -40,22 +42,22 @@ export const useImageUpload = () => {
 
   const disgardImage = async () => {
     const deleteForm = new FormData();
-    deleteForm.append("public_id", imageDetails.public_id);
-    deleteForm.append("token", imageDetails.delete_token);
+    deleteForm.append("public_id", public_id);
+    deleteForm.append("token", deleteToken);
 
-    const deleteResponse = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/delete_by_token`, {
+    const deleteResponse = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/delete_by_token`, {
       method: "POST",
       body: deleteForm,
     });
 
     await deleteResponse.json();
-    setImageDetails((prevState) => ({ ...prevState, imageUrl: null }));
+    setPublicId(null);
   };
 
   return {
     uploadImage,
     disgardImage,
-    public_id: imageDetails.public_id,
+    public_id,
     loading,
   };
 };

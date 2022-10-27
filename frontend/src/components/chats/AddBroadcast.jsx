@@ -1,51 +1,140 @@
-import { Box, Fab, IconButton, Typography, useTheme } from "@mui/material";
 import { Check, Close } from "@mui/icons-material";
-import Participants from "./Participants";
+import { Box, Fab, IconButton, TextField, Typography, useTheme } from "@mui/material";
 import SearchControl from "../common/SearchControl";
-import { DUMMY_USERS } from "../../data";
-import ScrollableList from "../common/ScrollableList";
 import FriendItem from "../friends/FriendItem";
+import ScrollableList from "../common/ScrollableList";
+import Participants from "./Participants";
+import { useDebounce } from "../../hooks/useDebounce";
+import { useGetFriends } from "../../graphql/user/hooks";
+import { useAddChat } from "../../graphql/chat/hooks";
+import { useParticipants } from "../../hooks/useParticipants";
+import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { navigationPositionVar } from "../../graphql/variables/common";
 
-const participants = DUMMY_USERS.slice(0, 20);
-
-const AddBroadcast = ({ onClose }) => {
+const AddBroadCast = ({ onClose }) => {
   const theme = useTheme();
+  const { debounce } = useDebounce();
+  const { friends, filterFriends, removeFriend, addFriend } = useGetFriends();
+  const { participants, addParticipant, removeParticipant, resetParticipants } = useParticipants();
+  const broadcastNameRef = useRef();
+  const { mutate: addChat } = useAddChat();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+  } = useForm({ mode: "all" });
+
+  const searchHandler = (e) => {
+    const searchTerm = e.target.value;
+    debounce(() => {
+      filterFriends(searchTerm);
+    }, 250);
+  };
+
+  const onSelectHandler = (friend) => {
+    removeFriend(friend.id);
+    addParticipant(friend);
+  };
+
+  const onRemoveHandler = (friend) => {
+    addFriend(friend.id);
+    removeParticipant(friend);
+  };
+
+  const onCloseHandler = () => {
+    reset();
+    resetParticipants();
+    onClose();
+  };
+
+  const createBroadcastHandler = () => {
+    const name = broadcastNameRef.current.value;
+    const members = participants.map((p) => p.id);
+    const input = {
+      chatType: "BROADCAST",
+      name,
+      members,
+    };
+    addChat({
+      variables: { input },
+      optimisticResponse: {
+        addChat: {
+          __typename: "Chat",
+          id: "Temp_Broadcast_Id",
+          chatType: "BROADCAST",
+          isSelected: true,
+          latestMessage: null,
+          updatedAt: Date.now().toString(),
+          details: {
+            __typename: "Detail",
+            name,
+            members,
+          },
+        },
+      },
+    });
+    navigationPositionVar(1);
+    onClose();
+  };
+
   return (
     <Box display="flex" flexDirection="column" gap="0.8rem" overflow="hidden">
       <Box display="flex" justifyContent="space-between" alignItems="center" p="12px 12px 0px">
         <Typography fontWeight="bold" fontSize="x-large">
-          Add To Broadcast
+          New Broadcast List
         </Typography>
-        <IconButton onClick={onClose}>
+        <IconButton onClick={onCloseHandler}>
           <Close />
         </IconButton>
       </Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center" gap="1rem" p="0 15px 12px 12px ">
+        <TextField
+          variant="standard"
+          placeholder="Broadcast name"
+          fullWidth
+          inputRef={broadcastNameRef}
+          // helperText={errors?.name?.message || serverErrors?.name}
+          // error={errors?.name || Boolean(serverErrors?.name)}
+          helperText={errors?.name?.message}
+          FormHelperTextProps={{ sx: { position: "absolute", bottom: "-1.2rem" } }}
+          error={Boolean(errors?.name)}
+          {...register("name", { required: "Please provide your broadcast name" })}
+        />
+      </Box>
 
-      <Participants participants={participants} />
+      <Participants participants={participants} onRemove={onRemoveHandler} />
 
       <Box padding="0 12px">
-        <SearchControl placeholder="Search friends..." backgroundColor={theme.palette.grey["200"]} />
+        <SearchControl
+          placeholder="Search friends..."
+          backgroundColor={theme.palette.grey["200"]}
+          onSearch={searchHandler}
+        />
       </Box>
 
-      <Box p="12px" overflow="hidden" display="flex" flexGrow={1} position="relative`">
+      <Box p="12px" overflow="hidden" display="flex" position="relative">
         <ScrollableList gap="0.5rem" thumbWidth="10px" thumbColor="#8f0acd73">
-          {/* {DUMMY_USERS.map((friend) => (
-            <FriendItem key={friend.id} {...friend} active={friend.id === 2} />
-          ))} */}
+          {friends &&
+            friends.map((friend) => <FriendItem key={friend.id} friend={friend} onSelect={onSelectHandler} />)}
         </ScrollableList>
-        <Fab
-          color="primary"
-          sx={{
-            position: "absolute",
-            bottom: "12px",
-            right: "12px",
-          }}
-        >
-          <Check />
-        </Fab>
       </Box>
+      <Fab
+        onClick={handleSubmit(createBroadcastHandler)}
+        color="primary"
+        sx={{
+          position: "absolute",
+          bottom: "12px",
+          right: "12px",
+        }}
+        disabled={participants.length === 0 || !isValid}
+      >
+        <Check />
+      </Fab>
     </Box>
   );
 };
 
-export default AddBroadcast;
+export default AddBroadCast;

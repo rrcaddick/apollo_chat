@@ -37,6 +37,7 @@ const ChatMenu = () => {
   const selectedChat = useReactiveVar(selectedChatVar);
   const {
     id,
+    chatType,
     details: { name, profilePicture, mobile, isOnline, lastSeen },
   } = selectedChat || { details: {} };
 
@@ -86,18 +87,20 @@ const ChatMenu = () => {
           <Typography fontWeight="bold" fontSize="1rem" noWrap>
             {name}
           </Typography>
-          <Typography
-            fontSize="0.8rem"
-            noWrap
-            sx={(theme) => ({
-              display: "none",
-              [theme.breakpoints.up("450")]: {
-                display: "block",
-              },
-            })}
-          >
-            {formatLastSeen(isOnline, lastSeen)}
-          </Typography>
+          {chatType === "DIRECT" && (
+            <Typography
+              fontSize="0.8rem"
+              noWrap
+              sx={(theme) => ({
+                display: "none",
+                [theme.breakpoints.up("450")]: {
+                  display: "block",
+                },
+              })}
+            >
+              {formatLastSeen(isOnline, lastSeen)}
+            </Typography>
+          )}
           <Typography
             fontSize="0.8rem"
             noWrap

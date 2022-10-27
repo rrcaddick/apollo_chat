@@ -40,7 +40,7 @@ function stringAvatar(name) {
   };
 }
 
-const AvatarWithInitials = ({ alt, src, isOnline, ...rest }) => {
+const AvatarWithInitials = ({ alt, src, isOnline, children, ...rest }) => {
   if (!src) src = "";
   return (
     <>

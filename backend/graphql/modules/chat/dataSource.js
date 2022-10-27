@@ -10,12 +10,16 @@ class Chat extends MongoDataSource {
   }
 
   async getChatDetails(chat, userId) {
-    const { members, latestMessage, createdAt } = await chat.populate("members latestMessage");
+    const { chatType, name, icon } = chat;
+    if (chatType !== "DIRECT") {
+      return { name: name, profilePicture: icon };
+    }
+    const { members } = await chat.populate("members");
     return members.find((m) => !m._id.equals(userId));
   }
 
-  async addChat(members) {
-    return await this.model.create({ members });
+  async addChat(input) {
+    return await this.model.create({ ...input });
   }
 
   async removeChat(chatId) {

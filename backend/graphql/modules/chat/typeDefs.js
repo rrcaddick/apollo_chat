@@ -14,23 +14,30 @@ const typeDefs = gql`
   type Chat {
     id: ID
     updatedAt: String
+    chatType: String
     members: [User!]
     details: ChatDetail!
     latestMessage: Message
   }
 
-  union ChatDetail = User | GroupDetail
+  union ChatDetail = User | Detail
 
-  type GroupDetail {
+  type Detail {
     name: String!
     profilePicture: String
-    time: String!
-    mobile: String
-    lastSeen: String
+  }
+
+  enum ChatType {
+    DIRECT
+    GROUP
+    BROADCAST
   }
 
   input AddChatInput {
-    members: [ID]
+    members: [ID!]!
+    chatType: ChatType
+    name: String
+    icon: String
   }
 `;
 
