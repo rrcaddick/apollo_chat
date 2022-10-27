@@ -27,6 +27,11 @@ const resolvers = {
     addChat: (_root, { input }, { dataSources: { chat }, user }) => {
       const currentUserId = user._id.toString();
       const members = [currentUserId, ...input.members];
+
+      if (input.chatType && input.chatType !== "DIRECT") {
+        input.admins = [currentUserId];
+      }
+
       return chat.addChat({ ...input, members });
     },
     removeChat: (_root, { chatId }, { dataSources: { chat } }) => {

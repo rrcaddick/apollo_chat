@@ -83,7 +83,7 @@ const AddGroup = ({ onClose }) => {
             __typename: "Detail",
             name,
             members,
-            ...(public_id && { profilePicture: public_id }),
+            profilePicture: public_id || null,
           },
         },
       },

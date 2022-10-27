@@ -21,6 +21,15 @@ const chatSchema = new Schema(
     },
     name: String,
     icon: String,
+    admins: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+      default: undefined,
+    },
   },
   { timestamps: true }
 );
