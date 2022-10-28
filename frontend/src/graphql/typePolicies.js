@@ -119,6 +119,22 @@ const queryTypePolicies = {
           });
         },
       },
+      chatById: {
+        read(root, { cache, readField, variables: { chatId } }) {
+          return readField("chats")?.find((chatRef) => {
+            return (chatId = readField("id", chatRef));
+          });
+        },
+      },
+    },
+  },
+  Subscription: {
+    fields: {
+      messageAdded: {
+        read(test, test1, test2, test3) {
+          console.log(test);
+        },
+      },
     },
   },
 };

@@ -5,6 +5,7 @@ import { ON_MESSAGE_ADDED } from "./subscriptions";
 import { selectedChatVar } from "../variables/selectedChat";
 import { useReactiveVar } from "@apollo/client";
 import { baseMutation } from "../mutationUtils";
+import { GET_CHATS_QUERY, GET_CHAT_BY_ID } from "../chat/queries";
 
 const updateLastestMessage = (cache, newMessage, chatId) => {
   const newMessageRef = cache.identify(newMessage);
@@ -47,14 +48,37 @@ const useAddMessage = baseMutation(ADD_MESSAGE, (cache, { data: { addMessage } }
 
 const useReceiveMessage = () => {
   const { loading, data, error } = useSubscription(ON_MESSAGE_ADDED, {
-    onData: ({ client, data }) => {
+    onData: async ({ client, data }) => {
       const { messageAdded } = data.data;
 
       const {
         chat: { id: chatId },
       } = messageAdded;
 
-      updateLastestMessage(client.cache, messageAdded, chatId);
+      const exists = Boolean(
+        client.readFragment({
+          id: `Chat:${chatId}`,
+          fragment: gql`
+            fragment exists on Chat {
+              chatType
+            }
+          `,
+        })
+      );
+
+      if (!exists) {
+        const {
+          data: { chat },
+        } = await client.query({
+          query: GET_CHAT_BY_ID,
+          variables: { chatId },
+        });
+        client.cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
+          return { chats: [...chats, chat] };
+        });
+      } else {
+        updateLastestMessage(client.cache, messageAdded, chatId);
+      }
 
       client.cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId } }, (data) => {
         if (!data) return;

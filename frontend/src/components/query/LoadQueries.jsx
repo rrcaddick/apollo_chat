@@ -1,5 +1,5 @@
 import { Backdrop } from "@mui/material";
-import { useGetChats } from "../../graphql/chat/hooks";
+import { useGetChats, useGroupAdded } from "../../graphql/chat/hooks";
 import { useGetFriends, useGetMe, useUserOnline } from "../../graphql/user/hooks";
 import Lottie from "lottie-react";
 import loadingAnimation from "../../animations/app-loading.json";
@@ -11,6 +11,7 @@ const LoadQueries = ({ children }) => {
   const { loading: loadingChats } = useGetChats();
   useReceiveMessage();
   useUserOnline();
+  useGroupAdded();
 
   if (loadingMe || loadingFriends || loadingChats)
     return (

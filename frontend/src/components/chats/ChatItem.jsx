@@ -1,5 +1,5 @@
 import { Badge, Box, Typography, IconButton } from "@mui/material";
-import { Campaign, Delete } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 import { formatChatTime } from "../../utils/dateUtils";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";

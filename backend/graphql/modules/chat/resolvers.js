@@ -1,3 +1,5 @@
+const { withFilter } = require("graphql-subscriptions");
+const { pubSubToken } = require("../../common/injectionTokens");
 const User = require("../../../models/user");
 
 const resolvers = {
@@ -15,16 +17,12 @@ const resolvers = {
   },
   Chat: {
     id: (chat) => chat._id,
-    members: ({ members }, _args, { dataSources: { user } }) => {
-      return user.getUsersByIds(members);
-    },
+    members: ({ members }, _args, { dataSources: { user } }) => user.getUsersByIds(members),
     latestMessage: ({ latestMessage }, _args, { dataSources: { message } }) => message.getMessage(latestMessage),
-    details: (chat, _args, { dataSources: { chat: chatSource }, user }) => {
-      return chatSource.getChatDetails(chat, user._id);
-    },
+    details: (chat, _args, { dataSources: { chat: chatSource }, user }) => chatSource.getChatDetails(chat, user._id),
   },
   Mutation: {
-    addChat: (_root, { input }, { dataSources: { chat }, user }) => {
+    addChat: async (_root, { input }, { dataSources: { chat: chatSource }, user, injector }) => {
       const currentUserId = user._id.toString();
       const members = [currentUserId, ...input.members];
 
@@ -32,10 +30,32 @@ const resolvers = {
         input.admins = [currentUserId];
       }
 
-      return chat.addChat({ ...input, members });
+      const chat = await chatSource.addChat({ ...input, members });
+
+      if (chat.chatType === "GROUP") {
+        const pubSub = injector.get(pubSubToken);
+        pubSub.publish("GROUP_ADDED", chat);
+      }
+
+      return chat;
     },
     removeChat: (_root, { chatId }, { dataSources: { chat } }) => {
       return chat.removeChat(chatId);
+    },
+  },
+  Subscription: {
+    groupAdded: {
+      subscribe: withFilter(
+        (_root, _args, { injector }) => {
+          const pubSub = injector.get(pubSubToken);
+          return pubSub.asyncIterator(["GROUP_ADDED"]);
+        },
+        (chat, _args, { user }) => {
+          if (chat.admins[0].equals(user._id)) return false;
+          return chat.members.includes(user._id.toString());
+        }
+      ),
+      resolve: (root) => root,
     },
   },
 };

@@ -102,18 +102,20 @@ const ChatMenu = () => {
               {formatLastSeen(isOnline, lastSeen)}
             </Typography>
           )}
-          <Typography
-            fontSize="0.8rem"
-            noWrap
-            sx={(theme) => ({
-              display: "block",
-              [theme.breakpoints.up("450")]: {
-                display: "none",
-              },
-            })}
-          >
-            {formatLastSeen(isOnline, lastSeen, true)}
-          </Typography>
+          {chatType === "DIRECT" && (
+            <Typography
+              fontSize="0.8rem"
+              noWrap
+              sx={(theme) => ({
+                display: "block",
+                [theme.breakpoints.up("450")]: {
+                  display: "none",
+                },
+              })}
+            >
+              {formatLastSeen(isOnline, lastSeen, true)}
+            </Typography>
+          )}
         </Box>
       </Box>
 

@@ -11,6 +11,10 @@ const typeDefs = gql`
     removeChat(chatId: ID): Chat!
   }
 
+  type Subscription {
+    groupAdded: Chat!
+  }
+
   type Chat {
     id: ID
     updatedAt: String

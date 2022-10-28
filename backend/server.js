@@ -60,7 +60,7 @@ const wsServer = new WebSocketServer({
 
 const wsContext = ({ connectionParams }) => {
   const { user } = connectionParams;
-  return { user };
+  return { user, dataSources: dataSources() };
 };
 
 useServer(
