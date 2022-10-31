@@ -5,7 +5,8 @@ const resolvers = {
   Query: {
     messages: (_root, _args, { dataSources: { message } }) => message.getMessages(),
     message: (_root, { id }, { dataSources: { message } }) => message.getMessage(id),
-    chatMessages: (_root, { chatId }, { dataSources: { message } }) => message.getChatMessages(chatId),
+    chatMessages: (_root, { chatId }, { dataSources: { message }, user: { id } }) =>
+      message.getChatMessages(chatId, id),
   },
   Message: {
     id: ({ _id }) => _id,
@@ -26,7 +27,8 @@ const resolvers = {
       pubSub.publish("MESSAGE_ADDED", newMessage);
       return newMessage;
     },
-    clearChatMessages: async (_root, { chatId }, { dataSources: { message } }) => message.clearChatMessages(chatId),
+    clearChatMessages: async (_root, { chatId }, { dataSources: { message }, user: { id } }) =>
+      message.clearChatMessages(chatId, id),
   },
   Subscription: {
     messageAdded: {

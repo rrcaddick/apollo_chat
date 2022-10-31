@@ -27,7 +27,11 @@ class Chat extends MongoDataSource {
   }
 
   async removeChat(chatId, userId) {
-    const chat = await this.model.findByIdAndUpdate({ _id: chatId }, { $push: { deletedBy: userId } }, { new: true });
+    const chat = await this.model.findByIdAndUpdate(
+      { _id: chatId },
+      { $push: { deletedBy: userId } },
+      { new: true, updateMessageDeletedBy: true, chatId, userId }
+    );
     return chat;
   }
 }

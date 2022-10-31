@@ -47,4 +47,10 @@ chatSchema.pre("save", function (next) {
   next();
 });
 
+chatSchema.post("findOneAndUpdate", async function () {
+  const Message = mongoose.model("Message");
+  const { updateMessageDeletedBy, chatId, userId } = this?.options;
+  if (updateMessageDeletedBy) await Message.updateMany({ chat: chatId }, { $push: { deletedBy: userId } });
+});
+
 module.exports = mongoose.model("Chat", chatSchema);

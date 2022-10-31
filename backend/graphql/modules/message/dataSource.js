@@ -5,8 +5,11 @@ class Message extends MongoDataSource {
     return await this.model.find().populate("sender chat");
   }
 
-  async getChatMessages(chatId) {
-    return await this.model.find({ chat: chatId }).populate("sender chat").sort({ createdAt: 1 });
+  async getChatMessages(chatId, userId) {
+    return await this.model
+      .find({ chat: chatId, deletedBy: { $ne: userId } })
+      .populate("sender chat")
+      .sort({ createdAt: 1 });
   }
 
   async getMessage(messageId) {
@@ -18,8 +21,12 @@ class Message extends MongoDataSource {
     return await message.populate("sender chat");
   }
 
-  async clearChatMessages(chatId) {
-    const { deletedCount: clearedMessageCount } = await this.model.deleteMany({ chat: chatId });
+  async clearChatMessages(chatId, userId) {
+    const { modifiedCount: clearedMessageCount } = await this.model.updateMany(
+      { chat: chatId, deletedBy: { $ne: userId } },
+      { $push: { deletedBy: userId } },
+      { clearLatestMessage: true, chatId }
+    );
     return { clearedMessageCount };
   }
 }
