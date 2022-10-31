@@ -30,7 +30,7 @@ const resolvers = {
         input.admins = [currentUserId];
       }
 
-      const chat = await chatSource.addChat({ ...input, members });
+      const chat = await chatSource.addChat({ ...input, members }, currentUserId);
 
       if (chat.chatType === "GROUP") {
         const pubSub = injector.get(pubSubToken);

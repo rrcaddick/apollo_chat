@@ -43,6 +43,7 @@ const useReadSelectedChat = (onCompletedFn = null) => {
     onCompleted: ({ selectedChat }) => {
       onCompletedFn && onCompletedFn(selectedChat);
     },
+    fetchPolicy: "cache-only",
   });
   return { selectedChat: data?.selectedChat, loading, error };
 };

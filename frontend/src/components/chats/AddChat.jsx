@@ -44,6 +44,7 @@ const AddChat = ({ onClose }) => {
           addChat: {
             __typename: "Chat",
             id: "Temp_Chat_Id",
+            chatType: "DIRECT",
             updatedAt: Date.now().toString(),
             latestMessage: null,
             details: {

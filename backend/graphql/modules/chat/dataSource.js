@@ -22,7 +22,11 @@ class Chat extends MongoDataSource {
     return members.find((m) => !m._id.equals(userId));
   }
 
-  async addChat(input) {
+  async addChat(input, userId) {
+    const { _id } = (await this.model.exists({ members: input.members })) || {};
+    if (_id) {
+      return await this.model.findByIdAndUpdate(_id, { $pull: { deletedBy: userId } }, { new: true });
+    }
     return await this.model.create({ ...input });
   }
 
