@@ -15,6 +15,13 @@ const chatSchema = new Schema(
         required: "Chat members are required",
       },
     ],
+    deletedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: "Chat members are required",
+      },
+    ],
     latestMessage: {
       type: Schema.Types.ObjectId,
       ref: "Message",

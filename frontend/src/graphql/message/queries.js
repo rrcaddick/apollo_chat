@@ -7,6 +7,14 @@ const GET_CHAT_MESSAGES = gql`
       content
       isUserMessage
       createdAt
+      chat {
+        id
+        chatType
+      }
+      sender {
+        id
+        name
+      }
       isFirstInCluster @client
       isLastInCluster @client
       isNewDate @client

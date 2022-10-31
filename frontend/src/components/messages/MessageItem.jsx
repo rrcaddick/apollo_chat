@@ -3,7 +3,26 @@ import { forwardRef } from "react";
 import { getTimeString, getDateName } from "../../utils/dateUtils";
 
 const MessageItem = forwardRef(
-  ({ content, isUserMessage, isFirstInCluster, isLastInCluster, createdAt, isNewDate }, ref) => {
+  (
+    {
+      content,
+      isUserMessage,
+      isFirstInCluster,
+      isLastInCluster,
+      createdAt,
+      isNewDate,
+      chat: { chatType },
+      sender: { name },
+    },
+    ref
+  ) => {
+    function getRandomColor() {
+      var color = "#";
+      for (var i = 0; i < 6; i++) {
+        color += Math.floor(Math.random() * 10);
+      }
+      return color;
+    }
     const theme = useTheme();
     const messageStyles = isUserMessage
       ? {
@@ -33,7 +52,7 @@ const MessageItem = forwardRef(
             padding="0.1rem 0.5rem"
             alignSelf="center"
             color="white"
-            // fontWeight="600"
+            fontWeight="600"
             fontSize="0.6rem"
             borderRadius="5px"
             marginY="1rem"
@@ -41,16 +60,23 @@ const MessageItem = forwardRef(
             {getDateName(+createdAt, false).toUpperCase()}
           </Typography>
         )}
-        <Box p="0.5rem 1rem" sx={messageStyles} ref={ref} display="flex" gap="0.5rem">
-          <Typography>{content}</Typography>
-          <Typography
-            fontSize="0.5rem"
-            fontWeight="600"
-            alignSelf="flex-end"
-            color={isUserMessage ? "#d3a9d3" : "orange"}
-          >
-            {getTimeString(createdAt)}
-          </Typography>
+        <Box p="0.5rem 1rem" sx={messageStyles} ref={ref}>
+          {chatType === "GROUP" && isFirstInCluster && (
+            <Typography fontSize="0.6rem" fontWeight="600" color={isUserMessage ? "orange" : getRandomColor()}>
+              {name}
+            </Typography>
+          )}
+          <Box display="flex" gap="0.5rem">
+            <Typography>{content}</Typography>
+            <Typography
+              fontSize="0.5rem"
+              fontWeight="600"
+              alignSelf="flex-end"
+              color={isUserMessage ? "#d3a9d3" : "orange"}
+            >
+              {getTimeString(createdAt)}
+            </Typography>
+          </Box>
         </Box>
       </Stack>
     );

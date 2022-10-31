@@ -2,7 +2,11 @@ const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class Chat extends MongoDataSource {
   async getUserChats(userId) {
-    return await this.model.find({ members: userId, $or: [{ chatType: { $ne: "BROADCAST" } }, { admins: userId }] });
+    return await this.model.find({
+      members: userId,
+      deletedBy: { $ne: userId },
+      $or: [{ chatType: { $ne: "BROADCAST" } }, { admins: userId }],
+    });
   }
 
   async getChat(chatId) {
@@ -22,8 +26,8 @@ class Chat extends MongoDataSource {
     return await this.model.create({ ...input });
   }
 
-  async removeChat(chatId) {
-    const chat = await this.model.findByIdAndDelete(chatId);
+  async removeChat(chatId, userId) {
+    const chat = await this.model.findByIdAndUpdate({ _id: chatId }, { $push: { deletedBy: userId } }, { new: true });
     return chat;
   }
 }

@@ -6,6 +6,8 @@ import { useReactiveVar } from "@apollo/client";
 import { emojiTrayOpenVar } from "../../graphql/variables/common";
 import { useNewMessage } from "../../hooks/useNewMessage";
 import { useAddMessage } from "../../graphql/message/hooks";
+import { useGetMe } from "../../graphql/user/hooks";
+import { selectedChatVar } from "../../graphql/variables/selectedChat";
 
 const MessageInput = styled(TextareaAutosize)`
   width: 100%;
@@ -32,6 +34,8 @@ const NewMessage = () => {
   const isOpen = useReactiveVar(emojiTrayOpenVar);
   const { content, setContentHandler, reset, chatId } = useNewMessage();
   const { mutate: addMessage, loading, error } = useAddMessage();
+  const { me } = useGetMe();
+  const { id, chatType } = selectedChatVar();
 
   const sendMessageHandler = () => {
     const input = { chatId, content };
@@ -44,6 +48,16 @@ const NewMessage = () => {
           content,
           createdAt: Date.now().toString(),
           isUserMessage: true,
+          sender: {
+            __typename: "User",
+            id: me.id,
+            name: me.name,
+          },
+          chat: {
+            __typename: "Chat",
+            id,
+            chatType,
+          },
         },
       },
     });

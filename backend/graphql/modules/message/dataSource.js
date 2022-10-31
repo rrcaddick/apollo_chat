@@ -6,7 +6,7 @@ class Message extends MongoDataSource {
   }
 
   async getChatMessages(chatId) {
-    return await this.model.find({ chat: chatId }).populate("sender").sort({ createdAt: 1 });
+    return await this.model.find({ chat: chatId }).populate("sender chat").sort({ createdAt: 1 });
   }
 
   async getMessage(messageId) {

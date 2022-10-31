@@ -17,11 +17,12 @@ import { navigationPositionVar } from "../../graphql/variables/common";
 const AddGroup = ({ onClose }) => {
   const theme = useTheme();
   const { debounce } = useDebounce();
-  const { friends, filterFriends, removeFriend, addFriend } = useGetFriends();
+  const { friends, filterFriends, removeFriend, addFriend, resetFriends } = useGetFriends();
   const { participants, addParticipant, removeParticipant, resetParticipants } = useParticipants();
   const { uploadImage, disgardImage, public_id, loading: imageUploadLoading } = useImageUpload();
   const AvatarRef = useRef();
   const GroupNameRef = useRef();
+  const SearchInputRef = useRef();
   const { mutate: addChat } = useAddChat();
 
   const {
@@ -29,7 +30,7 @@ const AddGroup = ({ onClose }) => {
     handleSubmit,
     formState: { errors, isValid },
     reset,
-  } = useForm({ mode: "all" });
+  } = useForm({ mode: "all", defaultValues: { name: "" } });
 
   const searchHandler = (e) => {
     const searchTerm = e.target.value;
@@ -48,11 +49,17 @@ const AddGroup = ({ onClose }) => {
     removeParticipant(friend);
   };
 
+  const resetAndClose = () => {
+    reset({ name: "" });
+    resetParticipants();
+    resetFriends();
+    SearchInputRef.current.value = "";
+    onClose();
+  };
+
   const onCloseHandler = () => {
     disgardImage();
-    reset();
-    resetParticipants();
-    onClose();
+    resetAndClose();
   };
 
   const uploadImageHandler = ({ target }) => {
@@ -89,7 +96,7 @@ const AddGroup = ({ onClose }) => {
       },
     });
     navigationPositionVar(1);
-    onClose();
+    resetAndClose();
   };
 
   return (
@@ -136,6 +143,7 @@ const AddGroup = ({ onClose }) => {
           placeholder="Search friends..."
           backgroundColor={theme.palette.grey["200"]}
           onSearch={searchHandler}
+          ref={SearchInputRef}
         />
       </Box>
 

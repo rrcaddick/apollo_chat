@@ -15,9 +15,10 @@ import { navigationPositionVar } from "../../graphql/variables/common";
 const AddBroadCast = ({ onClose }) => {
   const theme = useTheme();
   const { debounce } = useDebounce();
-  const { friends, filterFriends, removeFriend, addFriend } = useGetFriends();
+  const { friends, filterFriends, removeFriend, addFriend, resetFriends } = useGetFriends();
   const { participants, addParticipant, removeParticipant, resetParticipants } = useParticipants();
-  const broadcastNameRef = useRef();
+  const BroadcastNameRef = useRef();
+  const SearchInputRef = useRef();
   const { mutate: addChat } = useAddChat();
 
   const {
@@ -44,14 +45,20 @@ const AddBroadCast = ({ onClose }) => {
     removeParticipant(friend);
   };
 
-  const onCloseHandler = () => {
-    reset();
+  const resetAndClose = () => {
+    reset({ name: "" });
     resetParticipants();
+    resetFriends();
+    SearchInputRef.current.value = "";
     onClose();
   };
 
+  const onCloseHandler = () => {
+    resetAndClose();
+  };
+
   const createBroadcastHandler = () => {
-    const name = broadcastNameRef.current.value;
+    const name = BroadcastNameRef.current.value;
     const members = participants.map((p) => p.id);
     const input = {
       chatType: "BROADCAST",
@@ -72,12 +79,13 @@ const AddBroadCast = ({ onClose }) => {
             __typename: "Detail",
             name,
             members,
+            profilePicture: null,
           },
         },
       },
     });
     navigationPositionVar(1);
-    onClose();
+    resetAndClose();
   };
 
   return (
@@ -95,7 +103,7 @@ const AddBroadCast = ({ onClose }) => {
           variant="standard"
           placeholder="Broadcast name"
           fullWidth
-          inputRef={broadcastNameRef}
+          inputRef={BroadcastNameRef}
           // helperText={errors?.name?.message || serverErrors?.name}
           // error={errors?.name || Boolean(serverErrors?.name)}
           helperText={errors?.name?.message}
@@ -112,6 +120,7 @@ const AddBroadCast = ({ onClose }) => {
           placeholder="Search friends..."
           backgroundColor={theme.palette.grey["200"]}
           onSearch={searchHandler}
+          ref={SearchInputRef}
         />
       </Box>
 

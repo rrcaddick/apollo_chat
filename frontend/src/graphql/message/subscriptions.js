@@ -9,6 +9,11 @@ const ON_MESSAGE_ADDED = gql`
       createdAt
       chat {
         id
+        chatType
+      }
+      sender {
+        id
+        name
       }
     }
   }

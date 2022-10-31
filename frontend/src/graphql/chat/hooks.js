@@ -56,13 +56,11 @@ const useAddChat = baseMutation(ADD_CHAT, (cache, { data }) => {
 });
 
 const useRemoveChat = baseMutation(REMOVE_CHAT, (cache, { data: { removeChat } }) => {
-  try {
-    cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
-      return { chats: chats.filter((chat) => chat.id !== removeChat.id) };
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
+    return { chats: chats.filter((chat) => chat.id !== removeChat.id) };
+  });
+  cache.evict({ id: `Chat:${removeChat.id}` });
+  cache.gc();
   selectedChatVar(null);
 });
 

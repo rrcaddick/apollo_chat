@@ -39,8 +39,8 @@ const resolvers = {
 
       return chat;
     },
-    removeChat: (_root, { chatId }, { dataSources: { chat } }) => {
-      return chat.removeChat(chatId);
+    removeChat: (_root, { chatId }, { dataSources: { chat }, user: { id } }) => {
+      return chat.removeChat(chatId, id);
     },
   },
   Subscription: {

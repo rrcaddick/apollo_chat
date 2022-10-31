@@ -7,6 +7,14 @@ const ADD_MESSAGE = gql`
       content
       isUserMessage
       createdAt
+      chat {
+        id
+        chatType
+      }
+      sender {
+        id
+        name
+      }
     }
   }
 `;

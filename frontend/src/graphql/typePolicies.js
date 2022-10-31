@@ -11,37 +11,37 @@ const getClientFields = (messages, index, readField) => {
       isNewDate: true,
     };
 
-  const currIsUser = readField("isUserMessage", messages[index]);
+  const currSenderId = readField("id", readField("sender", messages[index]));
   const currCreatedAt = readField("createdAt", messages[index]);
 
   // First message in chat
   if (index === 0) {
-    const nextIsUser = readField("isUserMessage", messages[index + 1]);
+    const nextSenderId = readField("id", readField("sender", messages[index + 1]));
     return {
       isFirstInCluster: true,
-      isLastInCluster: nextIsUser !== currIsUser,
+      isLastInCluster: nextSenderId !== currSenderId,
       isNewDate: true,
     };
   }
 
   // Last message in chat
   if (index === messages.length - 1) {
-    const prevIsUser = readField("isUserMessage", messages[index - 1]);
+    const prevSenderId = readField("id", readField("sender", messages[index - 1]));
     const prevCreatedAt = readField("createdAt", messages[index - 1]);
     return {
-      isFirstInCluster: prevIsUser !== currIsUser,
+      isFirstInCluster: prevSenderId !== currSenderId,
       isLastInCluster: true,
       isNewDate: getDateString(currCreatedAt) !== getDateString(prevCreatedAt),
     };
   }
 
-  const prevIsUser = readField("isUserMessage", messages[index - 1]);
-  const nextIsUser = readField("isUserMessage", messages[index + 1]);
+  const prevSenderId = readField("id", readField("sender", messages[index - 1]));
+  const nextSenderId = readField("id", readField("sender", messages[index + 1]));
   const prevCreatedAt = readField("createdAt", messages[index - 1]);
 
   return {
-    isFirstInCluster: prevIsUser !== currIsUser,
-    isLastInCluster: nextIsUser !== currIsUser,
+    isFirstInCluster: prevSenderId !== currSenderId,
+    isLastInCluster: nextSenderId !== currSenderId,
     isNewDate: getDateString(currCreatedAt) !== getDateString(prevCreatedAt),
   };
 };
@@ -49,6 +49,11 @@ const getClientFields = (messages, index, readField) => {
 const queryTypePolicies = {
   Query: {
     fields: {
+      chats: {
+        merge(existing = [], incoming = [], { cache, readField }) {
+          return incoming;
+        },
+      },
       chatMessages: {
         keyArgs: ({ chatId }, { fieldName }) => {
           return `${fieldName}:${chatId}`;

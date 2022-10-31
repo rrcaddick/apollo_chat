@@ -22,7 +22,7 @@ const useGetFriends = () => {
   const [filteredFriends, setFilteredFriends] = useState();
   const { data, loading, error } = useQuery(GET_FRIENDS);
   const [filter, setFilter] = useState([]);
-  const [searchTerm, setSearchTerm] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filterFriends = (searchTerm) => {
     setSearchTerm(searchTerm.toLowerCase());
@@ -34,6 +34,11 @@ const useGetFriends = () => {
 
   const addFriend = (friendId) => {
     setFilter((prevState) => prevState.filter((id) => id !== friendId));
+  };
+
+  const resetFriends = () => {
+    setFilter([]);
+    setSearchTerm("");
   };
 
   useEffect(() => {
@@ -50,7 +55,7 @@ const useGetFriends = () => {
     }
   }, [data]);
 
-  return { friends: filteredFriends, filterFriends, removeFriend, addFriend, loading, error };
+  return { friends: filteredFriends, filterFriends, removeFriend, addFriend, resetFriends, loading, error };
 };
 
 const useGetOnlineFriends = () => {

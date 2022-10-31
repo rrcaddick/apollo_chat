@@ -60,7 +60,7 @@ const useReceiveMessage = () => {
           id: `Chat:${chatId}`,
           fragment: gql`
             fragment exists on Chat {
-              chatType
+              latestMessage
             }
           `,
         })
