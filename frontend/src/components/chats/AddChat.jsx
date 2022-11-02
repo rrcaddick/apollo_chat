@@ -10,6 +10,7 @@ import { READ_EXISTING_CHAT } from "../../graphql/chat/queries";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
 import { useAddChat } from "../../graphql/chat/hooks";
 import { navigationPositionVar } from "../../graphql/variables/common";
+import { generateTempId } from "../../utils/common";
 
 const AddChat = ({ onClose }) => {
   const theme = useTheme();
@@ -43,7 +44,7 @@ const AddChat = ({ onClose }) => {
         optimisticResponse: {
           addChat: {
             __typename: "Chat",
-            id: "Temp_Chat_Id",
+            id: generateTempId("Chat"),
             chatType: "DIRECT",
             updatedAt: Date.now().toString(),
             latestMessage: null,

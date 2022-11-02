@@ -12,7 +12,6 @@ const ChatItem = ({ chat }) => {
     latestMessage,
     isSelected,
     updatedAt,
-    chatType,
     details: { name, profilePicture, isOnline },
   } = chat;
 

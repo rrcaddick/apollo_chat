@@ -11,6 +11,7 @@ import { useParticipants } from "../../hooks/useParticipants";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { navigationPositionVar } from "../../graphql/variables/common";
+import { generateTempId } from "../../utils/common";
 
 const AddBroadCast = ({ onClose }) => {
   const theme = useTheme();
@@ -70,7 +71,7 @@ const AddBroadCast = ({ onClose }) => {
       optimisticResponse: {
         addChat: {
           __typename: "Chat",
-          id: "Temp_Broadcast_Id",
+          id: generateTempId("BroadcastChat"),
           chatType: "BROADCAST",
           isSelected: true,
           latestMessage: null,

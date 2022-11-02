@@ -17,9 +17,7 @@ const LoginForm = styled.form`
 
 const Login = () => {
   const { showPassword, toggleShowPassword } = useShowPassword();
-
   const { login, loading, serverError, success } = useLogin();
-
   const navigate = useNavigate();
 
   const {

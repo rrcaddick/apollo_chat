@@ -8,6 +8,7 @@ import { useNewMessage } from "../../hooks/useNewMessage";
 import { useAddMessage } from "../../graphql/message/hooks";
 import { useGetMe } from "../../graphql/user/hooks";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
+import { generateTempId } from "../../utils/common";
 
 const MessageInput = styled(TextareaAutosize)`
   width: 100%;
@@ -44,7 +45,7 @@ const NewMessage = () => {
       optimisticResponse: {
         addMessage: {
           __typename: "Message",
-          id: "Temp_Message_ID",
+          id: generateTempId("Message"),
           content,
           createdAt: Date.now().toString(),
           isUserMessage: true,

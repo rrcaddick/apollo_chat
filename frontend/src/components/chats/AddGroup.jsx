@@ -13,6 +13,7 @@ import { getAvatarUrl } from "../../utils/cloudinary";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { navigationPositionVar } from "../../graphql/variables/common";
+import { generateTempId } from "../../utils/common";
 
 const AddGroup = ({ onClose }) => {
   const theme = useTheme();
@@ -81,7 +82,7 @@ const AddGroup = ({ onClose }) => {
       optimisticResponse: {
         addChat: {
           __typename: "Chat",
-          id: "Temp_Group_Id",
+          id: generateTempId("GroupChat"),
           chatType: "GROUP",
           isSelected: true,
           latestMessage: null,

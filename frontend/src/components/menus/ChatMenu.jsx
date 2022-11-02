@@ -7,8 +7,6 @@ import AvatarWithInitials from "../common/AvatarWithInitials";
 import { navigationPositionVar } from "../../graphql/variables/common";
 import { formatLastSeen } from "../../utils/dateUtils";
 import { useRemoveChat } from "../../graphql/chat/hooks";
-import { useReactiveVar } from "@apollo/client";
-import { selectedChatVar } from "../../graphql/variables/selectedChat";
 import { useClearChatMessages } from "../../graphql/message/hooks";
 import { useReadSelectedChat } from "../../graphql/chat/hooks";
 
