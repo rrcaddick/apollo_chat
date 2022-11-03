@@ -31,9 +31,7 @@ const resolvers = {
       }
 
       const { members } = newMessage.chat;
-
       for (let member of members) {
-        if (member.equals(id)) continue;
         const { _id } = await chatSource.getOrCreateChat([member, id]);
         const newBroadcastMessage = await message.addMessage({ sender: id, chat: _id, content });
         pubSub.publish("MESSAGE_ADDED", { message: newBroadcastMessage, broadcast: true });

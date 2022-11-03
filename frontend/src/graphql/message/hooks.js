@@ -5,7 +5,7 @@ import { ON_MESSAGE_ADDED } from "./subscriptions";
 import { selectedChatVar } from "../variables/selectedChat";
 import { useReactiveVar } from "@apollo/client";
 import { baseMutation } from "../mutationUtils";
-import { GET_CHATS_QUERY, GET_CHAT_BY_ID } from "../chat/queries";
+import { GET_CHATS_QUERY, GET_CHAT_BY_ID, READ_CHAT_BY_MEMBER } from "../chat/queries";
 
 const updateLastestMessage = (cache, newMessage, chatId) => {
   const newMessageRef = cache.identify(newMessage);
@@ -39,9 +39,20 @@ const useGetChatMessages = (onCompletedFn = null) => {
 };
 
 const useAddMessage = baseMutation(ADD_MESSAGE, (cache, { data: { addMessage } }) => {
-  const selectedChat = selectedChatVar();
-  updateLastestMessage(cache, addMessage, selectedChat?.id);
-  cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId: selectedChat?.id } }, ({ chatMessages }) => {
+  const { id, members } = selectedChatVar();
+
+  for (let member of members) {
+    const data = cache.readQuery({
+      query: READ_CHAT_BY_MEMBER,
+      variables: { member },
+    });
+
+    data?.chatIdByMember?.id && updateLastestMessage(cache, addMessage, data?.chatIdByMember?.id);
+  }
+
+  updateLastestMessage(cache, addMessage, id);
+
+  cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId: id } }, ({ chatMessages }) => {
     return { chatMessages: [...chatMessages, addMessage] };
   });
 });

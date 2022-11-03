@@ -3,9 +3,11 @@ const { MongoDataSource } = require("apollo-datasource-mongodb");
 class Chat extends MongoDataSource {
   async getUserChats(userId) {
     return await this.model.find({
-      members: userId,
+      $or: [
+        { $and: [{ chatType: { $ne: "BROADCAST" } }, { members: userId }] },
+        { $and: [{ chatType: { $eq: "BROADCAST" } }, { admins: userId }] },
+      ],
       deletedBy: { $ne: userId },
-      $or: [{ chatType: { $ne: "BROADCAST" } }, { admins: userId }],
     });
   }
 

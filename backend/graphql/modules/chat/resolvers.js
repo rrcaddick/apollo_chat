@@ -24,15 +24,21 @@ const resolvers = {
   Mutation: {
     addChat: async (_root, { input }, { dataSources: { chat: chatSource }, user, injector }) => {
       const currentUserId = user._id.toString();
-      const members = [currentUserId, ...input.members];
+      const isDirect = input.chatType === "DIRECT" || !input?.chatType;
+      const isBroadcast = input.chatType === "BROADCAST";
+      const isGroup = input.chatType === "GROUP";
 
-      if (input.chatType && input.chatType !== "DIRECT") {
+      if (!isDirect) {
         input.admins = [currentUserId];
       }
 
-      const chat = await chatSource.addChat({ ...input, members }, currentUserId);
+      if (!isBroadcast) {
+        input.members.push(currentUserId);
+      }
 
-      if (chat.chatType === "GROUP") {
+      const chat = await chatSource.addChat(input, currentUserId);
+
+      if (isGroup) {
         const pubSub = injector.get(pubSubToken);
         pubSub.publish("GROUP_ADDED", chat);
       }

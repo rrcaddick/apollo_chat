@@ -131,6 +131,21 @@ const queryTypePolicies = {
           });
         },
       },
+      chatIdByMember: {
+        read(root, { cache, readField, variables: { member } }) {
+          const userId = readField("id", readField("me"));
+
+          return readField("chats")?.find((chatRef) => {
+            const members = readField("members", chatRef);
+            const isDirect = readField("chatType", chatRef) === "DIRECT";
+            return (
+              isDirect &&
+              members.some((m) => m.__ref === `User:${userId}`) &&
+              members.some((m) => m.__ref === `User:${member.id}`)
+            );
+          });
+        },
+      },
     },
   },
   Subscription: {

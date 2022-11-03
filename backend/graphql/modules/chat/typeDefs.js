@@ -20,6 +20,7 @@ const typeDefs = gql`
     updatedAt: String
     chatType: String
     members: [User!]
+    admins: [User]
     details: ChatDetail!
     latestMessage: Message
   }

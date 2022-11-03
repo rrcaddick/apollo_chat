@@ -5,6 +5,9 @@ const CHAT_FIELDS = gql`
     id
     updatedAt
     chatType
+    members {
+      id
+    }
     latestMessage {
       id
       content

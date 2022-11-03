@@ -55,4 +55,21 @@ const READ_CHAT_BY_ID = gql`
   }
 `;
 
-export { GET_CHATS_QUERY, READ_SELECTED_CHAT, READ_ORDERED_CHATS, READ_EXISTING_CHAT, READ_CHAT_BY_ID, GET_CHAT_BY_ID };
+const READ_CHAT_BY_MEMBER = gql`
+  ${CHAT_FIELDS}
+  query ReadChatByMember($member: ID) @client {
+    chatIdByMember {
+      id
+    }
+  }
+`;
+
+export {
+  GET_CHATS_QUERY,
+  READ_SELECTED_CHAT,
+  READ_ORDERED_CHATS,
+  READ_EXISTING_CHAT,
+  READ_CHAT_BY_ID,
+  GET_CHAT_BY_ID,
+  READ_CHAT_BY_MEMBER,
+};
