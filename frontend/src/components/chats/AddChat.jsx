@@ -46,6 +46,7 @@ const AddChat = ({ onClose }) => {
             __typename: "Chat",
             id: generateTempId("Chat"),
             chatType: "DIRECT",
+            members: [{ id: user.id }],
             updatedAt: Date.now().toString(),
             latestMessage: null,
             details: {

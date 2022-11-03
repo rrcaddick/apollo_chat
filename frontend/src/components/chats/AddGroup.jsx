@@ -86,6 +86,7 @@ const AddGroup = ({ onClose }) => {
           id: generateTempId("GroupChat"),
           chatType: "GROUP",
           isSelected: true,
+          members: members.map((m) => ({ id: m })),
           latestMessage: null,
           updatedAt: Date.now().toString(),
           details: {

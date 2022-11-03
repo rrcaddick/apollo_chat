@@ -74,6 +74,7 @@ const AddBroadCast = ({ onClose }) => {
           id: generateTempId("BroadcastChat"),
           chatType: "BROADCAST",
           isSelected: true,
+          members: members.map((m) => ({ id: m })),
           latestMessage: null,
           updatedAt: Date.now().toString(),
           details: {

@@ -1,8 +1,10 @@
+import { useApolloClient } from "@apollo/client";
 import { useState } from "react";
 
 const useLogout = () => {
   // Stops fetch from being overidden to expose token
   const secureFetch = window.fetch;
+  const client = useApolloClient();
 
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState(null);
@@ -26,6 +28,7 @@ const useLogout = () => {
         const { message } = await response.json();
         setServerError(message);
       } else {
+        await client.clearStore();
         setSuccess(true);
       }
     } catch (err) {

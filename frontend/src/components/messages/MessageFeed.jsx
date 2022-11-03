@@ -4,12 +4,14 @@ import MessageItem from "./MessageItem";
 import { useGetChatMessages } from "../../graphql/message/hooks";
 import EmoticonPicker from "../common/EmoticonPicker";
 import { selectedEmojiVar } from "../../graphql/variables/common";
+import { selectedChatVar } from "../../graphql/variables/selectedChat";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 
 const MessageFeed = () => {
-  const { chatMessages, loading, error } = useGetChatMessages();
+  const { chatMessages, loading: messagesLoading, error } = useGetChatMessages();
   const scrollRef = useScrollIntoView(chatMessages);
 
+  const loading = messagesLoading || selectedChatVar()?.id.includes("Temp");
   const hasChatMessage = chatMessages && chatMessages.length > 0;
 
   const onSelectHandler = (emojiData, e) => {
