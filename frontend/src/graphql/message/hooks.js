@@ -33,7 +33,7 @@ const useGetChatMessages = (onCompletedFn = null) => {
     onCompleted: ({ chatMessages }) => {
       onCompletedFn && onCompletedFn(chatMessages);
     },
-    skip: !selectedChat || selectedChat.id.includes("Temp"),
+    skip: !selectedChat || selectedChat.id.includes("Temp") || !selectedChat.latestMessage,
   });
   return { chatMessages: data?.chatMessages, loading, error };
 };
