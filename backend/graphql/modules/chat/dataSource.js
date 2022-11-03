@@ -34,7 +34,8 @@ class Chat extends MongoDataSource {
 
   async addChat(input, userId) {
     const { _id } = (await this.model.exists({ members: input.members })) || {};
-    if (input?.chatType === "DIRECT" && _id) {
+    const isDirect = input?.chatType === "DIRECT" || !input?.chatType;
+    if (isDirect && _id) {
       return await this.model.findByIdAndUpdate(_id, { $pull: { deletedBy: userId } }, { new: true });
     }
     return await this.model.create({ ...input });
