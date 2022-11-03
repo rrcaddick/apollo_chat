@@ -18,13 +18,26 @@ const resolvers = {
     addMessage: async (_root, { input: { chatId, content } }, context) => {
       const {
         injector,
-        dataSources: { message },
+        dataSources: { message, chat: chatSource },
         user: { _id: id },
       } = context;
       const pubSub = injector.get(pubSubToken);
 
       const newMessage = await message.addMessage({ sender: id, chat: chatId, content });
-      pubSub.publish("MESSAGE_ADDED", newMessage);
+
+      if (newMessage.chat.chatType !== "BROADCAST") {
+        pubSub.publish("MESSAGE_ADDED", { message: newMessage });
+        return newMessage;
+      }
+
+      const { members } = newMessage.chat;
+
+      for (let member of members) {
+        if (member.equals(id)) continue;
+        const { _id } = await chatSource.getOrCreateChat([member, id]);
+        const newBroadcastMessage = await message.addMessage({ sender: id, chat: _id, content });
+        pubSub.publish("MESSAGE_ADDED", { message: newBroadcastMessage, broadcast: true });
+      }
       return newMessage;
     },
     clearChatMessages: async (_root, { chatId }, { dataSources: { message }, user: { id } }) =>
@@ -37,12 +50,13 @@ const resolvers = {
           const pubSub = injector.get(pubSubToken);
           return pubSub.asyncIterator(["MESSAGE_ADDED"]);
         },
-        ({ chat, sender }, _args, { user }) => {
-          if (sender._id.equals(user._id)) return false;
+        ({ message, broadcast = false }, _args, { user }) => {
+          const { chat, sender } = message;
+          if (sender._id.equals(user._id) && !broadcast) return false;
           return chat.members.includes(user._id.toString());
         }
       ),
-      resolve: (root) => root,
+      resolve: ({ message }) => message,
     },
   },
 };

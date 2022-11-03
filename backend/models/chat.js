@@ -42,8 +42,9 @@ const chatSchema = new Schema(
 );
 
 chatSchema.pre("save", function (next) {
-  const { chatType } = this;
+  const { chatType, icon } = this;
   if (chatType === "BROADCAST") this.icon = "ApolloChat/ykoxzcf9rpbdtcftc1ih";
+  if (chatType === "GROUP" && !icon) this.icon = "ApolloChat/emmyk1ttz4fusm3dlqut";
   next();
 });
 

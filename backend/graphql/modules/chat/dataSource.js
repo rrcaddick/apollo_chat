@@ -13,6 +13,14 @@ class Chat extends MongoDataSource {
     return await this.findOneById(chatId);
   }
 
+  async getOrCreateChat(members) {
+    let chat = await this.model.findOne({ members: { $all: members }, chatType: "DIRECT" });
+    if (!chat) {
+      chat = await this.model.create({ members });
+    }
+    return chat;
+  }
+
   async getChatDetails(chat, userId) {
     const { chatType, name, icon } = chat;
     if (chatType !== "DIRECT") {
@@ -24,7 +32,7 @@ class Chat extends MongoDataSource {
 
   async addChat(input, userId) {
     const { _id } = (await this.model.exists({ members: input.members })) || {};
-    if (_id) {
+    if (input?.chatType === "DIRECT" && _id) {
       return await this.model.findByIdAndUpdate(_id, { $pull: { deletedBy: userId } }, { new: true });
     }
     return await this.model.create({ ...input });

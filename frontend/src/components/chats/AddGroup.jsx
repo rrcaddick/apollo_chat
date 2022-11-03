@@ -20,7 +20,7 @@ const AddGroup = ({ onClose }) => {
   const { debounce } = useDebounce();
   const { friends, filterFriends, removeFriend, addFriend, resetFriends } = useGetFriends();
   const { participants, addParticipant, removeParticipant, resetParticipants } = useParticipants();
-  const { uploadImage, disgardImage, public_id, loading: imageUploadLoading } = useImageUpload();
+  const { uploadImage, disgardImage, resetImage, public_id, loading: imageUploadLoading } = useImageUpload();
   const AvatarRef = useRef();
   const GroupNameRef = useRef();
   const SearchInputRef = useRef();
@@ -55,6 +55,7 @@ const AddGroup = ({ onClose }) => {
     resetParticipants();
     resetFriends();
     SearchInputRef.current.value = "";
+    resetImage();
     onClose();
   };
 
@@ -91,7 +92,7 @@ const AddGroup = ({ onClose }) => {
             __typename: "Detail",
             name,
             members,
-            profilePicture: public_id || null,
+            profilePicture: public_id || "ApolloChat/emmyk1ttz4fusm3dlqut",
           },
         },
       },

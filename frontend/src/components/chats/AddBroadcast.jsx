@@ -80,7 +80,7 @@ const AddBroadCast = ({ onClose }) => {
             __typename: "Detail",
             name,
             members,
-            profilePicture: null,
+            profilePicture: "ApolloChat/ykoxzcf9rpbdtcftc1ih",
           },
         },
       },

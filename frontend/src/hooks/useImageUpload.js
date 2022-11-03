@@ -40,6 +40,12 @@ export const useImageUpload = () => {
     await loadSignature();
   };
 
+  const resetImage = () => {
+    setImage(null);
+    setPublicId(null);
+    setDeleteToken("");
+  };
+
   const disgardImage = async () => {
     const deleteForm = new FormData();
     deleteForm.append("public_id", public_id);
@@ -57,6 +63,7 @@ export const useImageUpload = () => {
   return {
     uploadImage,
     disgardImage,
+    resetImage,
     public_id,
     loading,
   };
