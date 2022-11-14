@@ -3,9 +3,9 @@ import { GET_CHAT_MESSAGES } from "./queries";
 import { ADD_MESSAGE, CLEAR_CHAT_MESSAGES } from "./mutations";
 import { ON_MESSAGE_ADDED } from "./subscriptions";
 import { selectedChatVar } from "../variables/selectedChat";
-import { useReactiveVar } from "@apollo/client";
 import { baseMutation } from "../mutationUtils";
 import { GET_CHATS_QUERY, GET_CHAT_BY_ID, READ_CHAT_BY_MEMBER } from "../chat/queries";
+import { RESET_UNREAD_COUNT } from "../chat/mutations";
 
 const updateLastestMessage = (cache, newMessage, chatId, receiving = false) => {
   const newMessageRef = cache.identify(newMessage);
@@ -33,7 +33,7 @@ const updateLastestMessage = (cache, newMessage, chatId, receiving = false) => {
 };
 
 const useGetChatMessages = (onCompletedFn = null) => {
-  const selectedChat = useReactiveVar(selectedChatVar);
+  const selectedChat = selectedChatVar();
   const { data, loading, error } = useQuery(GET_CHAT_MESSAGES, {
     variables: { chatId: selectedChat?.id },
     onCompleted: ({ chatMessages }) => {
@@ -70,10 +70,13 @@ const useReceiveMessage = () => {
   const { loading, data, error } = useSubscription(ON_MESSAGE_ADDED, {
     onData: async ({ client, data }) => {
       const { messageAdded } = data.data;
+      const { id: selectedChatId } = selectedChatVar();
 
       const {
         chat: { id: chatId },
       } = messageAdded;
+
+      const updateUnreadCount = selectedChatId !== chatId;
 
       const exists = Boolean(
         client.readFragment({
@@ -97,7 +100,8 @@ const useReceiveMessage = () => {
           return { chats: [...chats, chat] };
         });
       } else {
-        updateLastestMessage(client.cache, messageAdded, chatId, true);
+        !updateUnreadCount && client.mutate({ mutation: RESET_UNREAD_COUNT, variables: { chatId } });
+        updateLastestMessage(client.cache, messageAdded, chatId, updateUnreadCount);
       }
 
       client.cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId } }, (data) => {

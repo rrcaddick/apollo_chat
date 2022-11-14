@@ -4,7 +4,7 @@ import AvatarWithInitials from "../common/AvatarWithInitials";
 import { formatChatTime } from "../../utils/dateUtils";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
 import { navigationPositionVar } from "../../graphql/variables/common";
-import { useRemoveChat } from "../../graphql/chat/hooks";
+import { useRemoveChat, useResetUnreadCount } from "../../graphql/chat/hooks";
 
 const ChatItem = ({ chat }) => {
   const {
@@ -20,6 +20,7 @@ const ChatItem = ({ chat }) => {
   const hasUnread = unreadCount > 0;
 
   const { mutate: removeChat } = useRemoveChat();
+  const { mutate: resetUnreadCount } = useResetUnreadCount();
 
   const removeChatHandler = (e) => {
     e.stopPropagation();
@@ -27,10 +28,27 @@ const ChatItem = ({ chat }) => {
       variables: { chatId: id },
       optimisticResponse: {
         removeChat: {
+          __typename: "Chat",
           id,
         },
       },
     });
+  };
+
+  const onSelectHandler = () => {
+    selectedChatVar(chat);
+    hasUnread &&
+      resetUnreadCount({
+        variables: { chatId: id },
+        optimisticResponse: {
+          resetUnreadCount: {
+            __typename: "Chat",
+            id,
+            unreadCount: 0,
+          },
+        },
+      });
+    navigationPositionVar(1);
   };
 
   return (
@@ -60,10 +78,7 @@ const ChatItem = ({ chat }) => {
           },
         },
       })}
-      onClick={() => {
-        selectedChatVar(chat);
-        navigationPositionVar(1);
-      }}
+      onClick={onSelectHandler}
     >
       <Box
         position="absolute"

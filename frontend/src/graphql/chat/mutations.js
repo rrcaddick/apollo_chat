@@ -18,4 +18,13 @@ const REMOVE_CHAT = gql`
   }
 `;
 
-export { ADD_CHAT, REMOVE_CHAT };
+const RESET_UNREAD_COUNT = gql`
+  mutation ResetUnreadCount($chatId: ID) {
+    resetUnreadCount(chatId: $chatId) {
+      id
+      unreadCount
+    }
+  }
+`;
+
+export { ADD_CHAT, REMOVE_CHAT, RESET_UNREAD_COUNT };

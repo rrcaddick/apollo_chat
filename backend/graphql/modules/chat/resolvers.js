@@ -46,6 +46,9 @@ const resolvers = {
     removeChat: (_root, { chatId }, { dataSources: { chat }, user: { id } }) => {
       return chat.removeChat(chatId, id);
     },
+    resetUnreadCount: (_root, { chatId }, { dataSources: { chat }, user: { id } }) => {
+      return chat.resetUnreadCount(chatId, id);
+    },
   },
   Subscription: {
     groupAdded: {

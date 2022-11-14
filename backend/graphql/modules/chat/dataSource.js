@@ -60,6 +60,21 @@ class Chat extends MongoDataSource {
     );
     return chat;
   }
+
+  async resetUnreadCount(chatId, userId) {
+    const chat = await this.findOneById(chatId);
+    ``;
+    chat.set(
+      "unreadCount",
+      chat.members.reduce((obj, member) => {
+        if (member.toString() === userId) return { ...obj, [member]: 0 };
+        return { ...obj, [member]: chat.unreadCount[member] };
+      }, {})
+    );
+    chat.markModified("unreadCount");
+    await chat.save();
+    return chat;
+  }
 }
 
 module.exports = Chat;

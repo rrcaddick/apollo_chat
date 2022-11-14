@@ -9,6 +9,7 @@ const typeDefs = gql`
   type Mutation {
     addChat(input: AddChatInput!): Chat!
     removeChat(chatId: ID): Chat!
+    resetUnreadCount(chatId: ID): Chat!
   }
 
   type Subscription {

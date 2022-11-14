@@ -2,7 +2,7 @@ import { useLazyQuery, useQuery, useSubscription } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { baseMutation } from "../mutationUtils";
 import { selectedChatVar } from "../variables/selectedChat";
-import { ADD_CHAT, REMOVE_CHAT } from "./mutations";
+import { ADD_CHAT, REMOVE_CHAT, RESET_UNREAD_COUNT } from "./mutations";
 import { GROUP_ADDED } from "./subscriptions";
 import { GET_CHATS_QUERY, READ_SELECTED_CHAT, READ_ORDERED_CHATS, GET_CHAT_BY_ID } from "./queries";
 
@@ -56,6 +56,8 @@ const useAddChat = baseMutation(ADD_CHAT, (cache, { data }) => {
   selectedChatVar(addChat);
 });
 
+const useResetUnreadCount = baseMutation(RESET_UNREAD_COUNT, (cache, { data }) => {});
+
 const useRemoveChat = baseMutation(REMOVE_CHAT, (cache, { data: { removeChat } }) => {
   cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {
     return { chats: chats.filter((chat) => chat.id !== removeChat.id) };
@@ -85,4 +87,5 @@ export {
   useRemoveChat,
   useGroupAdded,
   useGetChatById,
+  useResetUnreadCount,
 };
