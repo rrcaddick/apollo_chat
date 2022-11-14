@@ -30,7 +30,7 @@ const Chat = () => {
         },
         [theme.breakpoints.down("md")]: {
           transform: `translateX(-${100 * position}%)`,
-          transition: `transform 500ms ease-in-out`,
+          transition: `all 500ms ease-in-out`,
         },
       })}
     >

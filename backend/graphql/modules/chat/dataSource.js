@@ -16,7 +16,7 @@ class Chat extends MongoDataSource {
   }
 
   async getChat(chatId) {
-    return await this.findOneById(chatId);
+    return await this.model.findById(chatId).populate("members admins");
   }
 
   async getOrCreateChat(members) {

@@ -37,6 +37,7 @@ const ChatItem = ({ chat }) => {
 
   const onSelectHandler = () => {
     selectedChatVar(chat);
+    navigationPositionVar(1);
     hasUnread &&
       resetUnreadCount({
         variables: { chatId: id },
@@ -48,7 +49,6 @@ const ChatItem = ({ chat }) => {
           },
         },
       });
-    navigationPositionVar(1);
   };
 
   return (

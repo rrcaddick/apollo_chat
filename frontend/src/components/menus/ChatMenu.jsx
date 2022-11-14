@@ -73,6 +73,7 @@ const ChatMenu = ({ toggleProfile }) => {
           padding="0"
           onClick={() => {
             navigationPositionVar(0);
+            selectedChatVar(null);
           }}
         >
           <ChevronLeftSharp

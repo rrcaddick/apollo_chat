@@ -74,6 +74,7 @@ const AddBroadCast = ({ onClose }) => {
           __typename: "Chat",
           id: generateTempId("BroadcastChat"),
           chatType: "BROADCAST",
+          unreadCount: 0,
           isSelected: true,
           members: participants.map((participant) => ({ __typename: "User", ...participant })),
           admins: [{ __typename: "User", ...me }],

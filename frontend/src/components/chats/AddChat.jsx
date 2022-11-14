@@ -47,6 +47,7 @@ const AddChat = ({ onClose }) => {
             __typename: "Chat",
             id: generateTempId("Chat"),
             chatType: "DIRECT",
+            unreadCount: 0,
             members: [
               { __typename: "User", ...me },
               { __typename: "User", ...user },

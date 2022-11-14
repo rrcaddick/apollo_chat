@@ -49,11 +49,6 @@ const getClientFields = (messages, index, readField) => {
 const queryTypePolicies = {
   Query: {
     fields: {
-      chats: {
-        merge(existing = [], incoming = [], { cache, readField }) {
-          return incoming;
-        },
-      },
       chatMessages: {
         keyArgs: ({ chatId }, { fieldName }) => {
           return `${fieldName}:${chatId}`;

@@ -19,7 +19,9 @@ const resolvers = {
     id: (chat) => chat._id,
     latestMessage: ({ latestMessage }, _args, { dataSources: { message } }) => message.getMessage(latestMessage),
     details: (chat, _args, { dataSources: { chat: chatSource }, user }) => chatSource.getChatDetails(chat, user._id),
-    unreadCount: (chat, _args, { user }) => chat.unreadCount[user._id.toString()],
+    unreadCount: (chat, _args, { user }) => {
+      return chat.unreadCount[user._id.toString()];
+    },
   },
   Mutation: {
     addChat: async (_root, { input }, { dataSources: { chat: chatSource }, user, injector }) => {
@@ -59,7 +61,7 @@ const resolvers = {
         },
         (chat, _args, { user }) => {
           if (chat.admins[0].equals(user._id)) return false;
-          return chat.members.includes(user._id.toString());
+          return chat.members.map((m) => m._id.toString()).includes(user._id.toString());
         }
       ),
       resolve: (root) => root,

@@ -10,7 +10,7 @@ import { RESET_UNREAD_COUNT } from "../chat/mutations";
 const updateLastestMessage = (cache, newMessage, chatId, receiving = false) => {
   const newMessageRef = cache.identify(newMessage);
 
-  cache.updateFragment(
+  const updatedChat = cache.updateFragment(
     {
       id: `Chat:${chatId}`,
       fragment: gql`
@@ -30,6 +30,9 @@ const updateLastestMessage = (cache, newMessage, chatId, receiving = false) => {
       unreadCount: receiving ? data.unreadCount + 1 : data.unreadCount,
     })
   );
+
+  !selectedChatVar()?.latestMessage &&
+    selectedChatVar({ ...selectedChatVar(), latestMessage: updatedChat.latestMessage });
 };
 
 const useGetChatMessages = (onCompletedFn = null) => {
@@ -61,7 +64,7 @@ const useAddMessage = baseMutation(ADD_MESSAGE, (cache, { data: { addMessage } }
   updateLastestMessage(cache, addMessage, id);
 
   cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId: id } }, (data) => {
-    const chatMessages = data?.chatMessages;
+    const chatMessages = data?.chatMessages || [];
     return { chatMessages: [...chatMessages, addMessage] };
   });
 });
@@ -70,13 +73,12 @@ const useReceiveMessage = () => {
   const { loading, data, error } = useSubscription(ON_MESSAGE_ADDED, {
     onData: async ({ client, data }) => {
       const { messageAdded } = data.data;
-      const { id: selectedChatId } = selectedChatVar();
 
       const {
         chat: { id: chatId },
       } = messageAdded;
 
-      const updateUnreadCount = selectedChatId !== chatId;
+      const updateUnreadCount = selectedChatVar()?.id !== chatId;
 
       const exists = Boolean(
         client.readFragment({
