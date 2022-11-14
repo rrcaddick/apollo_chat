@@ -1,11 +1,13 @@
 import { Box } from "@mui/system";
+import { forwardRef } from "react";
 
-const ScrollableList = ({ children, thumbWidth, thumbColor, ...rest }) => {
+const ScrollableList = forwardRef(({ children, thumbWidth, thumbColor, ...rest }, ref) => {
   return (
     <Box
       display="flex"
       flexDirection="column"
       flexGrow={1}
+      ref={ref}
       sx={{
         overflowY: "overlay",
         "&:hover::-webkit-scrollbar": {
@@ -22,6 +24,6 @@ const ScrollableList = ({ children, thumbWidth, thumbColor, ...rest }) => {
       {children}
     </Box>
   );
-};
+});
 
 export default ScrollableList;

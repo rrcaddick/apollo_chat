@@ -5,7 +5,7 @@ import FriendItem from "../friends/FriendItem";
 import ScrollableList from "../common/ScrollableList";
 import Participants from "./Participants";
 import { useDebounce } from "../../hooks/useDebounce";
-import { useGetFriends } from "../../graphql/user/hooks";
+import { useGetFriends, useGetMe } from "../../graphql/user/hooks";
 import { useAddChat } from "../../graphql/chat/hooks";
 import { useParticipants } from "../../hooks/useParticipants";
 import { useImageUpload } from "../../hooks/useImageUpload";
@@ -18,6 +18,7 @@ import { generateTempId } from "../../utils/common";
 const AddGroup = ({ onClose }) => {
   const theme = useTheme();
   const { debounce } = useDebounce();
+  const { me } = useGetMe();
   const { friends, filterFriends, removeFriend, addFriend, resetFriends } = useGetFriends();
   const { participants, addParticipant, removeParticipant, resetParticipants } = useParticipants();
   const { uploadImage, disgardImage, resetImage, public_id, loading: imageUploadLoading } = useImageUpload();
@@ -86,7 +87,8 @@ const AddGroup = ({ onClose }) => {
           id: generateTempId("GroupChat"),
           chatType: "GROUP",
           isSelected: true,
-          members: members.map((m) => ({ id: m })),
+          members: participants.map((participant) => ({ __typename: "User", ...participant })),
+          admins: [{ __typename: "User", ...me }],
           latestMessage: null,
           updatedAt: Date.now().toString(),
           details: {

@@ -7,23 +7,29 @@ import { useReactiveVar } from "@apollo/client";
 import { baseMutation } from "../mutationUtils";
 import { GET_CHATS_QUERY, GET_CHAT_BY_ID, READ_CHAT_BY_MEMBER } from "../chat/queries";
 
-const updateLastestMessage = (cache, newMessage, chatId) => {
+const updateLastestMessage = (cache, newMessage, chatId, receiving = false) => {
   const newMessageRef = cache.identify(newMessage);
-  cache.writeFragment({
-    id: `Chat:${chatId}`,
-    fragment: gql`
-      fragment UpdateLastestMessage on Chat {
-        latestMessage
-      }
-    `,
-    data: {
+
+  cache.updateFragment(
+    {
+      id: `Chat:${chatId}`,
+      fragment: gql`
+        fragment UpdateLastestMessage on Chat {
+          latestMessage
+          unreadCount
+        }
+      `,
+    },
+    (data) => ({
+      ...data,
       latestMessage: newMessage
         ? {
             __ref: newMessageRef,
           }
         : null,
-    },
-  });
+      unreadCount: receiving ? data.unreadCount + 1 : data.unreadCount,
+    })
+  );
 };
 
 const useGetChatMessages = (onCompletedFn = null) => {
@@ -39,20 +45,23 @@ const useGetChatMessages = (onCompletedFn = null) => {
 };
 
 const useAddMessage = baseMutation(ADD_MESSAGE, (cache, { data: { addMessage } }) => {
-  const { id, members } = selectedChatVar();
+  const { id, members, chatType } = selectedChatVar();
 
-  for (let member of members) {
-    const data = cache.readQuery({
-      query: READ_CHAT_BY_MEMBER,
-      variables: { member },
-    });
+  if (chatType === "BROADCAST") {
+    for (let member of members) {
+      const data = cache.readQuery({
+        query: READ_CHAT_BY_MEMBER,
+        variables: { member },
+      });
 
-    data?.chatIdByMember?.id && updateLastestMessage(cache, addMessage, data?.chatIdByMember?.id);
+      data?.chatIdByMember?.id && updateLastestMessage(cache, addMessage, data?.chatIdByMember?.id);
+    }
   }
 
   updateLastestMessage(cache, addMessage, id);
 
-  cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId: id } }, ({ chatMessages }) => {
+  cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId: id } }, (data) => {
+    const chatMessages = data?.chatMessages;
     return { chatMessages: [...chatMessages, addMessage] };
   });
 });
@@ -88,7 +97,7 @@ const useReceiveMessage = () => {
           return { chats: [...chats, chat] };
         });
       } else {
-        updateLastestMessage(client.cache, messageAdded, chatId);
+        updateLastestMessage(client.cache, messageAdded, chatId, true);
       }
 
       client.cache.updateQuery({ query: GET_CHAT_MESSAGES, variables: { chatId } }, (data) => {

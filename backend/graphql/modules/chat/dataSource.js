@@ -2,13 +2,17 @@ const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class Chat extends MongoDataSource {
   async getUserChats(userId) {
-    return await this.model.find({
-      $or: [
-        { $and: [{ chatType: { $ne: "BROADCAST" } }, { members: userId }] },
-        { $and: [{ chatType: { $eq: "BROADCAST" } }, { admins: userId }] },
-      ],
-      deletedBy: { $ne: userId },
-    });
+    const chats = await this.model
+      .find({
+        $or: [
+          { $and: [{ chatType: { $ne: "BROADCAST" } }, { members: userId }] },
+          { $and: [{ chatType: { $eq: "BROADCAST" } }, { admins: userId }] },
+          { $and: [{ chatType: { $eq: "GROUP" } }, { $or: [{ members: userId }, { admins: userId }] }] },
+        ],
+        deletedBy: { $ne: userId },
+      })
+      .populate("members admins");
+    return chats;
   }
 
   async getChat(chatId) {
@@ -36,9 +40,16 @@ class Chat extends MongoDataSource {
     const { _id } = (await this.model.exists({ members: input.members })) || {};
     const isDirect = input?.chatType === "DIRECT" || !input?.chatType;
     if (isDirect && _id) {
-      return await this.model.findByIdAndUpdate(_id, { $pull: { deletedBy: userId } }, { new: true });
+      return await this.model
+        .findByIdAndUpdate(_id, { $pull: { deletedBy: userId } }, { new: true })
+        .populate("members admins");
     }
-    return await this.model.create({ ...input });
+    try {
+      const chat = await this.model.create({ ...input });
+      return await chat.populate("members admins");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async removeChat(chatId, userId) {

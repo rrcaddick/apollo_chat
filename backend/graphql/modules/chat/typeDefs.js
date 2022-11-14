@@ -23,6 +23,7 @@ const typeDefs = gql`
     admins: [User]
     details: ChatDetail!
     latestMessage: Message
+    unreadCount: Int
   }
 
   union ChatDetail = User | Detail

@@ -13,9 +13,11 @@ const ChatItem = ({ chat }) => {
     isSelected,
     updatedAt,
     details: { name, profilePicture, isOnline },
+    unreadCount,
   } = chat;
 
   const chatTime = latestMessage?.createdAt || updatedAt;
+  const hasUnread = unreadCount > 0;
 
   const { mutate: removeChat } = useRemoveChat();
 
@@ -59,8 +61,8 @@ const ChatItem = ({ chat }) => {
         },
       })}
       onClick={() => {
-        navigationPositionVar(1);
         selectedChatVar(chat);
+        navigationPositionVar(1);
       }}
     >
       <Box
@@ -88,19 +90,19 @@ const ChatItem = ({ chat }) => {
       <AvatarWithInitials alt={name} src={profilePicture} isOnline={isOnline} />
 
       <Box overflow="hidden" textOverflow="ellipsis">
-        <Typography fontWeight="bold" noWrap>
+        <Typography fontWeight={hasUnread ? "bold" : "normal"} noWrap>
           {name}
         </Typography>
-        <Typography fontSize="x-small" noWrap>
+        <Typography fontWeight={hasUnread ? "bold" : "normal"} fontSize="x-small" noWrap>
           {latestMessage?.content}
         </Typography>
       </Box>
 
       <Box marginLeft="auto" display="flex" flexDirection="column" alignItems="flex-end" justifyContent="space-between">
-        <Typography fontSize="x-small" noWrap>
+        <Typography fontWeight={hasUnread ? "bold" : "normal"} fontSize="x-small" noWrap>
           {formatChatTime(chatTime)}
         </Typography>
-        {/* <Badge badgeContent={Math.floor(Math.random() * (4 - 1 + 0) + 0)} color="secondary" /> */}
+        <Badge sx={{ marginRight: "10px" }} badgeContent={unreadCount} color="secondary" />
       </Box>
     </Box>
   );

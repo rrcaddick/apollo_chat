@@ -17,9 +17,9 @@ const resolvers = {
   },
   Chat: {
     id: (chat) => chat._id,
-    members: ({ members }, _args, { dataSources: { user } }) => user.getUsersByIds(members),
     latestMessage: ({ latestMessage }, _args, { dataSources: { message } }) => message.getMessage(latestMessage),
     details: (chat, _args, { dataSources: { chat: chatSource }, user }) => chatSource.getChatDetails(chat, user._id),
+    unreadCount: (chat, _args, { user }) => chat.unreadCount[user._id.toString()],
   },
   Mutation: {
     addChat: async (_root, { input }, { dataSources: { chat: chatSource }, user, injector }) => {
@@ -30,9 +30,7 @@ const resolvers = {
 
       if (!isDirect) {
         input.admins = [currentUserId];
-      }
-
-      if (!isBroadcast) {
+      } else {
         input.members.push(currentUserId);
       }
 

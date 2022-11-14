@@ -3,7 +3,7 @@ import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import ScrollableList from "../common/ScrollableList";
 import FriendItem from "../friends/FriendItem";
 import SearchControl from "../common/SearchControl";
-import { useGetFriends } from "../../graphql/user/hooks";
+import { useGetFriends, useGetMe } from "../../graphql/user/hooks";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useApolloClient } from "@apollo/client";
 import { READ_EXISTING_CHAT } from "../../graphql/chat/queries";
@@ -15,6 +15,7 @@ import { generateTempId } from "../../utils/common";
 const AddChat = ({ onClose }) => {
   const theme = useTheme();
   const { debounce } = useDebounce();
+  const { me } = useGetMe();
   const { friends, filterFriends } = useGetFriends();
   const client = useApolloClient();
   const { mutate: addChat } = useAddChat();
@@ -46,7 +47,11 @@ const AddChat = ({ onClose }) => {
             __typename: "Chat",
             id: generateTempId("Chat"),
             chatType: "DIRECT",
-            members: [{ id: user.id }],
+            members: [
+              { __typename: "User", ...me },
+              { __typename: "User", ...user },
+            ],
+            admins: null,
             updatedAt: Date.now().toString(),
             latestMessage: null,
             details: {

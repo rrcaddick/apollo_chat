@@ -8,7 +8,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 
 const MessageFeed = () => {
   const { chatMessages, loading, error } = useGetChatMessages();
-  const scrollRef = useScrollIntoView(chatMessages);
+  const { scrollToRef, scrollContainerRef } = useScrollIntoView(chatMessages);
 
   const hasChatMessage = chatMessages && chatMessages.length > 0;
 
@@ -31,9 +31,9 @@ const MessageFeed = () => {
         </Box>
       )}
       {hasChatMessage && (
-        <ScrollableList gap="0.25rem" p="0 16px" thumbWidth="10px" thumbColor="#8f0acd73">
+        <ScrollableList gap="0.25rem" p="0 16px" thumbWidth="10px" thumbColor="#8f0acd73" ref={scrollContainerRef}>
           {chatMessages.map((message, i, arr) => {
-            const lastMessageRef = i === arr.length - 1 ? scrollRef : undefined;
+            const lastMessageRef = i === arr.length - 1 ? scrollToRef : undefined;
             return <MessageItem key={message.id} {...message} ref={lastMessageRef} />;
           })}
         </ScrollableList>

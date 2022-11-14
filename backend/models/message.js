@@ -32,7 +32,21 @@ messageSchema.index({ createdAt: 1 });
 
 messageSchema.post("save", async function (message, next) {
   const Chat = mongoose.model("Chat");
-  await Chat.findByIdAndUpdate(message.chat, { latestMessage: message, deletedBy: [] });
+  const userId = message.sender._id.toString();
+  const chat = await Chat.findById(message.chat);
+
+  chat.latestMessage = message;
+  chat.deletedBy = [];
+  chat.set(
+    "unreadCount",
+    chat.members.reduce((obj, member) => {
+      if (member.toString() === userId) return { ...obj, [member]: 0 };
+      return { ...obj, [member]: chat.unreadCount[member] + 1 };
+    }, {})
+  );
+  chat.markModified("unreadCount");
+
+  await chat.save();
   next();
 });
 

@@ -5,8 +5,17 @@ const CHAT_FIELDS = gql`
     id
     updatedAt
     chatType
+    unreadCount
     members {
       id
+      name
+      status
+      profilePicture
+    }
+    admins {
+      id
+      name
+      profilePicture
     }
     latestMessage {
       id
@@ -19,6 +28,7 @@ const CHAT_FIELDS = gql`
         id
         name
         profilePicture
+        status
         mobile
         isOnline
         lastSeen

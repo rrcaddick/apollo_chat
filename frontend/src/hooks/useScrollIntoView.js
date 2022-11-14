@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
-import { navigationPositionVar } from "../graphql/variables/common";
 
 const useScrollIntoView = (array) => {
-  const scrollRef = useRef();
+  const scrollToRef = useRef();
+  const scrollContainerRef = useRef();
 
   useEffect(() => {
-    if (array && navigationPositionVar() === 1) scrollRef?.current?.scrollIntoView(false);
+    scrollContainerRef?.current?.scroll(0, scrollToRef?.current?.offsetTop);
   }, [array]);
 
-  return scrollRef;
+  return { scrollToRef, scrollContainerRef };
 };
 
 export { useScrollIntoView };

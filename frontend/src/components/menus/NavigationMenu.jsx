@@ -22,15 +22,15 @@ const NavigationMenu = ({ onNavigate, navMenuPosition, toggleMenu }) => {
     { icon: <Message />, navPos: 0, active: navMenuPosition === 0 },
     { icon: <Phone />, navPos: 1, active: navMenuPosition === 1 },
     { icon: <Group />, navPos: 2, active: navMenuPosition === 2 },
-    {
-      icon: (
-        <Badge badgeContent={4} color="secondary">
-          <Notifications />
-        </Badge>
-      ),
-      navPos: 3,
-      active: navMenuPosition === 3,
-    },
+    // {
+    //   icon: (
+    //     <Badge badgeContent={4} color="secondary">
+    //       <Notifications />
+    //     </Badge>
+    //   ),
+    //   navPos: 3,
+    //   active: navMenuPosition === 3,
+    // },
   ];
 
   return (

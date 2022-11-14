@@ -9,6 +9,7 @@ import { useAddMessage } from "../../graphql/message/hooks";
 import { useGetMe } from "../../graphql/user/hooks";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
 import { generateTempId } from "../../utils/common";
+import { useRef } from "react";
 
 const MessageInput = styled(TextareaAutosize)`
   width: 100%;
@@ -37,8 +38,10 @@ const NewMessage = () => {
   const { mutate: addMessage, loading, error } = useAddMessage();
   const { me } = useGetMe();
   const { id, chatType } = selectedChatVar();
+  const messageInputRef = useRef();
 
   const sendMessageHandler = () => {
+    messageInputRef.current.blur();
     const input = { chatId, content };
     addMessage({
       variables: { input },
@@ -88,6 +91,7 @@ const NewMessage = () => {
           maxRows={4}
           placeholder="Message..."
           value={content}
+          ref={messageInputRef}
           onChange={setContentHandler}
         />
         <Box display="flex" alignItems="center">

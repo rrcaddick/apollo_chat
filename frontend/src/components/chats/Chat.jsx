@@ -4,9 +4,17 @@ import NewMessage from "../messages/NewMessage";
 import ChatMenu from "../menus/ChatMenu";
 import { navigationPositionVar } from "../../graphql/variables/common";
 import { useReactiveVar } from "@apollo/client";
+import ContainedDrawer from "../common/ContainedDrawer";
+import { useState } from "react";
+import ChatProfile from "./ChatProfile";
 
 const Chat = () => {
   const position = useReactiveVar(navigationPositionVar);
+  const [openProfile, setOpenProfile] = useState(false);
+
+  const toggleProfile = () => {
+    setOpenProfile((p) => !p);
+  };
 
   return (
     <Box
@@ -16,6 +24,7 @@ const Chat = () => {
       flexDirection="column"
       pb="12px"
       sx={(theme) => ({
+        position: "relative",
         [theme.breakpoints.up("md")]: {
           flex: 3,
         },
@@ -25,7 +34,8 @@ const Chat = () => {
         },
       })}
     >
-      <ChatMenu />
+      <ChatProfile openProfile={openProfile} onClose={toggleProfile} />
+      <ChatMenu toggleProfile={toggleProfile} />
       <MessageFeed />
       <NewMessage />
     </Box>

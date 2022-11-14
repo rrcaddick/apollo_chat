@@ -9,8 +9,10 @@ import { formatLastSeen } from "../../utils/dateUtils";
 import { useRemoveChat } from "../../graphql/chat/hooks";
 import { useClearChatMessages } from "../../graphql/message/hooks";
 import { useReadSelectedChat } from "../../graphql/chat/hooks";
+import { useReactiveVar } from "@apollo/client";
+import { selectedChatVar } from "../../graphql/variables/selectedChat";
 
-const ChatMenu = () => {
+const ChatMenu = ({ toggleProfile }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -33,7 +35,7 @@ const ChatMenu = () => {
     }, 3000);
   });
 
-  const { selectedChat } = useReadSelectedChat();
+  const selectedChat = useReactiveVar(selectedChatVar);
   const {
     id,
     chatType,
@@ -82,7 +84,7 @@ const ChatMenu = () => {
           />
           <AvatarWithInitials src={profilePicture} alt={name} isOnline={isOnline} />
         </IconButton>
-        <Box overflow="hidden" textOverflow="ellipsis">
+        <Box overflow="hidden" textOverflow="ellipsis" onClick={toggleProfile} sx={{ cursor: "pointer" }}>
           <Typography fontWeight="bold" fontSize="1rem" noWrap>
             {name}
           </Typography>
@@ -140,7 +142,7 @@ const ChatMenu = () => {
         </IconButton>
 
         <DropDownMenu anchorEl={anchorEl} open={open} onClose={handleClose} onClick={handleClose}>
-          <MenuItem>
+          <MenuItem onClick={toggleProfile}>
             <ListItemIcon>
               <Person fontSize="small" />
             </ListItemIcon>

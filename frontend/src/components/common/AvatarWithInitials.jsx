@@ -1,5 +1,5 @@
 import { Avatar, Badge } from "@mui/material";
-import { getAvatarUrl } from "../../utils/cloudinary";
+import { getAvatarUrl, getProfilePicture } from "../../utils/cloudinary";
 
 function stringToColor(string) {
   if (!string) return "#ececec";
@@ -40,7 +40,7 @@ function stringAvatar(name) {
   };
 }
 
-const AvatarWithInitials = ({ alt, src, isOnline, children, ...rest }) => {
+const AvatarWithInitials = ({ alt, src, isOnline, sx, large, children, ...rest }) => {
   if (!src) src = "";
   return (
     <>
@@ -54,7 +54,13 @@ const AvatarWithInitials = ({ alt, src, isOnline, children, ...rest }) => {
         }}
         invisible={!isOnline}
       >
-        <Avatar {...rest} {...stringAvatar(alt)} alt={alt} src={getAvatarUrl(src)} />
+        <Avatar
+          {...rest}
+          {...stringAvatar(alt)}
+          alt={alt}
+          src={large ? getProfilePicture(src) : getAvatarUrl(src)}
+          sx={{ ...sx }}
+        />
       </Badge>
     </>
   );

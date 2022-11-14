@@ -5,7 +5,7 @@ import FriendItem from "../friends/FriendItem";
 import ScrollableList from "../common/ScrollableList";
 import Participants from "./Participants";
 import { useDebounce } from "../../hooks/useDebounce";
-import { useGetFriends } from "../../graphql/user/hooks";
+import { useGetFriends, useGetMe } from "../../graphql/user/hooks";
 import { useAddChat } from "../../graphql/chat/hooks";
 import { useParticipants } from "../../hooks/useParticipants";
 import { useRef } from "react";
@@ -16,6 +16,7 @@ import { generateTempId } from "../../utils/common";
 const AddBroadCast = ({ onClose }) => {
   const theme = useTheme();
   const { debounce } = useDebounce();
+  const { me } = useGetMe();
   const { friends, filterFriends, removeFriend, addFriend, resetFriends } = useGetFriends();
   const { participants, addParticipant, removeParticipant, resetParticipants } = useParticipants();
   const BroadcastNameRef = useRef();
@@ -74,7 +75,8 @@ const AddBroadCast = ({ onClose }) => {
           id: generateTempId("BroadcastChat"),
           chatType: "BROADCAST",
           isSelected: true,
-          members: members.map((m) => ({ id: m })),
+          members: participants.map((participant) => ({ __typename: "User", ...participant })),
+          admins: [{ __typename: "User", ...me }],
           latestMessage: null,
           updatedAt: Date.now().toString(),
           details: {

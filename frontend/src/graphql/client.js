@@ -45,7 +45,7 @@ const createClient = () => {
     },
   });
 
-  subscriptionClient.dispose();
+  // subscriptionClient.dispose();
 
   const wsLink = new GraphQLWsLink(subscriptionClient);
   const splitLink = split(

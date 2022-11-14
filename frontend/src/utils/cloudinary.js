@@ -17,4 +17,18 @@ const getAvatarUrl = (public_id) => {
   return cloudImage.toURL();
 };
 
-export { getAvatarUrl };
+const getProfilePicture = (public_id) => {
+  if (!public_id) return;
+
+  const cloud = new Cloudinary({
+    cloud: {
+      cloudName: "raytechprojects",
+    },
+  });
+
+  const cloudImage = cloud.image(public_id);
+  cloudImage.resize(thumbnail().width(300).height(300).gravity(focusOn(FocusOn.face())));
+  return cloudImage.toURL();
+};
+
+export { getAvatarUrl, getProfilePicture };
