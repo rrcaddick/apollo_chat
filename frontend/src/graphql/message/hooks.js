@@ -1,5 +1,6 @@
 import { gql, useQuery, useSubscription } from "@apollo/client";
 import { GET_CHAT_MESSAGES } from "./queries";
+import { GET_ME_QUERY } from "../user/queries";
 import { ADD_MESSAGE, CLEAR_CHAT_MESSAGES } from "./mutations";
 import { ON_MESSAGE_ADDED } from "./subscriptions";
 import { selectedChatVar } from "../variables/selectedChat";
@@ -31,7 +32,7 @@ const updateLastestMessage = (cache, newMessage, chatId, receiving = false) => {
     })
   );
 
-  !selectedChatVar()?.latestMessage &&
+  if (selectedChatVar() && !selectedChatVar()?.latestMessage)
     selectedChatVar({ ...selectedChatVar(), latestMessage: updatedChat.latestMessage });
 };
 
@@ -42,7 +43,7 @@ const useGetChatMessages = (onCompletedFn = null) => {
     onCompleted: ({ chatMessages }) => {
       onCompletedFn && onCompletedFn(chatMessages);
     },
-    skip: !selectedChat || selectedChat.id.includes("Temp") || !selectedChat.latestMessage,
+    skip: !selectedChat || selectedChat?.id?.includes("Temp") || !selectedChat?.latestMessage,
   });
   return { chatMessages: data?.chatMessages, loading, error };
 };
@@ -75,10 +76,18 @@ const useReceiveMessage = () => {
       const { messageAdded } = data.data;
 
       const {
+        me: { id: userId },
+      } = client.cache.readQuery({
+        query: GET_ME_QUERY,
+      });
+
+      const {
+        sender: { id: senderId },
         chat: { id: chatId },
+        unreadCount,
       } = messageAdded;
 
-      const updateUnreadCount = selectedChatVar()?.id !== chatId;
+      const updateUnreadCount = selectedChatVar()?.id !== chatId && userId !== senderId;
 
       const exists = Boolean(
         client.readFragment({
@@ -102,7 +111,9 @@ const useReceiveMessage = () => {
           return { chats: [...chats, chat] };
         });
       } else {
-        !updateUnreadCount && client.mutate({ mutation: RESET_UNREAD_COUNT, variables: { chatId } });
+        !updateUnreadCount &&
+          unreadCount === 0 &&
+          client.mutate({ mutation: RESET_UNREAD_COUNT, variables: { chatId } });
         updateLastestMessage(client.cache, messageAdded, chatId, updateUnreadCount);
       }
 

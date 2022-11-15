@@ -34,8 +34,8 @@ const createClient = () => {
   const subscriptionClient = createWsClient({
     url: "ws://192.168.0.122:5000/graphql",
     connectionParams: async () => await getToken,
-    shouldRetry: false,
-    retryAttempts: 0,
+    shouldRetry: true,
+    retryAttempts: 2,
     on: {
       closed: ({ code, reason }) => {
         if (code === 3000) {

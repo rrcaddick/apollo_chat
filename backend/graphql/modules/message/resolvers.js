@@ -51,7 +51,7 @@ const resolvers = {
         ({ message, broadcast = false }, _args, { user }) => {
           const { chat, sender } = message;
           if (sender._id.equals(user._id) && !broadcast) return false;
-          return chat.members.includes(user._id.toString()) || chat.admins.includes(user._id.toString());
+          return chat.members.includes(user._id.toString()) || chat.admins?.includes(user._id.toString());
         }
       ),
       resolve: ({ message }) => message,
