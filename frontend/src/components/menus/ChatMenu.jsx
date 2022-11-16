@@ -1,6 +1,18 @@
-import { useState } from "react";
-import { Phone, VideoCall, MoreVert, ChevronLeftSharp, Person, Delete, ClearAll, Search } from "@mui/icons-material";
-import { Box, IconButton, ListItemIcon, MenuItem, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import {
+  Phone,
+  VideoCall,
+  MoreVert,
+  ChevronLeftSharp,
+  Person,
+  Delete,
+  ClearAll,
+  Search,
+  ArrowBack,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+} from "@mui/icons-material";
+import { Box, IconButton, ListItemIcon, MenuItem, TextField, Typography } from "@mui/material";
 import MenuWrapper from "../common/MenuWrapper";
 import DropDownMenu from "../common/DropDownMenu";
 import AvatarWithInitials from "../common/AvatarWithInitials";
@@ -8,15 +20,18 @@ import { navigationPositionVar } from "../../graphql/variables/common";
 import { formatLastSeen } from "../../utils/dateUtils";
 import { useRemoveChat } from "../../graphql/chat/hooks";
 import { useClearChatMessages } from "../../graphql/message/hooks";
-import { useReadSelectedChat } from "../../graphql/chat/hooks";
 import { useReactiveVar } from "@apollo/client";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
+import { useSearchMessages } from "../../hooks/useSearchMessages";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const ChatMenu = ({ toggleProfile }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const searchRef = useRef();
 
-  const handleClick = (event) => {
+  const openMenuHandler = (event) => {
+    setShowMessageSearch(false);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -25,6 +40,7 @@ const ChatMenu = ({ toggleProfile }) => {
 
   const [clearedCount, setClearedCount] = useState(0);
   const [showClearedBanner, setShowClearedBanner] = useState(false);
+  const [showMessageSearch, setShowMessageSearch] = useState(false);
 
   const { mutate: removeChat } = useRemoveChat();
   const { mutate: clearChatMessages } = useClearChatMessages(({ clearChatMessages }) => {
@@ -41,6 +57,15 @@ const ChatMenu = ({ toggleProfile }) => {
     chatType,
     details: { name, profilePicture, mobile, isOnline, lastSeen },
   } = selectedChat || { details: {} };
+
+  const { debounce } = useDebounce();
+  const { setSearchTerm, nextMessage, reset } = useSearchMessages();
+
+  // TODO: Use callback for reset function
+  useEffect(() => {
+    setShowMessageSearch(false);
+    reset();
+  }, [id]);
 
   const removeChatHandler = (e) => {
     removeChat({
@@ -138,7 +163,7 @@ const ChatMenu = ({ toggleProfile }) => {
           <VideoCall />
         </IconButton>
 
-        <IconButton size="small" onClick={handleClick}>
+        <IconButton size="small" onClick={openMenuHandler}>
           <MoreVert />
         </IconButton>
 
@@ -149,7 +174,11 @@ const ChatMenu = ({ toggleProfile }) => {
             </ListItemIcon>
             Profile
           </MenuItem>
-          <MenuItem>
+          <MenuItem
+            onClick={() => {
+              setShowMessageSearch(true);
+            }}
+          >
             <ListItemIcon>
               <Search fontSize="small" />
             </ListItemIcon>
@@ -169,6 +198,7 @@ const ChatMenu = ({ toggleProfile }) => {
           </MenuItem>
         </DropDownMenu>
       </Box>
+
       <Box
         position="absolute"
         backgroundColor={(theme) => theme.palette.success.main}
@@ -182,9 +212,57 @@ const ChatMenu = ({ toggleProfile }) => {
           transform: `translateY(${showClearedBanner ? 100 : 0}%)`,
           transition: "transform 200ms linear",
         }}
-        zIndex="-1"
+        zIndex={-1}
       >
         {`${clearedCount} Message${clearedCount > 1 ? "s" : ""} cleared`}
+      </Box>
+      <Box
+        position="absolute"
+        display="flex"
+        backgroundColor="white"
+        alignItems="center"
+        width="100%"
+        textAlign="center"
+        p="0.5rem"
+        sx={{
+          bottom: 0,
+          left: 0,
+          opacity: showMessageSearch ? 1 : 0,
+          transform: `translateY(${showMessageSearch ? 100 : 0}%)`,
+          transition: "all 200ms linear",
+        }}
+        zIndex={showMessageSearch ? 1 : -1}
+      >
+        <ArrowBack
+          sx={{ cursor: "pointer", marginRight: "0.5rem" }}
+          onClick={() => {
+            searchRef.current.value = "";
+            reset();
+            setShowMessageSearch(false);
+          }}
+        />
+        <TextField
+          fullWidth
+          inputProps={{ style: { fontSize: "0.8rem", padding: "0.2rem 0.5rem" } }}
+          inputRef={searchRef}
+          onChange={(e) => {
+            debounce(() => {
+              setSearchTerm(e.target.value);
+            }, 250);
+          }}
+        />
+        <KeyboardArrowUp
+          sx={{ cursor: "pointer", marginLeft: "0.5rem" }}
+          onClick={() => {
+            nextMessage(true);
+          }}
+        />
+        <KeyboardArrowDown
+          sx={{ cursor: "pointer" }}
+          onClick={() => {
+            nextMessage(false);
+          }}
+        />
       </Box>
     </MenuWrapper>
   );

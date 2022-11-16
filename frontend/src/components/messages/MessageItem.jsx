@@ -5,6 +5,7 @@ import { getTimeString, getDateName } from "../../utils/dateUtils";
 const MessageItem = forwardRef(
   (
     {
+      id,
       content,
       isUserMessage,
       isFirstInCluster,
@@ -38,10 +39,10 @@ const MessageItem = forwardRef(
           alignSelf: "flex-start",
           backgroundColor: theme.palette.grey["200"],
           color: theme.palette.grey.contrastText,
-          borderTopRightRadius: "30px",
-          borderBottomRightRadius: "30px",
           borderTopLeftRadius: isFirstInCluster && "30px",
           borderBottomLeftRadius: isLastInCluster && "30px",
+          borderTopRightRadius: "30px",
+          borderBottomRightRadius: "30px",
         };
 
     return (
@@ -60,7 +61,7 @@ const MessageItem = forwardRef(
             {getDateName(+createdAt, false).toUpperCase()}
           </Typography>
         )}
-        <Box p="0.5rem 1rem" sx={messageStyles} ref={ref}>
+        <Box p="0.5rem 1rem" sx={messageStyles} ref={ref} id={id}>
           {chatType === "GROUP" && isFirstInCluster && (
             <Typography fontSize="0.6rem" fontWeight="600" color={isUserMessage ? "orange" : getRandomColor()}>
               {name}
