@@ -41,7 +41,6 @@ const NewMessage = () => {
   const messageInputRef = useRef();
 
   const sendMessageHandler = () => {
-    messageInputRef.current.blur();
     const input = { chatId, content };
     addMessage({
       variables: { input },
@@ -66,6 +65,7 @@ const NewMessage = () => {
       },
     });
     reset();
+    messageInputRef.current.focus();
     emojiTrayOpenVar(false);
   };
 
@@ -93,6 +93,12 @@ const NewMessage = () => {
           value={content}
           ref={messageInputRef}
           onChange={setContentHandler}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              sendMessageHandler();
+            }
+          }}
         />
         <Box display="flex" alignItems="center">
           <IconButton
