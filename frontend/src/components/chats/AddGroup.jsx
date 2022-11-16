@@ -117,7 +117,15 @@ const AddGroup = ({ onClose }) => {
       </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" gap="1rem" p="0 15px 12px 12px ">
         <IconButton color="primary" component="label">
-          <Avatar src={getAvatarUrl(public_id)} ref={AvatarRef}>
+          <Avatar
+            src={getAvatarUrl(public_id)}
+            ref={AvatarRef}
+            imgProps={{
+              onLoad: () => {
+                console.log("Loaded");
+              },
+            }}
+          >
             <PhotoCamera />
           </Avatar>
           <input hidden accept="image/*" type="file" onChange={uploadImageHandler} />

@@ -61,6 +61,7 @@ const useGetFriends = () => {
 const useGetOnlineFriends = () => {
   const [filteredFriends, setFilteredFriends] = useState();
   const { data, loading, error } = useQuery(READ_ONLINE_FRIENDS);
+  const [friendCount, setFriendCount] = useState(0);
 
   const filterOnlineFriends = (searchTerm) => {
     if (searchTerm === "") {
@@ -72,10 +73,11 @@ const useGetOnlineFriends = () => {
   useEffect(() => {
     if (data?.onlineFriends) {
       setFilteredFriends(data.onlineFriends);
+      setFriendCount(data.onlineFriends.length);
     }
   }, [data]);
 
-  return { onlineFriends: filteredFriends, filterOnlineFriends, loading, error };
+  return { onlineFriends: filteredFriends, friendCount, filterOnlineFriends, loading, error };
 };
 
 const useUserOnline = () => {

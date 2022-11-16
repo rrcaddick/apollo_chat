@@ -1,7 +1,7 @@
 import { Group, Message, Notifications, Phone } from "@mui/icons-material";
 import { Avatar, Badge, IconButton } from "@mui/material";
 import { useState } from "react";
-import { useGetMe } from "../../graphql/user/hooks";
+import { useGetMe, useGetOnlineFriends } from "../../graphql/user/hooks";
 import MenuWrapper from "../common/MenuWrapper";
 import UserMenuOptions from "./UserMenuOptions";
 import { getAvatarUrl } from "../../utils/cloudinary";
@@ -18,19 +18,20 @@ const NavigationMenu = ({ onNavigate, navMenuPosition, toggleMenu }) => {
     setAnchorEl(null);
   };
 
+  const { friendCount } = useGetOnlineFriends();
+
   const MenuItems = [
     { icon: <Message />, navPos: 0, active: navMenuPosition === 0 },
     { icon: <Phone />, navPos: 1, active: navMenuPosition === 1 },
-    { icon: <Group />, navPos: 2, active: navMenuPosition === 2 },
-    // {
-    //   icon: (
-    //     <Badge badgeContent={4} color="secondary">
-    //       <Notifications />
-    //     </Badge>
-    //   ),
-    //   navPos: 3,
-    //   active: navMenuPosition === 3,
-    // },
+    {
+      icon: (
+        <Badge badgeContent={friendCount} color="secondary">
+          <Group />
+        </Badge>
+      ),
+      navPos: 2,
+      active: navMenuPosition === 2,
+    },
   ];
 
   return (

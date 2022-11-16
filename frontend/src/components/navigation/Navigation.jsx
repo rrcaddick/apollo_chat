@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import ChatsNav from "./ChatsNav";
 import PhoneNav from "./PhoneNav";
 import OnlineFriendsNav from "./OnlineFriendsNav";
-import NotificationsNav from "./NotificationsNav";
 import NavigationMenu from "../menus/NavigationMenu";
 import UserMenu from "../menus/UserMenu";
 import { navigationPositionVar } from "../../graphql/variables/common";
@@ -69,7 +68,6 @@ const Navigation = () => {
         <ChatsNav position={navMenuPosition} />
         <PhoneNav position={navMenuPosition} />
         <OnlineFriendsNav position={navMenuPosition} />
-        <NotificationsNav position={navMenuPosition} />
       </Box>
     </Box>
   );
