@@ -24,21 +24,37 @@ const authenticate = asyncHandler(async (req, res, next) => {
 
     return next();
   } catch (error) {
-    // TODO: Add refresh token logic
-    //attemptRefresh(refreshToken);
     return next();
   }
 });
 
-const attemptRefresh = async (refreshToken) => {
-  const user = await User.findOne({ refreshToken });
-  const { userId } = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+const validateRefreshToken = asyncHandler(async (req, res, next) => {
+  const {
+    cookies: { refreshToken },
+  } = req;
 
-  if (user._id === userId) {
-    const refreshToken = await generateRefreshToken(user);
+  const user = await User.findOne({ refreshToken });
+
+  if (!user) {
+    res.status(403);
+    throw new Error("Invalid token");
   }
-};
+
+  try {
+    const { userId } = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    if (user._id.toString() === userId) {
+      req.user = user;
+    }
+
+    return next();
+  } catch (error) {
+    res.status(403);
+    throw new Error("Invalid token");
+  }
+});
 
 module.exports = {
   authenticate,
+  validateRefreshToken,
 };
