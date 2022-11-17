@@ -56,9 +56,7 @@ const useAddChat = baseMutation(ADD_CHAT, (cache, { data }) => {
   selectedChatVar(addChat);
 });
 
-const useResetUnreadCount = baseMutation(RESET_UNREAD_COUNT, (cache, { data }) => {
-  console.log(data);
-});
+const useResetUnreadCount = baseMutation(RESET_UNREAD_COUNT);
 
 const useRemoveChat = baseMutation(REMOVE_CHAT, (cache, { data: { removeChat } }) => {
   cache.updateQuery({ query: GET_CHATS_QUERY }, ({ chats }) => {

@@ -25,7 +25,7 @@ const MessageFeed = () => {
           <Typography>{error.message}</Typography>
         </Box>
       )}
-      {!hasChatMessage && !loading && (
+      {!hasChatMessage && !loading && !error && (
         <Box alignSelf="center">
           <Typography>Send a message to start the conversation</Typography>
         </Box>
