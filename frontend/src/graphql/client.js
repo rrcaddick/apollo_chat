@@ -6,13 +6,12 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient as createWsClient } from "graphql-ws";
 import { chatTypePolicies } from "./chat/typePolicies";
 import { queryTypePolicies } from "./typePolicies";
-import { recreateClientVar } from "./variables/common";
 import { resetAllVars } from "./variableUtils";
 
 const typePolicies = Object.assign({}, ...[queryTypePolicies, chatTypePolicies]);
 
 const createClient = () => {
-  let token, resolveToken, isRefreshing, refreshTokenPromise;
+  let token, getToken, isRefreshing, refreshTokenPromise;
 
   const cache = new InMemoryCache({
     typePolicies,
@@ -23,12 +22,14 @@ const createClient = () => {
   //   storage: new LocalStorageWrapper(window.localStorage),
   // });
 
-  const getToken = new Promise((resolve, reject) => {
-    resolveToken = resolve;
-  });
-
   const setToken = (newToken) => {
     token = newToken;
+  };
+
+  const setTokenPromise = (token) => {
+    getToken = new Promise((resolve, reject) => {
+      resolve({ token });
+    });
   };
 
   const refreshToken = async () => {
@@ -43,7 +44,7 @@ const createClient = () => {
 
     const { token } = await response.json();
     setToken(token);
-    resolveToken({ token });
+    setTokenPromise(token);
   };
 
   const isSubscription = (query) => {
@@ -119,16 +120,13 @@ const createClient = () => {
     cache,
   });
 
+  client.setTokenPromise = setTokenPromise;
   client.setToken = setToken;
-
-  client.resolveToken = resolveToken;
-  client.subscriptionClient = subscriptionClient;
   return client;
 };
 
-const resetClient = () => {
-  recreateClientVar(!recreateClientVar());
+const resetClientVars = () => {
   resetAllVars();
 };
 
-export { createClient, resetClient };
+export { createClient, resetClientVars };

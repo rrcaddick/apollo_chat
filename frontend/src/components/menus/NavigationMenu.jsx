@@ -1,4 +1,4 @@
-import { Group, Message, Notifications, Phone } from "@mui/icons-material";
+import { Group, Message, Phone } from "@mui/icons-material";
 import { Avatar, Badge, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useGetMe, useGetOnlineFriends } from "../../graphql/user/hooks";

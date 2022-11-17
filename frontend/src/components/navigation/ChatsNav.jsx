@@ -3,7 +3,6 @@ import { useState } from "react";
 import ChatItem from "../chats/ChatItem";
 import SearchControl from "../common/SearchControl";
 import ScrollableList from "../common/ScrollableList";
-// import { CHATS_DUMMY as chats } from "../../data";
 import AddChatsMenu from "../menus/AddChatsMenu";
 import { useReadOrderedChats } from "../../graphql/chat/hooks";
 import { useDebounce } from "../../hooks/useDebounce";

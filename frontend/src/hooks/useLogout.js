@@ -1,10 +1,13 @@
 import { useApolloClient } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { resetClientVars } from "../graphql/client";
 
 const useLogout = () => {
   // Stops fetch from being overidden to expose token
   const secureFetch = window.fetch;
   const client = useApolloClient();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState(null);
@@ -29,6 +32,7 @@ const useLogout = () => {
         setServerError(message);
       } else {
         await client.clearStore();
+        client.setTokenPromise();
         setSuccess(true);
       }
     } catch (err) {
@@ -37,6 +41,13 @@ const useLogout = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (success) {
+      navigate("/");
+      resetClientVars();
+    }
+  }, [success, navigate]);
 
   return { logout, loading, serverError, success };
 };

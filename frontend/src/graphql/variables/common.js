@@ -6,6 +6,6 @@ const navigationPositionVar = makeVar(0);
 
 const selectedEmojiVar = makeVar();
 
-const recreateClientVar = makeVar(false);
+const isDarkModeVar = makeVar(false);
 
-export { emojiTrayOpenVar, navigationPositionVar, selectedEmojiVar, recreateClientVar };
+export { emojiTrayOpenVar, navigationPositionVar, selectedEmojiVar, isDarkModeVar };

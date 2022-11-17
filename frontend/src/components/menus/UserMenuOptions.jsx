@@ -1,27 +1,16 @@
-import { useEffect, useState } from "react";
 import { DarkMode, LightMode, Logout, Person, Settings } from "@mui/icons-material";
 import { Backdrop, CircularProgress, ListItemIcon, MenuItem } from "@mui/material";
 import DropDownMenu from "../common/DropDownMenu";
-import { useNavigate } from "react-router-dom";
 import { useLogout } from "../../hooks/useLogout";
-import { resetClient } from "../../graphql/client";
+import { isDarkModeVar } from "../../graphql/variables/common";
 
 const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, toggleSettings } }) => {
-  const [darkMode, setDarkMode] = useState(false);
-
-  const navigate = useNavigate();
-  const { logout, loading, success } = useLogout();
+  const isDarkMode = isDarkModeVar();
+  const { logout, loading } = useLogout();
 
   const logoutHandler = () => {
     logout();
   };
-
-  useEffect(() => {
-    if (success) {
-      navigate("/");
-      resetClient();
-    }
-  }, [success, navigate]);
 
   return (
     <>
@@ -41,9 +30,13 @@ const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, to
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon>{darkMode ? <DarkMode fontSize="small" /> : <LightMode fontSize="small" />}</ListItemIcon>
-          {darkMode ? "Dark" : "Light"} Mode
+        <MenuItem
+          onClick={() => {
+            isDarkModeVar(!isDarkMode);
+          }}
+        >
+          <ListItemIcon>{isDarkMode ? <LightMode fontSize="small" /> : <DarkMode fontSize="small" />}</ListItemIcon>
+          {isDarkMode ? "Light" : "Dark"} Mode
         </MenuItem>
         <MenuItem onClick={logoutHandler}>
           <ListItemIcon>

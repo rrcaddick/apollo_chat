@@ -3,7 +3,14 @@ import React from "react";
 
 const MenuWrapper = ({ children, ...rest }) => {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#fff", color: "black", marginBottom: "0.75rem" }}>
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: "background.paper",
+        color: "text.primary",
+        marginBottom: "0.75rem",
+      }}
+    >
       <Toolbar
         sx={{
           display: "flex",
