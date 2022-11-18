@@ -219,7 +219,7 @@ const ChatMenu = ({ toggleProfile }) => {
       <Box
         position="absolute"
         display="flex"
-        backgroundColor="white"
+        backgroundColor="background.paper"
         alignItems="center"
         width="100%"
         textAlign="center"
@@ -243,7 +243,9 @@ const ChatMenu = ({ toggleProfile }) => {
         />
         <TextField
           fullWidth
-          inputProps={{ style: { fontSize: "0.8rem", padding: "0.2rem 0.5rem" } }}
+          label="Search messages..."
+          InputLabelProps={{ shrink: true }}
+          inputProps={{ style: { fontSize: "0.8rem", padding: "0.4rem 0.5rem" } }}
           inputRef={searchRef}
           onChange={(e) => {
             debounce(() => {
