@@ -3,14 +3,12 @@ import { Backdrop, CircularProgress, ListItemIcon, MenuItem } from "@mui/materia
 import DropDownMenu from "../common/DropDownMenu";
 import { useLogout } from "../../hooks/useLogout";
 import { isDarkModeVar } from "../../graphql/variables/common";
+import { toggleDarkMode } from "../../utils/common";
+import { useReactiveVar } from "@apollo/client";
 
 const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, toggleSettings } }) => {
-  const isDarkMode = isDarkModeVar();
+  const isDarkMode = useReactiveVar(isDarkModeVar);
   const { logout, loading } = useLogout();
-
-  const logoutHandler = () => {
-    logout();
-  };
 
   return (
     <>
@@ -30,15 +28,11 @@ const UserMenu = ({ anchorEl, open, handleClose, toggleMenu: { toggleProfile, to
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            isDarkModeVar(!isDarkMode);
-          }}
-        >
+        <MenuItem onClick={toggleDarkMode}>
           <ListItemIcon>{isDarkMode ? <LightMode fontSize="small" /> : <DarkMode fontSize="small" />}</ListItemIcon>
           {isDarkMode ? "Light" : "Dark"} Mode
         </MenuItem>
-        <MenuItem onClick={logoutHandler}>
+        <MenuItem onClick={logout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

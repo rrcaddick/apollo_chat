@@ -11,7 +11,7 @@ import { resetAllVars } from "./variableUtils";
 const typePolicies = Object.assign({}, ...[queryTypePolicies, chatTypePolicies]);
 
 const createClient = () => {
-  let token, getToken, isRefreshing, refreshTokenPromise;
+  let token, connectionParams, isRefreshing, refreshTokenPromise;
 
   const cache = new InMemoryCache({
     typePolicies,
@@ -26,9 +26,9 @@ const createClient = () => {
     token = newToken;
   };
 
-  const setTokenPromise = (token) => {
-    getToken = new Promise((resolve, reject) => {
-      resolve({ token });
+  const setConnectionParams = (params) => {
+    connectionParams = new Promise((resolve, reject) => {
+      resolve(params);
     });
   };
 
@@ -44,7 +44,7 @@ const createClient = () => {
 
     const { token } = await response.json();
     setToken(token);
-    setTokenPromise(token);
+    setConnectionParams({ token });
   };
 
   const isSubscription = (query) => {
@@ -94,7 +94,7 @@ const createClient = () => {
 
   const subscriptionClient = createWsClient({
     url: "ws://192.168.0.122:5000/graphql",
-    connectionParams: async () => await getToken,
+    connectionParams: async () => await connectionParams,
     shouldRetry: true,
     retryAttempts: 2,
     on: {
@@ -120,7 +120,7 @@ const createClient = () => {
     cache,
   });
 
-  client.setTokenPromise = setTokenPromise;
+  client.setConnectionParams = setConnectionParams;
   client.setToken = setToken;
   return client;
 };

@@ -6,6 +6,6 @@ const navigationPositionVar = makeVar(0);
 
 const selectedEmojiVar = makeVar();
 
-const isDarkModeVar = makeVar(false);
+const isDarkModeVar = makeVar(window.localStorage.getItem("isDarkMode") === "true");
 
 export { emojiTrayOpenVar, navigationPositionVar, selectedEmojiVar, isDarkModeVar };

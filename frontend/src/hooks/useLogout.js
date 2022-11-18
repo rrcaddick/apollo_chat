@@ -32,7 +32,6 @@ const useLogout = () => {
         setServerError(message);
       } else {
         await client.clearStore();
-        client.setTokenPromise();
         setSuccess(true);
       }
     } catch (err) {

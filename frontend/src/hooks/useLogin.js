@@ -31,7 +31,7 @@ const useLogin = () => {
       } else {
         const { token } = await response.json();
         client.setToken(token);
-        client.setTokenPromise(token);
+        client.setConnectionParams({ token });
         setSuccess(true);
       }
     } catch (err) {

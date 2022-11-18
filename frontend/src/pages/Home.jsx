@@ -20,7 +20,12 @@ const Home = () => {
   };
 
   return (
-    <Box flex={1} sx={{ backgroundImage: isDarkMode ? `url(${DarkBackgroundImage})` : `url(${BackgroundImage})` }}>
+    <Box
+      flex={1}
+      sx={{
+        backgroundImage: isDarkMode ? `url(${DarkBackgroundImage})` : `url(${BackgroundImage})`,
+      }}
+    >
       <Container maxWidth="sm" sx={{ paddingTop: "1.5rem" }}>
         <Stack padding="1rem" backgroundColor="background.paper" borderRadius="5px" boxShadow={theme.shadows[20]}>
           <Box borderRadius="3.5px" backgroundColor="primary.main" color="primary.contrastText" paddingY="1rem">
