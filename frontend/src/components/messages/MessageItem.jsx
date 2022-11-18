@@ -1,5 +1,6 @@
-import { Box, Typography, useTheme, Stack } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import { forwardRef } from "react";
+import { isDarkModeVar } from "../../graphql/variables/common";
 import { getTimeString, getDateName } from "../../utils/dateUtils";
 
 const MessageItem = forwardRef(
@@ -24,12 +25,12 @@ const MessageItem = forwardRef(
       }
       return color;
     }
-    const theme = useTheme();
+
     const messageStyles = isUserMessage
       ? {
           alignSelf: "flex-end",
-          backgroundColor: theme.palette.primary.main,
-          color: theme.palette.primary.contrastText,
+          backgroundColor: "primary.main",
+          color: "primary.contrastText",
           borderTopLeftRadius: "30px",
           borderBottomLeftRadius: "30px",
           borderTopRightRadius: isFirstInCluster && "30px",
@@ -37,8 +38,8 @@ const MessageItem = forwardRef(
         }
       : {
           alignSelf: "flex-start",
-          backgroundColor: theme.palette.grey["200"],
-          color: theme.palette.grey.contrastText,
+          backgroundColor: "background.dark",
+          color: "grey.contrastText",
           borderTopLeftRadius: isFirstInCluster && "30px",
           borderBottomLeftRadius: isLastInCluster && "30px",
           borderTopRightRadius: "30px",
@@ -73,7 +74,7 @@ const MessageItem = forwardRef(
               fontSize="0.5rem"
               fontWeight="600"
               alignSelf="flex-end"
-              color={isUserMessage ? "#d3a9d3" : "orange"}
+              color={isUserMessage ? `${isDarkModeVar() ? "red" : "#d3a9d3"}` : "orange"}
             >
               {getTimeString(createdAt)}
             </Typography>

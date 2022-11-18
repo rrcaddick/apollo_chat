@@ -10,6 +10,10 @@ import { createClient } from "./graphql/client";
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+    background: {
+      dark: "#424242",
+      light: "#333",
+    },
   },
   typography: {
     allVariants: {
@@ -22,6 +26,12 @@ const theme = createTheme({
   typography: {
     allVariants: {
       fontFamily: "'Poppins', sans-serif",
+    },
+  },
+  palette: {
+    background: {
+      dark: "#eeeeee",
+      light: "#fff",
     },
   },
 });

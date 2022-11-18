@@ -3,7 +3,7 @@ import { Box, IconButton } from "@mui/material";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import styled from "@emotion/styled";
 import { useReactiveVar } from "@apollo/client";
-import { emojiTrayOpenVar } from "../../graphql/variables/common";
+import { emojiTrayOpenVar, isDarkModeVar } from "../../graphql/variables/common";
 import { useNewMessage } from "../../hooks/useNewMessage";
 import { useAddMessage } from "../../graphql/message/hooks";
 import { useGetMe } from "../../graphql/user/hooks";
@@ -14,7 +14,8 @@ import { useRef } from "react";
 const MessageInput = styled(TextareaAutosize)`
   width: 100%;
   padding: 0.25rem 0.25rem;
-  background-color: ${(p) => p.theme.palette.grey["200"]};
+  background-color: ${(p) => p.theme.palette.background.dark};
+  color: ${(p) => (p.isDarkMode ? p.theme.palette.common.white : undefined)};
   outline: none;
   border: none;
   position: relative;
@@ -72,7 +73,7 @@ const NewMessage = () => {
   return (
     <Box p="12px 12px 0" sx={{ zIndex: isOpen ? (theme) => theme.zIndex.drawer + 2 : 0 }}>
       <Box
-        backgroundColor={(theme) => theme.palette.grey["200"]}
+        backgroundColor={(theme) => theme.palette.background.dark}
         borderRadius="30px"
         p="0.25rem 0.25rem"
         display="flex"
@@ -91,6 +92,7 @@ const NewMessage = () => {
           maxRows={4}
           placeholder="Message..."
           value={content}
+          isDarkMode={isDarkModeVar()}
           ref={messageInputRef}
           onChange={setContentHandler}
           onKeyDown={(e) => {
@@ -113,7 +115,7 @@ const NewMessage = () => {
             <Mic />
           </IconButton>
           <Box
-            backgroundColor={(theme) => theme.palette.primary.main}
+            backgroundColor="primary.main"
             borderRadius="50%"
             marginLeft="0.4rem"
             sx={{
@@ -122,7 +124,7 @@ const NewMessage = () => {
                 transform: "scale(1.4)",
               },
             }}
-            color="#fff"
+            color="background.dark"
           >
             <IconButton
               size="small"

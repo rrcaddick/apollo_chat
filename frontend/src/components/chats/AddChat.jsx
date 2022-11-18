@@ -69,7 +69,7 @@ const AddChat = ({ onClose }) => {
   };
 
   return (
-    <>
+    <Box backgroundColor="background.dark">
       <Box display="flex" justifyContent="space-between" alignItems="center" p="12px">
         <Typography fontWeight="bold" fontSize="x-large">
           Select a contact
@@ -93,7 +93,7 @@ const AddChat = ({ onClose }) => {
             friends.map((friend) => <FriendItem key={friend.id} friend={friend} onSelect={onSelectHandler} />)}
         </ScrollableList>
       </Box>
-    </>
+    </Box>
   );
 };
 

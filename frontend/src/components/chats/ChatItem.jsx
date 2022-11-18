@@ -3,7 +3,7 @@ import { Delete } from "@mui/icons-material";
 import AvatarWithInitials from "../common/AvatarWithInitials";
 import { formatChatTime } from "../../utils/dateUtils";
 import { selectedChatVar } from "../../graphql/variables/selectedChat";
-import { navigationPositionVar } from "../../graphql/variables/common";
+import { isDarkModeVar, navigationPositionVar } from "../../graphql/variables/common";
 import { useRemoveChat, useResetUnreadCount } from "../../graphql/chat/hooks";
 
 const ChatItem = ({ chat }) => {
@@ -60,19 +60,17 @@ const ChatItem = ({ chat }) => {
       gap="1rem"
       justifyContent="flex-start"
       position="relative"
-      // TODO: Fix hidden box shadows
-      // boxShadow={(theme) => theme.shadows["2"]}
       sx={(theme) => ({
         [theme.breakpoints.down("md")]: {
           userSelect: "none",
           WebkitTapHighlightColor: "rgba(0,0,0,0)",
         },
         cursor: "pointer",
-        backgroundColor: isSelected ? theme.palette.primary.main : "white",
-        color: isSelected && theme.palette.primary.contrastText,
+        backgroundColor: isSelected ? "primary.main" : "background.light",
+        color: isDarkModeVar() ? undefined : isSelected && "primary.contrastText",
         "&:hover": {
-          backgroundColor: theme.palette.primary.light,
-          color: theme.palette.primary.contrastText,
+          backgroundColor: isDarkModeVar() ? "action.hover" : "primary.light",
+          color: isDarkModeVar() ? undefined : "primary.contrastText",
           "& .delete-icon": {
             transform: `translateX(0%)`,
           },
@@ -87,7 +85,7 @@ const ChatItem = ({ chat }) => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        backgroundColor="white"
+        backgroundColor="background.paper"
         height="100%"
         zIndex="1000"
         className="delete-icon"

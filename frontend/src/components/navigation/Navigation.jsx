@@ -13,7 +13,7 @@ const Navigation = () => {
   const position = useReactiveVar(navigationPositionVar);
 
   const navigationStyles = (theme) => ({
-    backgroundColor: theme.palette.grey["200"],
+    backgroundColor: "background.dark",
     boxShadow: theme.shadows["10"],
     [theme.breakpoints.down("md")]: {
       transform: `translateX(-${100 * position}%)`,

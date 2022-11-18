@@ -25,6 +25,9 @@ const EmoticonPicker = ({ onSelect }) => {
           bottom: "10px",
           transition: "transform 200ms linear",
           transform: `translateY(${isOpen ? "0%" : "110%"})`,
+          "& .EmojiPickerReact.epr-main": {
+            backgroundColor: (theme) => theme.palette.background.paper,
+          },
           "& li[data-name='suggested']": {
             display: "none !important",
           },

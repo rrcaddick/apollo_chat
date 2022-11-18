@@ -1,6 +1,5 @@
-import InputUnstyled from "@mui/base/InputUnstyled";
 import styled from "@emotion/styled";
-import { Input, InputAdornment } from "@mui/material";
+import { Input, InputAdornment, useTheme } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { forwardRef } from "react";
 
@@ -30,7 +29,7 @@ const InputElement = forwardRef((props, ref) => {
   return <StyledInputElement ref={ref} {...props} />;
 });
 
-const SearchControl = forwardRef(({ placeholder, onSearch, backgroundColor = "#fff" }, ref) => {
+const SearchControl = forwardRef(({ placeholder, onSearch }, ref) => {
   const handleEnterHandler = (e) => {
     if (e.key === "Enter") {
       e.target.blur();
@@ -41,9 +40,11 @@ const SearchControl = forwardRef(({ placeholder, onSearch, backgroundColor = "#f
     onSearch(e);
   };
 
+  const theme = useTheme();
+
   return (
     <Input
-      backgroundColor={backgroundColor}
+      backgroundColor={theme.palette.common.white}
       placeholder={placeholder}
       type="search"
       components={{
@@ -55,7 +56,7 @@ const SearchControl = forwardRef(({ placeholder, onSearch, backgroundColor = "#f
       onKeyPress={handleEnterHandler}
       startAdornment={
         <InputAdornment position="start">
-          <Search />
+          <Search sx={{ color: theme.palette.grey["600"] }} />
         </InputAdornment>
       }
     />

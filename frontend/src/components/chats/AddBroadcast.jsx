@@ -94,7 +94,7 @@ const AddBroadCast = ({ onClose }) => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" gap="0.8rem" overflow="hidden">
+    <Box display="flex" flexDirection="column" gap="0.8rem" overflow="hidden" backgroundColor="background.dark">
       <Box display="flex" justifyContent="space-between" alignItems="center" p="12px 12px 0px">
         <Typography fontWeight="bold" fontSize="x-large">
           New Broadcast List
