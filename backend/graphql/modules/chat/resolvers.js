@@ -17,7 +17,6 @@ const resolvers = {
   },
   Chat: {
     id: (chat) => chat._id,
-    latestMessage: ({ latestMessage }, _args, { dataSources: { message } }) => message.getMessage(latestMessage),
     details: (chat, _args, { dataSources: { chat: chatSource }, user }) => chatSource.getChatDetails(chat, user._id),
     unreadCount: (chat, _args, { user }) => {
       return chat.unreadCount[user._id.toString()];

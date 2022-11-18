@@ -11,7 +11,7 @@ class Chat extends MongoDataSource {
         ],
         deletedBy: { $ne: userId },
       })
-      .populate("members admins");
+      .populate("members admins latestMessage");
     return chats;
   }
 
@@ -28,11 +28,10 @@ class Chat extends MongoDataSource {
   }
 
   async getChatDetails(chat, userId) {
-    const { chatType, name, icon } = chat;
+    const { chatType, name, icon, members } = chat;
     if (chatType !== "DIRECT") {
       return { name: name, profilePicture: icon };
     }
-    const { members } = await chat.populate("members");
     return members.find((m) => !m._id.equals(userId));
   }
 

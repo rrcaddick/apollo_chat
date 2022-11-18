@@ -25,8 +25,8 @@ const GET_FRIENDS = gql`
 
 const READ_ONLINE_FRIENDS = gql`
   ${FRIEND_FIELDS}
-  query readOnlineFriends {
-    onlineFriends @client {
+  query readOnlineFriends @client {
+    onlineFriends {
       ...FriendFields
     }
   }

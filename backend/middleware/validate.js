@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const { formatYupError } = require("../utils/formatYupError");
 
 const validate = (schema) =>
   asyncHandler(async (req, res, next) => {
